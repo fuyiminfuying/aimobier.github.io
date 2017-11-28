@@ -1,0 +1,2102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+      <!-- Title -->
+      
+      <title>Mongoose 学习 | 荆文征</title>
+
+    <!-- Required Meta Tags Always Come First -->
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700%7COpen+Sans:400,600,700">
+
+    <!-- CSS Global Compulsory -->
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/bootstrap.min.css">
+
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="/assets/vendor/icon-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/vendor/icon-line-pro/style.css">
+    <link rel="stylesheet" href="/assets/vendor/icon-hs/style.css">
+    <link rel="stylesheet" href="/assets/vendor/animate.css">
+    <link rel="stylesheet" href="/assets/vendor/hs-megamenu/src/hs.megamenu.css">
+    <link rel="stylesheet" href="/assets/vendor/hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" href="/assets/vendor/slick-carousel/slick/slick.css">
+    <link rel="stylesheet" href="/assets/vendor/fancybox/jquery.fancybox.css">
+
+    <!-- Revolution Slider -->
+    <link rel="stylesheet" href="/assets/vendor/revolution-slider/revolution/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="/assets/vendor/revolution-slider/revolution/css/settings.css">
+    <link rel="stylesheet" href="/revolution-slider/carousel-gallery/assets/css/style.css">
+
+    <!-- CSS Unify Theme -->
+    <link rel="stylesheet" href="/assets/css/styles.bm-classic.css">
+
+    <!-- CSS Customization -->
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <!-- CSS Implementing Plugins -->
+    <link  rel="stylesheet" href="/assets/vendor/fancybox/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/css/prism-atom-dark.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<!-- JS Global Compulsory -->
+<script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/jquery-migrate/jquery-migrate.min.js"></script>
+<script src="/assets/vendor/popper.js/index.js"></script>
+<script src="/assets/vendor/bootstrap/bootstrap.min.js"></script>
+
+<!-- JS Implementing Plugins -->
+<script src="/assets/vendor/appear.js"></script>
+<script src="/assets/vendor/slick-carousel/slick/slick.js"></script>
+<script src="/assets/vendor/hs-megamenu/src/hs.megamenu.js"></script>
+<script src="/assets/vendor/fancybox/jquery.fancybox.min.js"></script>
+
+<!-- JS Unify -->
+<script src="/assets/js/hs.core.js"></script>
+<script src="/assets/js/components/hs.header.js"></script>
+<script src="/assets/js/helpers/hs.hamburgers.js"></script>
+<script src="/assets/js/components/hs.dropdown.js"></script>
+<script src="/assets/js/components/hs.carousel.js"></script>
+<script src="/assets/js/components/hs.go-to.js"></script>
+<script src="/assets/js/components/hs.popup.js"></script>
+
+<!-- JS Revolution Slider -->
+<script src="/assets/vendor/revolution-slider/revolution/js/jquery.themepunch.tools.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/jquery.themepunch.revolution.min.js"></script>
+
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.actions.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.carousel.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.kenburn.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.layeranimation.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.migration.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.navigation.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.parallax.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.video.min.js"></script>
+
+<!-- JS Customization -->
+<script src="/assets/js/custom.js"></script>
+
+<!-- JS Implementing Plugins -->
+<script  src="/assets/vendor/fancybox/jquery.fancybox.min.js"></script>
+
+<!-- JS Unify -->
+<script  src="/assets/js/components/hs.popup.js"></script>
+
+<script src="https://cdn.wilddog.com/sdk/js/2.5.17/wilddog-sync.js"></script>
+
+<script>
+  function SETValue(key, value) {
+    if (typeof(Storage) !== "undefined") {
+      var curTime = new Date().getTime();
+      localStorage.setItem(key, JSON.stringify({
+        data: value,
+        time: curTime
+      }));
+    }
+  }
+
+  function GETvalue(key) {
+    if (typeof(Storage) !== "undefined") {
+      var data = localStorage.getItem(key);
+      if(data) {
+        var dataObj = JSON.parse(data);
+        if (new Date().getTime() - dataObj.time > 1000*60*60) {
+          //alert("信息已过期")
+        } else {
+          //console.log("data="+dataObj.data);
+          //console.log(JSON.parse(dataObj.data));
+          var dataObjDatatoJson = dataObj.data
+          return dataObjDatatoJson;
+        }
+      }
+    }
+  }
+
+  function REQuest(url, finish) {
+
+    var value = GETvalue(url);
+
+    if (value) {
+      finish(value);
+      return;
+    }
+
+    $.ajax({
+      type: "get",
+      dataType: "jsonp",
+      cache: true,
+      url: url,
+      success: function(data) {
+        SETValue(url, data);
+        finish(data);
+      }
+    });
+  }
+
+
+  $(document).on('ready', function() {
+    // initialization of header
+    $.HSCore.components.HSHeader.init($('#js-header'));
+    $.HSCore.helpers.HSHamburgers.init('.hamburger');
+
+    // initialization of MegaMenu
+    $('.js-mega-menu').HSMegaMenu();
+
+    // initialization of HSDropdown component
+    $.HSCore.components.HSDropdown.init($('[data-dropdown-target]'), {
+      afterOpen: function() {
+        $(this).find('input[type="search"]').focus();
+      }
+    });
+    // initialization of popups
+                                $.HSCore.components.HSPopup.init('.js-fancybox');
+
+                                // initialization of gallery with thumbs
+                                $.HSCore.components.HSPopup.init('.js-fancybox-thumbs', {
+                                  thumbs: {
+                                    showOnStart: true
+                                  }
+                                });
+
+    // initialization of go to
+    $.HSCore.components.HSGoTo.init('.js-go-to');
+  });
+</script>
+
+<script>
+
+//  百度站长 推送
+
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+  <body>
+    <main>
+
+  <!-- Header -->
+  <header id="js-header" class="u-header u-header--static u-shadow-v19">
+    <!-- Top Bar -->
+    <div class="u-header__section g-brd-bottom g-brd-gray-light-v4 g-py-18">
+      <div class="container">
+        <div class="row align-items-center">
+
+          <!-- Logo -->
+<div class="col-md-3 g-hidden-md-down">
+  <a href="bm-classic-home-page-1.html" class="navbar-brand">
+    <img src="/assets/img/logo.png" alt="Logo">
+  </a>
+</div>
+<!-- End Logo -->
+
+
+          <!-- Subscribe Form -->
+<div class="col-6 col-md-5">
+  <form class="input-group rounded">
+    <input class="form-control w-100 g-brd-secondary-light-v2 g-brd-primary--focus g-color-secondary-dark-v1 g-placeholder-secondary-dark-v1 g-bg-white g-font-weight-400 g-font-size-13 rounded g-px-20 g-py-12" type="text" placeholder="输入以搜索该博客文章">
+    <span class="input-group-addon g-brd-none g-py-0 g-pr-0">
+      <button class="btn u-btn-white g-color-primary--hover g-bg-secondary g-font-weight-600 g-font-size-13 text-uppercase rounded g-py-12 g-px-20" type="submit">
+        <span class="g-hidden-md-down">Search</span>
+        <i class="g-hidden-lg-up fa fa-search"></i>
+      </button>
+    </span>
+  </form>
+</div>
+<!-- End Subscribe Form -->
+
+
+          <!-- Language -->
+<div id="clock" class="col-4 col-lg-2 g-pos-rel g-px-15 ml-auto">
+</div>
+<!-- End Language -->
+
+
+<script type="text/javascript">
+
+var config = {
+  syncURL: "https://wd2622139095udguuj.wilddogio.com" //输入节点 URL
+};
+wilddog.initializeApp(config);
+var ref = wilddog.sync().ref("browerlog");
+
+ref.push({
+  "url": window.location.href,
+  "date": Math.round(new Date().getTime())
+});
+
+ref.orderByChild("url").equalTo(window.location.href).on('value', function(snapshot) {
+
+  $("#clock").text("No."+Object.keys(snapshot.val()).length);
+
+  }, function (error) {
+});
+
+</script>
+
+
+          <!-- Account -->
+<div class="col-1" id="account">
+  <a id="account-dropdown-invoker" class="media align-items-center float-right g-text-underline--none--hover" href="#"
+     aria-controls="account-dropdown"
+     aria-haspopup="true"
+     aria-expanded="false"
+     data-dropdown-event="hover"
+     data-dropdown-target="#account-dropdown"
+     data-dropdown-type="css-animation"
+     data-dropdown-duration="300"
+     data-dropdown-hide-on-scroll="false"
+     data-dropdown-animation-in="fadeIn"
+     data-dropdown-animation-out="fadeOut">
+    <div class="d-flex g-width-30 g-height-30 mr-2">
+      <img class="img-fluid rounded-circle" src="http://blog.msiter.com/favicon/avatar.jpg" alt="Image Description">
+    </div>
+    <div class="media-body">
+      <span class="d-block g-hidden-sm-down g-color-main g-font-weight-600 g-font-size-13">文征</span>
+    </div>
+  </a>
+
+  <div id="account-dropdown" class="list-unstyled text-right g-width-160 g-brd-around g-brd-secondary-light-v2 g-bg-white rounded g-pos-abs g-right-0 g-py-5 g-mt-57" aria-labelledby="account-dropdown-invoker">
+
+    暂时没想好怎么做
+
+  </div>
+
+
+</div>
+<!-- End Account -->
+
+<script type="text/javascript">
+
+$("#account").mouseover(function(){
+
+
+});
+
+$("#account").mouseout(function(){
+
+});
+
+</script>
+
+
+        </div>
+      </div>
+    </div>
+    <!-- End Top Bar -->
+
+    <div class="u-header__section u-header__section--light g-bg-white g-transition-0_3 g-py-10">
+      <nav class="js-mega-menu navbar navbar-expand-lg g-px-0">
+        <div class="container g-px-15">
+          <!-- Logo -->
+          <a class="navbar-brand g-hidden-lg-up" href="bm-classic-home-page-1.html">
+            <img src="/assets/img/logo.png" alt="Logo">
+          </a>
+          <!-- End Logo -->
+
+          <!-- Responsive Toggle Button -->
+          <button class="navbar-toggler navbar-toggler-right btn g-line-height-1 g-brd-none g-pa-0 ml-auto" type="button"
+                  aria-label="Toggle navigation"
+                  aria-expanded="false"
+                  aria-controls="navBar"
+                  data-toggle="collapse"
+                  data-target="#navBar">
+            <span class="hamburger hamburger--slider g-pa-0">
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
+            </span>
+          </button>
+          <!-- End Responsive Toggle Button -->
+
+          <!-- Navigation -->
+          <div class="collapse navbar-collapse align-items-center flex-sm-row g-pt-10 g-pt-5--lg" id="navBar">
+            <ul class="navbar-nav g-font-weight-600">
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-1" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">标签
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-1">
+    <div class="row">
+      <div class="col-lg-2">
+        <ul class="list-unstyled mb-0" style="ov">
+
+          
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/生活/">生活</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/悲观/">悲观</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/Objective-C/">Objective-C</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/AsyncDisplayKit/">AsyncDisplayKit</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/ios/">ios</a></li>
+
+            
+
+        </ul>
+      </div>
+      <div class="col-lg-1">
+
+      </div>
+      <div class="col-lg-9" style="height:auto;" >
+
+        <!-- Background Gray Colored -->
+        <ul class="u-list-inline">
+
+          
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/生活/">生活</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/悲观/">悲观</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Objective-C/">Objective-C</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/AsyncDisplayKit/">AsyncDisplayKit</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/ios/">ios</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/约束教程/">约束教程</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/swift/">swift</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/autolayout/">autolayout</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/AttributedString/">AttributedString</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/iOS8-html2AttributedString-error/">iOS8 html2AttributedString error</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/技巧/">技巧</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/IOS/">IOS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mongodb/">mongodb</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mongoose/">mongoose</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/nodejs/">nodejs</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/RX/">RX</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/java/">java</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/spring-boot/">spring boot</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mybatis/">mybatis</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WKWebView/">WKWebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Systematic-distinction/">Systematic distinction</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WebKit/">WebKit</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WebView/">WebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/UIWebView/">UIWebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Input/">Input</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/File/">File</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Bug/">Bug</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/破解/">破解</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/抓包/">抓包</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/reactiv/">reactiv</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/rxswift/">rxswift</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/DB/">DB</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/realm/">realm</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/swagger/">swagger</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/api/">api</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/travis-ci/">travis-ci</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/cocoapods/">cocoapods</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/NodeJS/">NodeJS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/APNs/">APNs</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/八爪鱼/">八爪鱼</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/html/">html</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/js/">js</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Javascript/">Javascript</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/鼠标悬浮/">鼠标悬浮</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/越狱/">越狱</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/cydia/">cydia</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/制作源/">制作源</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/error/">error</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/奇怪的问题/">奇怪的问题</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/无趣，心理学/">无趣，心理学</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/async/">async</a>
+                        </li>
+
+            
+
+        </ul>
+        <!-- End Background Gray Colored -->
+
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-5" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">栏目
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-primary g-left-15 g-right-15 g-px-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-5">
+    <div class="row">
+      <div class="col-lg-12">
+        <ul class="list-inline text-center mb-0">
+
+
+
+          
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/牢骚/">牢骚</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/IOS/">IOS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/服务器/">服务器</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/开发帮助/">开发帮助</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/Web-前端/">Web 前端</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/生活/">生活</a>
+                        </li>
+
+            
+
+
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-3" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">最新文章
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-3">
+    <div class="row">
+      <div class="col-lg-4">
+        <article>
+          <figure class="g-pos-rel">
+            <img class="img-fluid w-100 g-mb-20" src="/assets/img-temp/900x600/img7.jpg" alt="Image Description">
+          </figure>
+          <h3 class="h4 g-mb-10"><a class="g-color-gray-dark-v2" href="#">Love the mother nature</a>
+          </h3>
+          <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+            <li class="list-inline-item">
+              <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">Kathy Reyes</a>
+            </li>
+            <li class="list-inline-item">/</li>
+            <li class="list-inline-item">July 20, 2016</li>
+            <li class="list-inline-item">/</li>
+            <li class="list-inline-item">
+              <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                <i class="fa fa-comments-o"></i> 18
+              </a>
+            </li>
+          </ul>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Top 10 Luxury Hotels - 5 Star Best Luxury Hotels</a>
+            </h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 07, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 24
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6"><a class="g-color-main" href="#">10 Most beautiful beaches</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 20, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 18
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Stylish things to do, see and buy this week</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 16, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 31
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">8 health benefits and drawbacks of coffee</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 30, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 12
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Stylish things to do, see and buy this week</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 16, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 31
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Top 10 Luxury Hotels - 5 Star Best Luxury Hotels</a>
+            </h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 07, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 24
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-4" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">最火文章
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-4">
+    <div class="row">
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Fashion</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 26, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Be ready, fashion of the year is coming this year</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Beaches</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 15, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Must be visited places in the USA - Florida Beaches</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Food</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera g-left-2"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 8, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Why your next glass of juice will cost you more</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-ml-15--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-7" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">新闻热点
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-7">
+    <div class="row">
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 16, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">You've been making French Pie all wrong - Until Now</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 02, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Unify facts, study finds - sensitive to gluten without having coeliac disease</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 18, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Why your next cup of cofee with milk will cost you more</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 12, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Incredible product and quality: Unify best template of the year</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 16, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Some post title will be implimented here and It's cool!</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 02, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Wireframe approach for the news blocks and pages</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 18, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Over thousands of components help you to boost your project</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 12, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">How to run a ticket: Best 10 point approaches for people who stands..</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Main -->
+<li class="nav-item g-mx-10--lg g-mx-20--xl">
+  <a id="nav-link--pages" class="nav-link text-uppercase g-color-primary--hover g-px-0" href="/">
+    主页
+  </a>
+</li>
+<!-- End Main -->
+
+
+
+
+
+
+
+
+            </ul>
+          </div>
+          <!-- End Navigation -->
+        </div>
+      </nav>
+    </div>
+  </header>
+  <!-- End Header -->
+
+
+    <section class="g-pt-50 g-pb-100">
+  <div class="container">
+    <div class="row">
+      <!-- Articles Content -->
+      <div class="col-lg-9 g-mb-50 g-mb-0--lg">
+        <article class="g-mb-60">
+          <header class="g-mb-30">
+            <h2 class="h1 g-mb-15">Mongoose 学习</h2>
+
+            <ul class="list-inline d-sm-flex g-color-gray-dark-v4 mb-0">
+              <li class="list-inline-item">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                  小酒馆老板
+                </a>
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item">
+                2015/7/11 20:53:35
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item g-mr-10">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                        <i class="align-middle mr-2 icon-hotel-restaurant-242 u-line-icon-pro"></i>共有1,478个字
+                      </a>
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item g-mr-10">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                        <i class="align-middle mr-2 icon-hotel-restaurant-003 u-line-icon-pro"></i>预计阅读6分钟
+                      </a>
+              </li>
+            </ul>
+
+            <hr class="g-brd-gray-light-v4 g-my-15">
+
+
+
+                      <!-- Social Shares -->
+<div class="g-mb-30">
+
+    <ul class="list-inline text-uppercase mb-0">
+      <li class="list-inline-item g-mr-10">
+        <strong class="align-middle g-font-size-24 jiathis_counter_style"><a class="jiathis_counter_style"></a></strong>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <span class="g-color-gray-dark-v5">|</span>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_weixin btn u-btn-teal g-font-size-12 rounded g-px-20--sm g-py-10" style="color:white;">
+          <i class="fa fa-wechat g-mr-5--sm"></i>
+          <span class="g-hidden-xs-down">分享到微信</span>
+      </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tqq btn u-btn-twitter g-font-size-12 rounded g-px-20--sm g-py-10" href="#">
+              <i class="fa fa-qq g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 QQ</span>
+            </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tsina btn u-btn-lightred g-font-size-12 rounded g-px-20--sm g-py-10 " href="#">
+              <i class="fa fa-weibo g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 新浪微博</span>
+            </a>
+      </li>
+    </ul>
+</div>
+          <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+<!-- End Social Shares -->
+
+
+
+          </header>
+
+          <div class="">
+            <p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://image.msiter.com/stock-photo-161742993.jpg" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://image.msiter.com/stock-photo-161742993.jpg" alt="Image Description">          </a><figcaption class="figure-caption g-font-size-12 g-color-gray-dark-v4 g-mt-5 text-center">        &#x9189;&#x540E;&#x4E0D;&#x77E5;&#x5929;&#x5728;&#x6C34;&#xFF0C;&#x6EE1;&#x8239;&#x6E05;&#x68A6;&#x538B;&#x661F;&#x6CB3;&#x3002;</figcaption></figure></p>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment.</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+<p>&#x5173;&#x4E8E;mongodb&#x7684;&#x4F18;&#x52BF;&#x4E4B;&#x7C7B;&#x7684;&#x8BDD;&#xFF0C;&#x6211;&#x4E5F;&#x5C31;&#x4E0D;&#x8BF4;&#x4EC0;&#x4E48;&#xFF0C;&#x56E0;&#x4E3A;&#x4F60;&#x65E2;&#x7136;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x6570;&#x636E;&#x5E93;&#x7684;&#x8BDD;&#xFF0C;&#x6211;&#x76F8;&#x4FE1;&#x4F60;&#x5DF2;&#x7ECF;&#x5BF9;&#x4ED6;&#x7684;&#x57FA;&#x672C;&#x4FE1;&#x606F;&#x5F88;&#x4E86;&#x89E3;&#x4E86;&#x3002;<br>&#x53E6;&#x5916;&#x672C;&#x7BC7;&#x6587;&#x7AE0;&#x6CA1;&#x6709;&#x57FA;&#x672C;&#x7684;&#x64CD;&#x4F5C;&#x3002;&#x4E3B;&#x8981;&#x662F;&#x9488;&#x5BF9;&#xFF0C;&#x5B50;&#x8868;&#x548C;&#x5173;&#x8054;&#x8868;&#x7684;&#x64CD;&#x4F5C;&#x3002;&#x56E0;&#x4E3A;&#x6211;&#x89C9;&#x7684;&#x57FA;&#x672C;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x4E0D;&#x662F;&#x5F88;&#x9EBB;&#x70E6;&#xFF0C;&#x800C;&#x904D;&#x5730;&#x90FD;&#x662F;&#x6587;&#x6863;&#xFF0C;&#x6211;&#x611F;&#x89C9;&#x6CA1;&#x4EC0;&#x4E48;&#x5FC5;&#x8981;&#x518D;&#x53E8;&#x5520;&#x4E00;&#x904D;&#x4E86;</p>
+<a id="more"></a>
+<h2 id="MongoDB-&#x7B80;&#x4ECB;"><a href="#MongoDB-&#x7B80;&#x4ECB;" class="headerlink" title="MongoDB &#x7B80;&#x4ECB;"></a>MongoDB &#x7B80;&#x4ECB;</h2><p>MongoDB &#x662F;&#x4E00;&#x4E2A;&#x57FA;&#x4E8E;&#x5206;&#x5E03;&#x5F0F;&#x6587;&#x4EF6;&#x5B58;&#x50A8;&#x7684;&#x6570;&#x636E;&#x5E93;&#x3002;&#x7531; C++ &#x8BED;&#x8A00;&#x7F16;&#x5199;&#x3002;&#x65E8;&#x5728;&#x4E3A; WEB &#x5E94;&#x7528;&#x63D0;&#x4F9B;&#x53EF;&#x6269;&#x5C55;&#x7684;&#x9AD8;&#x6027;&#x80FD;&#x6570;&#x636E;&#x5B58;&#x50A8;&#x89E3;&#x51B3;&#x65B9;&#x6848;&#x3002;<br>MongoDB &#x662F;&#x4E00;&#x4E2A;&#x4ECB;&#x4E8E;&#x5173;&#x7CFB;&#x6570;&#x636E;&#x5E93;&#x548C;&#x975E;&#x5173;&#x7CFB;&#x6570;&#x636E;&#x5E93;&#x4E4B;&#x95F4;&#x7684;&#x4EA7;&#x54C1;&#xFF0C;&#x662F;&#x975E;&#x5173;&#x7CFB;&#x6570;&#x636E;&#x5E93;&#x5F53;&#x4E2D;&#x529F;&#x80FD;&#x6700;&#x4E30;&#x5BCC;&#xFF0C;&#x6700;&#x50CF;&#x5173;&#x7CFB;&#x6570;&#x636E;&#x5E93;&#x7684;&#x3002;</p>
+<h2 id="&#x6570;&#x636E;&#x5E93;&#x64CD;&#x4F5C;"><a href="#&#x6570;&#x636E;&#x5E93;&#x64CD;&#x4F5C;" class="headerlink" title="&#x6570;&#x636E;&#x5E93;&#x64CD;&#x4F5C;"></a>&#x6570;&#x636E;&#x5E93;&#x64CD;&#x4F5C;</h2><h3 id="&#x8FDE;&#x63A5;&#x6570;&#x636E;&#x5E93;&#xFF0C;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x8868;&#x3002;"><a href="#&#x8FDE;&#x63A5;&#x6570;&#x636E;&#x5E93;&#xFF0C;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x8868;&#x3002;" class="headerlink" title="&#x8FDE;&#x63A5;&#x6570;&#x636E;&#x5E93;&#xFF0C;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x8868;&#x3002;"></a>&#x8FDE;&#x63A5;&#x6570;&#x636E;&#x5E93;&#xFF0C;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x8868;&#x3002;</h3><pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript"><span class="token comment" spellcheck="true">///&#x83B7;&#x53D6;Mongoose&#x7EC4;&#x4EF6;</span>
+<span class="token keyword">var</span> mongoose <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&apos;mongoose&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">///&#x94FE;&#x63A5;&#x81F3;&#x6570;&#x636E;&#x5E93;&#xFF0C;Meet&#x5219;&#x4E3A;&#x6570;&#x636E;&#x5E93;&#x540D;&#x79F0;</span>
+mongoose<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span><span class="token string">&apos;mongodb://localhost/Meet&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>&#x65E2;&#x7136;&#x5DF2;&#x7ECF;&#x8FDE;&#x63A5;&#x4E0A;&#x7684;&#x8BDD;&#xFF0C;&#x90A3;&#x4E48;&#x63A5;&#x4E0B;&#x6765;&#x5C31;&#x8BE5;&#x662F;&#x5982;&#x4F55;&#x521B;&#x5EFA;&#x8868;&#x4E86;&#x3002;</p>
+<pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript"><span class="token keyword">var</span> mongoose <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&apos;mongoose&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> UserSchema <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">mongoose<span class="token punctuation">.</span>Schema</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    sinaId<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    name<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    gender<span class="token punctuation">:</span> String<span class="token punctuation">,</span><span class="token comment" spellcheck="true">//&#x6027;&#x522B;&#xFF0C;m&#xFF1A;&#x7537;&#x3001;f&#xFF1A;&#x5973;&#x3001;n&#xFF1A;&#x672A;&#x77E5;</span>
+    commGround<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    signature<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    headPhotoKey<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    userBacks<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+        identifier<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+        index<span class="token punctuation">:</span> Number<span class="token punctuation">,</span>
+        imageKey<span class="token punctuation">:</span> String
+    <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    userLabels<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+        content<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+        identifier<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+        createDateTime<span class="token punctuation">:</span> <span class="token punctuation">{</span>type<span class="token punctuation">:</span> Date<span class="token punctuation">,</span> <span class="token keyword">default</span><span class="token punctuation">:</span> Date<span class="token punctuation">.</span>now<span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    createDateTime<span class="token punctuation">:</span> <span class="token punctuation">{</span>type<span class="token punctuation">:</span> Date<span class="token punctuation">,</span> <span class="token keyword">default</span><span class="token punctuation">:</span> Date<span class="token punctuation">.</span>now<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>collection<span class="token punctuation">:</span> <span class="token string">&quot;User&quot;</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">///User&#x5C31;&#x662F;&#x8868;&#x540D;&#x4E86;</span>
+
+<span class="token comment" spellcheck="true">/**
+&#x4E2D;&#x95F4;&#x5199;&#x5176;&#x4ED6;&#x7684;&#x4E00;&#x4E9B;&#x65B9;&#x6CD5;
+*/</span>
+<span class="token keyword">var</span> User <span class="token operator">=</span> mongoose<span class="token punctuation">.</span><span class="token function">model</span><span class="token punctuation">(</span><span class="token string">&apos;User&apos;</span><span class="token punctuation">,</span> UserSchema<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>&#x81F3;&#x6B64; &#x4E00;&#x4E2A;&#x8868;&#x5DF2;&#x7ECF;&#x521B;&#x5EFA;&#x5B8C;&#x6210;&#x4E86;&#xFF0C;&#x53EF;&#x80FD;&#x4F60;&#x4F1A;&#x8BE7;&#x5F02;&#x4E3A;&#x4EC0;&#x4E48;&#x4F60;&#x542F;&#x52A8;&#x4E86;&#x670D;&#x52A1;&#x5668;&#x5E76;&#x4E14;&#x4E5F;&#x8FDE;&#x63A5;&#x5230;&#x4E86;&#x6570;&#x636E;&#x5E93;&#x5374;&#x6CA1;&#x6709;&#x521B;&#x5EFA;&#x8868;&#xFF0C;&#x4E0D;&#x8981;&#x7740;&#x6025;&#xFF0C;&#x4F60;&#x6CA1;&#x6709;&#x6570;&#x636E;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6570;&#x636E;&#x5E93;&#x662F;&#x4E0D;&#x4F1A;&#x663E;&#x793A;&#x7684;&#x3002;</p>
+<h2 id="&#x5B50;&#x8868;&#x5982;&#x4F55;&#x64CD;&#x4F5C;"><a href="#&#x5B50;&#x8868;&#x5982;&#x4F55;&#x64CD;&#x4F5C;" class="headerlink" title="&#x5B50;&#x8868;&#x5982;&#x4F55;&#x64CD;&#x4F5C;"></a>&#x5B50;&#x8868;&#x5982;&#x4F55;&#x64CD;&#x4F5C;</h2><p>&#x5927;&#x5BB6;&#x770B;&#x6211;&#x63A5;&#x4E0B;&#x6765;&#x7684;&#x4E00;&#x5F20;&#x8868;</p>
+<pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript"><span class="token keyword">var</span> UserSchema <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">mongoose<span class="token punctuation">.</span>Schema</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    sinaId<span class="token punctuation">:</span> String<span class="token punctuation">,</span><span class="token comment" spellcheck="true">//&#x65B0;&#x6D6A;&#x5FAE;&#x535A;ID</span>
+    name<span class="token punctuation">:</span> String<span class="token punctuation">,</span><span class="token comment" spellcheck="true">//&#x7528;&#x6237;&#x540D;&#x79F0;</span>
+    gender<span class="token punctuation">:</span> String<span class="token punctuation">,</span><span class="token comment" spellcheck="true">//&#x6027;&#x522B;&#xFF0C;m&#xFF1A;&#x7537;&#x3001;f&#xFF1A;&#x5973;&#x3001;n&#xFF1A;&#x672A;&#x77E5;</span>
+    commGround<span class="token punctuation">:</span> String<span class="token punctuation">,</span><span class="token comment" spellcheck="true">//&#x5531;&#x51FA;&#x6CA1;&#x5730;</span>
+    signature<span class="token punctuation">:</span> String<span class="token punctuation">,</span><span class="token comment" spellcheck="true">//&#x4E2A;&#x6027;&#x7B7E;&#x540D;</span>
+    headPhotoKey<span class="token punctuation">:</span> String<span class="token punctuation">,</span><span class="token comment" spellcheck="true">//&#x5934;&#x50CF;&#x5730;&#x5740;</span>
+    userLabels<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span><span class="token comment" spellcheck="true">//&#x7528;&#x6237;&#x4E2A;&#x4EBA;&#x6807;&#x7B7E;&#x96C6;&#x5408;</span>
+        content<span class="token punctuation">:</span> String<span class="token punctuation">,</span><span class="token comment" spellcheck="true">//&#x5185;&#x5BB9;</span>
+        identifier<span class="token punctuation">:</span> String<span class="token punctuation">,</span><span class="token comment" spellcheck="true">//&#x552F;&#x4E00;&#x6807;&#x793A;</span>
+        createDateTime<span class="token punctuation">:</span> <span class="token punctuation">{</span>type<span class="token punctuation">:</span> Date<span class="token punctuation">,</span> <span class="token keyword">default</span><span class="token punctuation">:</span> Date<span class="token punctuation">.</span>now<span class="token punctuation">}</span><span class="token comment" spellcheck="true">//&#x521B;&#x5EFA;&#x65F6;&#x95F4;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    createDateTime<span class="token punctuation">:</span> <span class="token punctuation">{</span>type<span class="token punctuation">:</span> Date<span class="token punctuation">,</span> <span class="token keyword">default</span><span class="token punctuation">:</span> Date<span class="token punctuation">.</span>now<span class="token punctuation">}</span><span class="token punctuation">,</span><span class="token comment" spellcheck="true">//&#x7528;&#x6237;&#x6CE8;&#x518C;&#x65F6;&#x95F4;</span>
+    isDelete<span class="token punctuation">:</span> <span class="token punctuation">{</span>type<span class="token punctuation">:</span> Boolean<span class="token punctuation">,</span> <span class="token keyword">default</span><span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">}</span><span class="token comment" spellcheck="true">//&#x662F;&#x5426;&#x5220;&#x9664;</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>collection<span class="token punctuation">:</span> <span class="token string">&quot;MeetUser&quot;</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>&#x8FD9;&#x662F;&#x4E00;&#x4E2A;&#x57FA;&#x672C;&#x7684;&#x7528;&#x6237;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x3002;&#x63A5;&#x4E0B;&#x6765;&#x8BA9;&#x6211;&#x4EEC;&#x6765;&#x770B;&#x770B;&#x5982;&#x4F55;&#x64CD;&#x4F5C;&#x8FD9;&#x4E2A;&#x7C7B;&#x578B;&#x90A3;&#x4E2A;&#x5427;&#x3002;</p>
+<h3 id="&#x5B50;&#x8868;&#x65B0;&#x589E;&#x6570;&#x636E;"><a href="#&#x5B50;&#x8868;&#x65B0;&#x589E;&#x6570;&#x636E;" class="headerlink" title="&#x5B50;&#x8868;&#x65B0;&#x589E;&#x6570;&#x636E;"></a>&#x5B50;&#x8868;&#x65B0;&#x589E;&#x6570;&#x636E;</h3><pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript">
+
+<span class="token comment" spellcheck="true">//&#x521B;&#x5EFA;&#x7528;&#x6237;&#x6807;&#x7B7E;&#x65B9;&#x6CD5;</span>
+UserSchema<span class="token punctuation">.</span>statics<span class="token punctuation">.</span>createUserLabel <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>userid<span class="token punctuation">,</span> identifier<span class="token punctuation">,</span> content<span class="token punctuation">,</span> createtime<span class="token punctuation">,</span> callBack<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//&#x9996;&#x5148;&#x67E5;&#x770B;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x8BE5;&#x7528;&#x6237;&#x662F;&#x5426;&#x5B58;&#x5728;&#x8FD9;&#x4E2A;&#x4E2A;&#x4EBA;&#x6807;&#x7B7E;&#xFF0C;&#x65B9;&#x6CD5;&#x4F1A;&#x5728;&#x4E0B;&#x9762;&#x5217;&#x51FA;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">findUserLabel</span><span class="token punctuation">(</span>userid<span class="token punctuation">,</span> identifier<span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> result<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>callBack<span class="token punctuation">)</span><span class="token keyword">return</span> <span class="token function">callBack</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">//&#x5982;&#x679C;&#x5E76;&#x6CA1;&#x6709;&#x8BE5;&#x5BF9;&#x8C61;&#xFF0C;&#x90A3;&#x4E48;&#x4E45;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x5FB7;&#x5BF9;&#x8C61;</span>
+        <span class="token keyword">var</span> b <span class="token operator">=</span> <span class="token punctuation">{</span>
+            identifier<span class="token punctuation">:</span> identifier<span class="token punctuation">,</span>
+            content<span class="token punctuation">:</span> content<span class="token punctuation">,</span>
+            createDateTime<span class="token punctuation">:</span> createtime
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">//&#x8FD9;&#x91CC;&#x5C31;&#x662F;&#x91CD;&#x70B9;&#xFF0C;&#x4F7F;&#x7528;findOneAndUpdate&#x627E;&#x5230;&#x9AD8;&#x7528;&#x6237;&#xFF0C;&#x4E4B;&#x540E;&#x4F7F;&#x7528; $push &#x65B0;&#x589E;&#x4E00;&#x4E2A;&#x7528;&#x6237;&#x4E2A;&#x4EBA;&#x6807;&#x7B7E;&#xFF0C;&#x5E76;&#x4E14;&#x6267;&#x884C;</span>
+        User<span class="token punctuation">.</span><span class="token function">findOneAndUpdate</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;_id&quot;</span><span class="token punctuation">:</span> mongoose<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token function">ObjectId</span><span class="token punctuation">(</span>userid<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">&apos;$push&apos;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">&quot;userLabels&quot;</span><span class="token punctuation">:</span> b<span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> result<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">///&#x63A5;&#x53E3;&#x9700;&#x8981;&#x6240;&#x4EE5;&#x8981;&#x5728;&#x589E;&#x52A0;&#x5B8C;&#x6210;&#x4E4B;&#x540E;&#xFF0C;&#x83B7;&#x53D6;&#x8FD9;&#x4E2A;&#x7528;&#x6237;&#x5E76;&#x4E14;&#x8FD4;&#x56DE;</span>
+            User<span class="token punctuation">.</span><span class="token function">findOne</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;_id&quot;</span><span class="token punctuation">:</span> mongoose<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token function">ObjectId</span><span class="token punctuation">(</span>userid<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> result<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token function">callBack</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="&#x5B50;&#x8868;&#x67E5;&#x627E;&#x6570;&#x636E;"><a href="#&#x5B50;&#x8868;&#x67E5;&#x627E;&#x6570;&#x636E;" class="headerlink" title="&#x5B50;&#x8868;&#x67E5;&#x627E;&#x6570;&#x636E;"></a>&#x5B50;&#x8868;&#x67E5;&#x627E;&#x6570;&#x636E;</h3><pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript"><span class="token comment" spellcheck="true">///&#x8BE5;&#x65B9;&#x6CD5;&#x5C31;&#x662F;&#x4E0A;&#x9762;&#x65B9;&#x6CD5;&#x4E2D;&#x8C03;&#x7528;&#x7684;&#x67E5;&#x627E;&#x65B9;&#x6CD5;</span>
+UserSchema<span class="token punctuation">.</span>statics<span class="token punctuation">.</span>findUserLabel <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>userid<span class="token punctuation">,</span> identifier<span class="token punctuation">,</span> callBack<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">findOne</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        <span class="token string">&quot;_id&quot;</span><span class="token punctuation">:</span> mongoose<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token function">ObjectId</span><span class="token punctuation">(</span>userid<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;userLabels.identifier&quot;</span><span class="token punctuation">:</span> identifier
+    <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> result<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>callBack<span class="token punctuation">)</span><span class="token keyword">return</span> <span class="token function">callBack</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="&#x5B50;&#x8868;&#x5220;&#x9664;&#x6570;&#x636E;"><a href="#&#x5B50;&#x8868;&#x5220;&#x9664;&#x6570;&#x636E;" class="headerlink" title="&#x5B50;&#x8868;&#x5220;&#x9664;&#x6570;&#x636E;"></a>&#x5B50;&#x8868;&#x5220;&#x9664;&#x6570;&#x636E;</h3><p>&#x7531;&#x4E8E;&#x4E1A;&#x52A1;&#x4E0A;&#x7684;&#x9700;&#x8981;&#xFF0C;&#x6240;&#x4EE5;&#x63A5;&#x4E0B;&#x6765;&#x65B9;&#x6CD5;&#x662F;&#x6E05;&#x7A7A;&#x8BE5;&#x7528;&#x6237;&#x6240;&#x6709;&#x7684;&#x4E2A;&#x4EBA;&#x6807;&#x7B7E;</p>
+<pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript">UserSchema<span class="token punctuation">.</span>statics<span class="token punctuation">.</span>cleanUserLabels <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>userid<span class="token punctuation">,</span> callBack<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">///&#x5148;&#x627E;&#x5230;&#x8BE5;&#x7528;&#x6237;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">findOne</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;_id&quot;</span><span class="token punctuation">:</span> mongoose<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token function">ObjectId</span><span class="token punctuation">(</span>userid<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> result<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">///&#x5FAA;&#x73AF;&#x904D;&#x5386;&#x7528;&#x6237;&#x7684;&#x4E2A;&#x4EBA;&#x6807;&#x7B7E;&#xFF0C;async &#x4F1A;&#x5728;&#x53E6;&#x4E00;&#x7BC7;&#x535A;&#x5BA2;&#x4E2D;&#x8BE6;&#x7EC6;&#x8BB2;&#x89E3;</span>
+        <span class="token keyword">async</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>userLabels<span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>item<span class="token punctuation">,</span> callback<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// &#x4E4B;&#x540E;&#x4F7F;&#x7528; $pull &#x5220;&#x9664;&#x7528;&#x6237;&#x7684;&#x4E2A;&#x4EBA;&#x6807;&#x7B7E;</span>
+            User<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;_id&quot;</span><span class="token punctuation">:</span> mongoose<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token function">ObjectId</span><span class="token punctuation">(</span>userid<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">&apos;$pull&apos;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">&quot;userLabels&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">&quot;identifier&quot;</span><span class="token punctuation">:</span> item<span class="token punctuation">.</span>identifier<span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> numberUpdated<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token function">callback</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+            <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> results<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>callBack<span class="token punctuation">)</span><span class="token keyword">return</span> <span class="token function">callBack</span><span class="token punctuation">(</span>results<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="&#x5B50;&#x8868;&#x4FEE;&#x6539;&#x6570;&#x636E;"><a href="#&#x5B50;&#x8868;&#x4FEE;&#x6539;&#x6570;&#x636E;" class="headerlink" title="&#x5B50;&#x8868;&#x4FEE;&#x6539;&#x6570;&#x636E;"></a>&#x5B50;&#x8868;&#x4FEE;&#x6539;&#x6570;&#x636E;</h3><pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript">UserSchema<span class="token punctuation">.</span>statics<span class="token punctuation">.</span>modifysUserLabel <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>userid<span class="token punctuation">,</span> identifier<span class="token punctuation">,</span>content<span class="token punctuation">,</span> callBack<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        <span class="token string">&quot;_id&quot;</span><span class="token punctuation">:</span> mongoose<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token function">ObjectId</span><span class="token punctuation">(</span>userid<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;userLabels.identifier&quot;</span><span class="token punctuation">:</span> identifier
+    <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">&apos;$set&apos;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">&quot;userLabels.$.content&quot;</span><span class="token punctuation">:</span> content<span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> numberUpdated<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        User<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>userid<span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>callBack<span class="token punctuation">)</span><span class="token function">callBack</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>&#x4EE5;&#x4E0A;&#x5C31;&#x662F;&#x5B50;&#x7C7B;&#x7684;&#x589E;&#x5220;&#x6539;&#x67E5;&#x3002;&#x5E0C;&#x671B;&#x5BF9;&#x4F60;&#x6709;&#x4E9B;&#x8BB8;&#x5E2E;&#x52A9;&#x3002;&#x57FA;&#x672C;&#x7684;&#x589E;&#x5220;&#x6539;&#x67E5;&#xFF0C;&#x6211;&#x8FD9;&#x91CC;&#x5C31;&#x4E0D;&#x591A;&#x591A;&#x89E3;&#x91CA;&#x4E86;&#x3002;</p>
+<p>##&#x5173;&#x8054;&#x8868;&#x5982;&#x4F55;&#x64CD;&#x4F5C;</p>
+<p>&#x5728;mongodb&#x4E2D;&#x5E76;&#x6CA1;&#x6709;&#x5173;&#x8054;&#x8868;&#x8FD9;&#x4E48;&#x4E00;&#x8BF4;&#xFF0C;&#x8FD9;&#x4E5F;&#x662F;&#x56E0;&#x4E3A;mongodb&#x672C;&#x8EAB;&#x5C31;&#x662F;&#x975E;&#x5173;&#x7CFB;&#x578B;&#x6570;&#x636E;&#x5E93;&#xFF0C;&#x4F46;&#x662F;mongoose&#x4E2D;&#x7684;<code>populate</code>&#x65B9;&#x6CD5;&#x5728;&#x4E00;&#x5B9A;&#x7A0B;&#x5EA6;&#x4E0A;&#x89E3;&#x51B3;&#x4E86;&#x5173;&#x8054;&#x95EE;&#x9898;</p>
+<p>&#x9996;&#x5148;&#x6765;&#x67E5;&#x770B;&#x4E00;&#x4E9B;&#x6570;&#x636E;&#x5E93;&#x7684;&#x8BBE;&#x8BA1;&#x5427;&#x3002;</p>
+<h3 id="&#x5173;&#x8054;&#x8868;&#x8BBE;&#x8BA1;"><a href="#&#x5173;&#x8054;&#x8868;&#x8BBE;&#x8BA1;" class="headerlink" title="&#x5173;&#x8054;&#x8868;&#x8BBE;&#x8BA1;"></a>&#x5173;&#x8054;&#x8868;&#x8BBE;&#x8BA1;</h3><pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript"><span class="token comment" spellcheck="true">//&#x7528;&#x6237;&#x8868;</span>
+<span class="token keyword">var</span> UserSchema <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">mongoose<span class="token punctuation">.</span>Schema</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> String
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>collection<span class="token punctuation">:</span> <span class="token string">&quot;MeetUser&quot;</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//&#x52A0;&#x5165;&#x6570;&#x636E;&#x5E93;</span>
+<span class="token keyword">var</span> User <span class="token operator">=</span> mongoose<span class="token punctuation">.</span><span class="token function">model</span><span class="token punctuation">(</span><span class="token string">&apos;User&apos;</span><span class="token punctuation">,</span> UserSchema<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//&#x5206;&#x7EC4;&#x8868;</span>
+<span class="token keyword">var</span> GroupSchema <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">mongoose<span class="token punctuation">.</span>Schema</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span>String<span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">//&#x6B64;&#x65F6;&#x7684;ref&#x5B57;&#x6BB5;&#x8981;&#x548C;&#x52A0;&#x5165;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x7684;model&#x65B9;&#x6CD5;&#x5185;&#x7684;&#x5B57;&#x6BB5;&#x543B;&#x5408;&#xFF0C;&#x5E76;&#x4E14;&#x8BB0;&#x4F4F;&#x4E00;&#x5B9A;&#x8981;&#x5199;&#x5B57;&#x7B26;&#x4E32;</span>
+    users<span class="token punctuation">:</span><span class="token punctuation">[</span><span class="token punctuation">{</span>type<span class="token punctuation">:</span>mongoose<span class="token punctuation">.</span>Schema<span class="token punctuation">.</span>ObjectId<span class="token punctuation">,</span>ref<span class="token punctuation">:</span><span class="token string">&apos;User&apos;</span><span class="token punctuation">}</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span><span class="token punctuation">{</span>collection<span class="token punctuation">:</span><span class="token string">&quot;MeetGroup&quot;</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">var</span> Group <span class="token operator">=</span> mongoose<span class="token punctuation">.</span><span class="token function">model</span><span class="token punctuation">(</span><span class="token string">&apos;Group&apos;</span><span class="token punctuation">,</span>GroupSchema<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="&#x5173;&#x8054;&#x8868;&#x67E5;&#x8BE2;&#x65B9;&#x6CD5;"><a href="#&#x5173;&#x8054;&#x8868;&#x67E5;&#x8BE2;&#x65B9;&#x6CD5;" class="headerlink" title="&#x5173;&#x8054;&#x8868;&#x67E5;&#x8BE2;&#x65B9;&#x6CD5;"></a>&#x5173;&#x8054;&#x8868;&#x67E5;&#x8BE2;&#x65B9;&#x6CD5;</h3><pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript">
+GroupSchema<span class="token punctuation">.</span>statics<span class="token punctuation">.</span>loadGroup <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>callBack<span class="token punctuation">)</span><span class="token punctuation">{</span>
+  Group<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">populate</span><span class="token punctuation">(</span><span class="token string">&apos;users&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span>callBack<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>&#x4EE5;&#x4E0A;&#x662F;&#x6BD4;&#x8F83;&#x57FA;&#x7840;&#x7684;&#x67E5;&#x8BE2;&#xFF0C;&#x4F46;&#x662F;&#x6211;&#x4EEC;&#x5F00;&#x53D1;&#x7684;&#x65F6;&#x5019;&#x9047;&#x5230;&#x7684;&#x5F80;&#x5F80;&#x6CA1;&#x6709;&#x90A3;&#x4E48;&#x7B80;&#x5355;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x60F3;&#x5BF9;&#x5B57;&#x8868;&#x8FDB;&#x884C;&#x6392;&#x5E8F;&#x6216;&#x8005;&#x7B5B;&#x9009;&#x518D;&#x6216;&#x8005;&#x6211;&#x53EA;&#x60F3;&#x8981;&#x5B50;&#x8868;&#x91CC;&#x7684;&#x5176;&#x4E2D;&#x4E00;&#x4E9B;&#x5B57;&#x6BB5;&#x8BE5;&#x600E;&#x4E48;&#x529E;&#x5462;</p>
+<h3 id="&#x5173;&#x8054;&#x8868;&#x51C6;&#x786E;&#x67E5;&#x8BE2;"><a href="#&#x5173;&#x8054;&#x8868;&#x51C6;&#x786E;&#x67E5;&#x8BE2;" class="headerlink" title="&#x5173;&#x8054;&#x8868;&#x51C6;&#x786E;&#x67E5;&#x8BE2;"></a>&#x5173;&#x8054;&#x8868;&#x51C6;&#x786E;&#x67E5;&#x8BE2;</h3><pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript">GroupSchema<span class="token punctuation">.</span>statics<span class="token punctuation">.</span>loadGroup <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>callBack<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">var</span> populateQuery <span class="token operator">=</span> <span class="token punctuation">{</span>path<span class="token punctuation">:</span><span class="token string">&apos;users&apos;</span><span class="token punctuation">,</span>select<span class="token punctuation">:</span><span class="token string">&apos;name&apos;</span><span class="token punctuation">,</span>match<span class="token punctuation">:</span><span class="token punctuation">{</span>
+        <span class="token string">&apos;name&apos;</span><span class="token punctuation">:</span><span class="token string">&apos;Msiter&apos;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>options<span class="token punctuation">:</span><span class="token punctuation">{</span>
+        limit<span class="token punctuation">:</span><span class="token number">20</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>sort<span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token string">&apos;_id&apos;</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    Group<span class="token punctuation">.</span><span class="token function">findOne</span><span class="token punctuation">(</span><span class="token punctuation">{</span>name<span class="token punctuation">:</span><span class="token string">&quot;Test&quot;</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token string">&apos;name users&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">populate</span><span class="token punctuation">(</span>populateQuery<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span>callBack<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>&#x5176;&#x4E2D; Path&#x5B57;&#x6BB5;&#x662F;&#x6307;&#x8981;&#x67E5;&#x8BE2;&#x7684; &#x54EA;&#x4E00;&#x4E2A; &#x5173;&#x8054;&#x8868;&#xFF0C;select &#x5219;&#x662F;&#x9700;&#x8981;&#x5B57;&#x8868;&#x7684;&#x90A3;&#x4E9B;&#x5B57;&#x6BB5; &#xFF0C;&#x5982;&#x679C;&#x9700;&#x8981;&#x591A;&#x4E2A; &#x4E2D;&#x95F4;&#x4E00;&#x4E2A; &#x7A7A;&#x683C;&#x5206;&#x9694;&#x5373;&#x53EF;&#xFF0C;<code>_id</code>&#x5B57;&#x6BB5;&#x662F;&#x9ED8;&#x8BA4;&#x88AB;&#x9700;&#x8981;&#x7684;&#x3002;match&#x5C31;&#x662F;&#x5BF9;&#x5173;&#x8054;&#x8868;&#x7684;&#x8FD9;&#x4E9B;&#x7B5B;&#x9009;&#x7684;&#xFF0C;options&#x5C31;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5206;&#x9875;&#x53C2;&#x6570;  Skip&#x548C;limit&#x4E86; &#x5F53;&#x7136;&#x4E5F;&#x6709;&#x4E00;&#x4E9B;&#x5E38;&#x89C1;&#x7684;&#x67E5;&#x8BE2;&#x53C2;&#x6570;&#x8B6C;&#x5982;Sort&#x7B49;&#xFF1B;</p>
+<h3 id="&#x5173;&#x8054;&#x8868;&#x7684;&#x589E;&#x52A0;&#x5462;&#xFF1F;"><a href="#&#x5173;&#x8054;&#x8868;&#x7684;&#x589E;&#x52A0;&#x5462;&#xFF1F;" class="headerlink" title="&#x5173;&#x8054;&#x8868;&#x7684;&#x589E;&#x52A0;&#x5462;&#xFF1F;"></a>&#x5173;&#x8054;&#x8868;&#x7684;&#x589E;&#x52A0;&#x5462;&#xFF1F;</h3><pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript"><span class="token comment" spellcheck="true">///&#x8FD9;&#x91CC;&#x7684;Userid&#x65F6;mongoose.Schema.ObjectId&#xFF0C;&#x5373;&#x4F60;&#x8981;&#x5173;&#x8054;&#x7684;&#x5BF9;&#x8C61;&#x7684;Id</span>
+GroupSchema<span class="token punctuation">.</span>statics<span class="token punctuation">.</span>createGroup <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>groupname<span class="token punctuation">,</span>userId<span class="token punctuation">,</span>callBack<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">var</span> group <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Group</span><span class="token punctuation">(</span><span class="token punctuation">{</span>name<span class="token punctuation">:</span>groupname<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    group<span class="token punctuation">.</span>users<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>userId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    group<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>callBack<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="&#x5173;&#x8054;&#x8868;&#x7684;&#x5220;&#x9664;"><a href="#&#x5173;&#x8054;&#x8868;&#x7684;&#x5220;&#x9664;" class="headerlink" title="&#x5173;&#x8054;&#x8868;&#x7684;&#x5220;&#x9664;"></a>&#x5173;&#x8054;&#x8868;&#x7684;&#x5220;&#x9664;</h3><pre class="line-numbers language-javascript g-mb-30"><code class="language-javascript"><span class="token comment" spellcheck="true">///&#x8FD9;&#x91CC;&#x7684;Userid&#x65F6;mongoose.Schema.ObjectId&#xFF0C;&#x5373;&#x4F60;&#x8981;&#x5173;&#x8054;&#x7684;&#x5BF9;&#x8C61;&#x7684;Id</span>
+GroupSchema<span class="token punctuation">.</span>statics<span class="token punctuation">.</span>createGroup <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>groupname<span class="token punctuation">,</span>userId<span class="token punctuation">,</span>callBack<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">var</span> group <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Group</span><span class="token punctuation">(</span><span class="token punctuation">{</span>name<span class="token punctuation">:</span>groupname<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    group<span class="token punctuation">.</span>users<span class="token punctuation">.</span><span class="token function">pull</span><span class="token punctuation">(</span>userId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    group<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>callBack<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+          </div>
+
+          <!-- Sources & Tags -->
+<div class="g-mb-30">
+  <h6 class="g-color-gray-dark-v1 g-mb-15">
+
+    
+
+                <strong class="g-mr-5">专栏:</strong> <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="/categories/服务器/">服务器</a>
+      
+
+        </h6>
+  <h6 class="g-color-gray-dark-v1">
+          <strong class="g-mr-5">标签:</strong>
+
+          
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/mongodb/">mongodb</a>
+            
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/mongoose/">mongoose</a>
+            
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/nodejs/">nodejs</a>
+            
+        </h6>
+</div>
+<!-- End Sources & Tags -->
+
+
+          <hr class="g-brd-gray-light-v4">
+
+          <!-- Social Shares -->
+<div class="g-mb-30">
+
+    <ul class="list-inline text-uppercase mb-0">
+      <li class="list-inline-item g-mr-10">
+        <strong class="align-middle g-font-size-24 jiathis_counter_style"><a class="jiathis_counter_style"></a></strong>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <span class="g-color-gray-dark-v5">|</span>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_weixin btn u-btn-teal g-font-size-12 rounded g-px-20--sm g-py-10" style="color:white;">
+          <i class="fa fa-wechat g-mr-5--sm"></i>
+          <span class="g-hidden-xs-down">分享到微信</span>
+      </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tqq btn u-btn-twitter g-font-size-12 rounded g-px-20--sm g-py-10" href="#">
+              <i class="fa fa-qq g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 QQ</span>
+            </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tsina btn u-btn-lightred g-font-size-12 rounded g-px-20--sm g-py-10 " href="#">
+              <i class="fa fa-weibo g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 新浪微博</span>
+            </a>
+      </li>
+    </ul>
+</div>
+          <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+<!-- End Social Shares -->
+
+
+
+          <div class="g-mb-60">
+  <!-- UY BEGIN -->
+  <div id="uyan_frame"></div>
+  <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1821358"></script>
+  <!-- UY END -->
+</div>
+
+
+        </article>
+
+        <div id="stickyblock-end"></div>
+      </div>
+      <!-- End Articles Content -->
+
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+
+        
+        <!-- Social Links -->
+        <div class="g-mb-50">
+          <div class="u-heading-v3-1 g-mb-30">
+            <h2 class="h5 u-heading-v3__title g-color-gray-dark-v1 text-uppercase g-brd-primary">最热专题</h2>
+          </div>
+
+          <ul class="list-unstyled mb-0">
+
+            
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        IOS
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">15</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        服务器
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">4</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        开发帮助
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">3</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        牢骚
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">1</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        Web 前端
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">1</span>
+              </li>
+
+              
+          </ul>
+        </div>
+        <!-- End Social Links -->
+
+
+        <div id="stickyblock-start" class="js-sticky-block g-sticky-block--lg g-pt-20" data-start-point="#stickyblock-start" data-end-point="#stickyblock-end" style="top: 0px; width: 255px; height: 957px;">
+
+  <div class="g-mb-40">
+
+
+
+
+
+      <!-- News Feed -->
+<div class="g-mb-40">
+  <div class="u-heading-v3-1 g-mb-30">
+    <h2 class="h5 u-heading-v3__title g-color-gray-dark-v1 text-uppercase g-brd-primary">最新日志</h2>
+  </div>
+
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/23/生活随处可见一斑20171123/">天通苑地铁 安检方式改变</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/23 9:18:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">使用 NodeJS APNS 给你的应用发消息</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/22 17:2:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">IOS10前 UITextFiled 的 placeholder 的问题</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/16 1:16:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/10/26/WebView 与 Html Input Bug/">WebView 与 Html Input File 以及 Upload File 出现的问题</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/10/26 4:10:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+
+  
+
+</div>
+<!-- End News Feed -->
+
+
+
+</div>
+
+
+      </div>
+      <!-- End Sidebar -->
+    </div>
+  </div>
+</section>
+
+<script src="/assets/js/components/hs.sticky-block.js"></script>
+<script type="text/javascript">
+
+    $(window).on('load', function () {
+      // initialization of sticky blocks
+      $.HSCore.components.HSStickyBlock.init('.js-sticky-block');
+    });
+
+</script>
+
+
+      <!-- JS Implementing Plugins -->
+<script src="/assets/vendor/custombox/custombox.min.js"></script>
+
+<!-- JS Unify -->
+<script src="/assets/js/components/hs.modal-window.js"></script>
+
+
+<!-- Footer -->
+<footer class="g-bg-black-opacity-0_9 g-color-white-opacity-0_8 ">
+  <br><br><br>
+  <div class="container g-mb-60">
+    <div class="row">
+
+      <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">关于我</h2>
+  </div>
+
+  <div class="g-mb-30">
+    <p class="g-color-white-opacity-0_8">努力学习的IOS程序员。目前在学习制作Hexo主题，主要还是为了做自己的一个博客.之后会好好学习linux以及服务器相关的知识.</p>
+  </div>
+
+  <address class="mb-0">
+    <div class="g-mb-30">
+      <h4 class="h6 g-font-weight-600">现居地</h4>
+      <p class="mb-0 g-color-white-opacity-0_8">北京 - 国家的首都 </p>
+    </div>
+
+    <!-- 配置标签相关视图 -->
+    
+
+      <div class="g-mb-30">
+        <h4 class="h6 g-font-weight-600">邮箱:</h4>
+
+        
+
+                <p class="mb-0 g-color-white-opacity-0_8">alphabetion@gmail.com</p>
+        
+
+                <p class="mb-0 g-color-white-opacity-0_8">jingwenzheng@baimaodai.com</p>
+        
+
+      </div>
+
+      
+
+
+
+    <div class="mb-0">
+      <h4 class="h6 g-font-weight-600">一言:</h4>
+      <p class="mb-0">
+        <a class="g-color-white-opacity-0_8" id="hitokoto" href="http://hitokoto.cn/">support@htmlstream.com</a>
+      </p>
+    </div>
+  </address>
+</div>
+<!-- End Footer Content -->
+
+
+        <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+
+
+  <!-- 配置标签相关视图 -->
+  
+    <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+      <h2 class="u-heading-v2__title h6 text-uppercase mb-0">标签</h2>
+    </div>
+    <ul class="u-list-inline g-font-size-12 g-mb-30">
+
+      
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/生活/">
+            生活
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/悲观/">
+            悲观
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/Objective-C/">
+            Objective-C
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/AsyncDisplayKit/">
+            AsyncDisplayKit
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/ios/">
+            ios
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/约束教程/">
+            约束教程
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/swift/">
+            swift
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/autolayout/">
+            autolayout
+          </a>
+        </li>
+        
+    </ul>
+    
+
+      <!-- 布局相关链接-->
+
+      <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+        <h2 class="u-heading-v2__title h6 text-uppercase mb-0">友情链接</h2>
+      </div>
+
+      <ul class="list-unstyled">
+        
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://baidu.com">
+              百度
+            </a>
+          </li>
+
+          
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://test.baidu.com">
+              测试链接
+            </a>
+          </li>
+
+          
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://baidu.com">
+              hexo
+            </a>
+          </li>
+
+          
+      </ul>
+
+
+
+</div>
+<!-- End Footer Content -->
+
+
+          <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">最近文章</h2>
+  </div>
+
+  
+    
+
+  <article class="media">
+
+
+  
+
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/23/生活随处可见一斑20171123/">天通苑地铁 安检方式改变</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/23 9:18:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/23/生活随处可见一斑20171123/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+  <a class="d-flex g-mt-3 mr-3" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">
+    <img class="g-width-60 g-height-60 rounded" src="http://image.msiter.com/stock-photo-236362221.jpg" alt="Image Description">
+  </a>
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">使用 NodeJS APNS 给你的应用发消息</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/22 17:2:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">IOS10前 UITextFiled 的 placeholder 的问题</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/16 1:16:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+  <a class="d-flex g-mt-3 mr-3" href="/2017/10/26/WebView 与 Html Input Bug/">
+    <img class="g-width-60 g-height-60 rounded" src="http://image.msiter.com/stock-photo-233150091.jpg" alt="Image Description">
+  </a>
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/10/26/WebView 与 Html Input Bug/">WebView 与 Html Input File 以及 Upload File 出现的问题</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/10/26 4:10:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/10/26/WebView 与 Html Input Bug/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+      
+</div>
+<!-- End Footer Content -->
+
+
+            <!-- Footer Content -->
+<div class="col-lg-3 col-md-6">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">订阅</h2>
+  </div>
+
+  <div class="g-mb-30">
+    <p class="g-color-white-opacity-0_8">订阅我可以更及时的获取到文章的推送，请在下方输入您的邮箱地址获取文章更新</p>
+    <div class="input-group border-0 g-rounded-30">
+      <input class="form-control border-0 g-rounded-left-30 g-px-12 g-py-8" type="email" placeholder="输入您的邮箱地址">
+      <div class="input-group-addon border-0 p-0">
+        <button class="btn u-btn-primary g-rounded-right-30 g-px-12 g-py-8" type="submit" role="button">订阅</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">社交</h2>
+  </div>
+
+  <p class="g-color-white-opacity-0_8">作为一个宅男，长期宅在家里，会不定期的更新文章。如果你想更新的了解到我的动态，请选择一下任意一种社交方式关注我。</p>
+  <ul class="list-inline mb-0">
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://www.facebook.com/aimobier">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://www.instagram.com/aimobier/">
+        <i class="fa fa-instagram"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://github.com/aimobier">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="http://weibo.com/aouns">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="#modal1" data-modal-target="#modal1" data-modal-effect="fadein">
+        <i class="fa fa-weixin"></i>
+</a>
+    </li>
+  </ul>
+</div>
+<!-- End Footer Content -->
+
+    </div>
+  </div>
+
+
+  <!-- Copyright Footer -->
+<div class="g-bg-black-opacity-0_1 g-color-white-opacity-0_8 text-center g-py-20">
+  <div class="container">
+    
+      
+        
+        <small class="g-font-size-7 g-mr-10 g-mb-10 g-mb-0--md">2015 - 2017 © All Rights Reserved. Msiter by
+        <a class="g-color-white-opacity-0_8" href="#">Jing WenZheng</a>
+      </small>
+  </div>
+</div>
+<!-- End Copyright Footer -->
+
+
+</footer>
+<!-- End Footer -->
+<a class="js-go-to u-go-to-v1" href="#" data-type="fixed" data-position='{
+ "bottom": 15,
+ "right": 15
+}' data-offset-top="400" data-compensation="#js-header" data-show-effect="zoomIn">
+  <i class="hs-icon hs-icon-arrow-top"></i>
+</a>
+
+<script type="text/javascript">
+  $(function() {
+
+    // initialization of go to
+    $.HSCore.components.HSGoTo.init('.js-go-to');
+    $.HSCore.components.HSModalWindow.init('[data-modal-target]');
+    $.getJSON("https://sslapi.hitokoto.cn/?encode=json", function(json) {
+      $("#hitokoto").html(json["hitokoto"]);
+    });
+  });
+</script>
+
+
+    </main>
+
+    <div class="u-outer-spaces-helper"></div>
+
+
+  </body>
+</html>

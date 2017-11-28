@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+      <!-- Title -->
+      
+      <title>WebView 与 Html Input File 以及 Upload File 出现的问题 | 荆文征</title>
+
+    <!-- Required Meta Tags Always Come First -->
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700%7COpen+Sans:400,600,700">
+
+    <!-- CSS Global Compulsory -->
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/bootstrap.min.css">
+
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="/assets/vendor/icon-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/vendor/icon-line-pro/style.css">
+    <link rel="stylesheet" href="/assets/vendor/icon-hs/style.css">
+    <link rel="stylesheet" href="/assets/vendor/animate.css">
+    <link rel="stylesheet" href="/assets/vendor/hs-megamenu/src/hs.megamenu.css">
+    <link rel="stylesheet" href="/assets/vendor/hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" href="/assets/vendor/slick-carousel/slick/slick.css">
+    <link rel="stylesheet" href="/assets/vendor/fancybox/jquery.fancybox.css">
+
+    <!-- Revolution Slider -->
+    <link rel="stylesheet" href="/assets/vendor/revolution-slider/revolution/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="/assets/vendor/revolution-slider/revolution/css/settings.css">
+    <link rel="stylesheet" href="/revolution-slider/carousel-gallery/assets/css/style.css">
+
+    <!-- CSS Unify Theme -->
+    <link rel="stylesheet" href="/assets/css/styles.bm-classic.css">
+
+    <!-- CSS Customization -->
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <!-- CSS Implementing Plugins -->
+    <link  rel="stylesheet" href="/assets/vendor/fancybox/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/css/prism-atom-dark.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<!-- JS Global Compulsory -->
+<script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/jquery-migrate/jquery-migrate.min.js"></script>
+<script src="/assets/vendor/popper.js/index.js"></script>
+<script src="/assets/vendor/bootstrap/bootstrap.min.js"></script>
+
+<!-- JS Implementing Plugins -->
+<script src="/assets/vendor/appear.js"></script>
+<script src="/assets/vendor/slick-carousel/slick/slick.js"></script>
+<script src="/assets/vendor/hs-megamenu/src/hs.megamenu.js"></script>
+<script src="/assets/vendor/fancybox/jquery.fancybox.min.js"></script>
+
+<!-- JS Unify -->
+<script src="/assets/js/hs.core.js"></script>
+<script src="/assets/js/components/hs.header.js"></script>
+<script src="/assets/js/helpers/hs.hamburgers.js"></script>
+<script src="/assets/js/components/hs.dropdown.js"></script>
+<script src="/assets/js/components/hs.carousel.js"></script>
+<script src="/assets/js/components/hs.go-to.js"></script>
+<script src="/assets/js/components/hs.popup.js"></script>
+
+<!-- JS Revolution Slider -->
+<script src="/assets/vendor/revolution-slider/revolution/js/jquery.themepunch.tools.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/jquery.themepunch.revolution.min.js"></script>
+
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.actions.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.carousel.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.kenburn.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.layeranimation.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.migration.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.navigation.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.parallax.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.video.min.js"></script>
+
+<!-- JS Customization -->
+<script src="/assets/js/custom.js"></script>
+
+<!-- JS Implementing Plugins -->
+<script  src="/assets/vendor/fancybox/jquery.fancybox.min.js"></script>
+
+<!-- JS Unify -->
+<script  src="/assets/js/components/hs.popup.js"></script>
+
+<script src="https://cdn.wilddog.com/sdk/js/2.5.17/wilddog-sync.js"></script>
+
+<script>
+  function SETValue(key, value) {
+    if (typeof(Storage) !== "undefined") {
+      var curTime = new Date().getTime();
+      localStorage.setItem(key, JSON.stringify({
+        data: value,
+        time: curTime
+      }));
+    }
+  }
+
+  function GETvalue(key) {
+    if (typeof(Storage) !== "undefined") {
+      var data = localStorage.getItem(key);
+      if(data) {
+        var dataObj = JSON.parse(data);
+        if (new Date().getTime() - dataObj.time > 1000*60*60) {
+          //alert("信息已过期")
+        } else {
+          //console.log("data="+dataObj.data);
+          //console.log(JSON.parse(dataObj.data));
+          var dataObjDatatoJson = dataObj.data
+          return dataObjDatatoJson;
+        }
+      }
+    }
+  }
+
+  function REQuest(url, finish) {
+
+    var value = GETvalue(url);
+
+    if (value) {
+      finish(value);
+      return;
+    }
+
+    $.ajax({
+      type: "get",
+      dataType: "jsonp",
+      cache: true,
+      url: url,
+      success: function(data) {
+        SETValue(url, data);
+        finish(data);
+      }
+    });
+  }
+
+
+  $(document).on('ready', function() {
+    // initialization of header
+    $.HSCore.components.HSHeader.init($('#js-header'));
+    $.HSCore.helpers.HSHamburgers.init('.hamburger');
+
+    // initialization of MegaMenu
+    $('.js-mega-menu').HSMegaMenu();
+
+    // initialization of HSDropdown component
+    $.HSCore.components.HSDropdown.init($('[data-dropdown-target]'), {
+      afterOpen: function() {
+        $(this).find('input[type="search"]').focus();
+      }
+    });
+    // initialization of popups
+                                $.HSCore.components.HSPopup.init('.js-fancybox');
+
+                                // initialization of gallery with thumbs
+                                $.HSCore.components.HSPopup.init('.js-fancybox-thumbs', {
+                                  thumbs: {
+                                    showOnStart: true
+                                  }
+                                });
+
+    // initialization of go to
+    $.HSCore.components.HSGoTo.init('.js-go-to');
+  });
+</script>
+
+<script>
+
+//  百度站长 推送
+
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+  <body>
+    <main>
+
+  <!-- Header -->
+  <header id="js-header" class="u-header u-header--static u-shadow-v19">
+    <!-- Top Bar -->
+    <div class="u-header__section g-brd-bottom g-brd-gray-light-v4 g-py-18">
+      <div class="container">
+        <div class="row align-items-center">
+
+          <!-- Logo -->
+<div class="col-md-3 g-hidden-md-down">
+  <a href="bm-classic-home-page-1.html" class="navbar-brand">
+    <img src="/assets/img/logo.png" alt="Logo">
+  </a>
+</div>
+<!-- End Logo -->
+
+
+          <!-- Subscribe Form -->
+<div class="col-6 col-md-5">
+  <form class="input-group rounded">
+    <input class="form-control w-100 g-brd-secondary-light-v2 g-brd-primary--focus g-color-secondary-dark-v1 g-placeholder-secondary-dark-v1 g-bg-white g-font-weight-400 g-font-size-13 rounded g-px-20 g-py-12" type="text" placeholder="输入以搜索该博客文章">
+    <span class="input-group-addon g-brd-none g-py-0 g-pr-0">
+      <button class="btn u-btn-white g-color-primary--hover g-bg-secondary g-font-weight-600 g-font-size-13 text-uppercase rounded g-py-12 g-px-20" type="submit">
+        <span class="g-hidden-md-down">Search</span>
+        <i class="g-hidden-lg-up fa fa-search"></i>
+      </button>
+    </span>
+  </form>
+</div>
+<!-- End Subscribe Form -->
+
+
+          <!-- Language -->
+<div id="clock" class="col-4 col-lg-2 g-pos-rel g-px-15 ml-auto">
+</div>
+<!-- End Language -->
+
+
+<script type="text/javascript">
+
+var config = {
+  syncURL: "https://wd2622139095udguuj.wilddogio.com" //输入节点 URL
+};
+wilddog.initializeApp(config);
+var ref = wilddog.sync().ref("browerlog");
+
+ref.push({
+  "url": window.location.href,
+  "date": Math.round(new Date().getTime())
+});
+
+ref.orderByChild("url").equalTo(window.location.href).on('value', function(snapshot) {
+
+  $("#clock").text("No."+Object.keys(snapshot.val()).length);
+
+  }, function (error) {
+});
+
+</script>
+
+
+          <!-- Account -->
+<div class="col-1" id="account">
+  <a id="account-dropdown-invoker" class="media align-items-center float-right g-text-underline--none--hover" href="#"
+     aria-controls="account-dropdown"
+     aria-haspopup="true"
+     aria-expanded="false"
+     data-dropdown-event="hover"
+     data-dropdown-target="#account-dropdown"
+     data-dropdown-type="css-animation"
+     data-dropdown-duration="300"
+     data-dropdown-hide-on-scroll="false"
+     data-dropdown-animation-in="fadeIn"
+     data-dropdown-animation-out="fadeOut">
+    <div class="d-flex g-width-30 g-height-30 mr-2">
+      <img class="img-fluid rounded-circle" src="http://blog.msiter.com/favicon/avatar.jpg" alt="Image Description">
+    </div>
+    <div class="media-body">
+      <span class="d-block g-hidden-sm-down g-color-main g-font-weight-600 g-font-size-13">文征</span>
+    </div>
+  </a>
+
+  <div id="account-dropdown" class="list-unstyled text-right g-width-160 g-brd-around g-brd-secondary-light-v2 g-bg-white rounded g-pos-abs g-right-0 g-py-5 g-mt-57" aria-labelledby="account-dropdown-invoker">
+
+    暂时没想好怎么做
+
+  </div>
+
+
+</div>
+<!-- End Account -->
+
+<script type="text/javascript">
+
+$("#account").mouseover(function(){
+
+
+});
+
+$("#account").mouseout(function(){
+
+});
+
+</script>
+
+
+        </div>
+      </div>
+    </div>
+    <!-- End Top Bar -->
+
+    <div class="u-header__section u-header__section--light g-bg-white g-transition-0_3 g-py-10">
+      <nav class="js-mega-menu navbar navbar-expand-lg g-px-0">
+        <div class="container g-px-15">
+          <!-- Logo -->
+          <a class="navbar-brand g-hidden-lg-up" href="bm-classic-home-page-1.html">
+            <img src="/assets/img/logo.png" alt="Logo">
+          </a>
+          <!-- End Logo -->
+
+          <!-- Responsive Toggle Button -->
+          <button class="navbar-toggler navbar-toggler-right btn g-line-height-1 g-brd-none g-pa-0 ml-auto" type="button"
+                  aria-label="Toggle navigation"
+                  aria-expanded="false"
+                  aria-controls="navBar"
+                  data-toggle="collapse"
+                  data-target="#navBar">
+            <span class="hamburger hamburger--slider g-pa-0">
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
+            </span>
+          </button>
+          <!-- End Responsive Toggle Button -->
+
+          <!-- Navigation -->
+          <div class="collapse navbar-collapse align-items-center flex-sm-row g-pt-10 g-pt-5--lg" id="navBar">
+            <ul class="navbar-nav g-font-weight-600">
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-1" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">标签
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-1">
+    <div class="row">
+      <div class="col-lg-2">
+        <ul class="list-unstyled mb-0" style="ov">
+
+          
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/生活/">生活</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/悲观/">悲观</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/Objective-C/">Objective-C</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/AsyncDisplayKit/">AsyncDisplayKit</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/ios/">ios</a></li>
+
+            
+
+        </ul>
+      </div>
+      <div class="col-lg-1">
+
+      </div>
+      <div class="col-lg-9" style="height:auto;" >
+
+        <!-- Background Gray Colored -->
+        <ul class="u-list-inline">
+
+          
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/生活/">生活</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/悲观/">悲观</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Objective-C/">Objective-C</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/AsyncDisplayKit/">AsyncDisplayKit</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/ios/">ios</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/约束教程/">约束教程</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/swift/">swift</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/autolayout/">autolayout</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/AttributedString/">AttributedString</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/iOS8-html2AttributedString-error/">iOS8 html2AttributedString error</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/技巧/">技巧</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/IOS/">IOS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mongodb/">mongodb</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mongoose/">mongoose</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/nodejs/">nodejs</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/RX/">RX</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/java/">java</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/spring-boot/">spring boot</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mybatis/">mybatis</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WKWebView/">WKWebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Systematic-distinction/">Systematic distinction</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WebKit/">WebKit</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WebView/">WebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/UIWebView/">UIWebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Input/">Input</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/File/">File</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Bug/">Bug</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/破解/">破解</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/抓包/">抓包</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/reactiv/">reactiv</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/rxswift/">rxswift</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/DB/">DB</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/realm/">realm</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/swagger/">swagger</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/api/">api</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/travis-ci/">travis-ci</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/cocoapods/">cocoapods</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/NodeJS/">NodeJS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/APNs/">APNs</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/八爪鱼/">八爪鱼</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/html/">html</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/js/">js</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Javascript/">Javascript</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/鼠标悬浮/">鼠标悬浮</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/越狱/">越狱</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/cydia/">cydia</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/制作源/">制作源</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/error/">error</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/奇怪的问题/">奇怪的问题</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/无趣，心理学/">无趣，心理学</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/async/">async</a>
+                        </li>
+
+            
+
+        </ul>
+        <!-- End Background Gray Colored -->
+
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-5" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">栏目
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-primary g-left-15 g-right-15 g-px-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-5">
+    <div class="row">
+      <div class="col-lg-12">
+        <ul class="list-inline text-center mb-0">
+
+
+
+          
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/牢骚/">牢骚</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/IOS/">IOS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/服务器/">服务器</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/开发帮助/">开发帮助</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/Web-前端/">Web 前端</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/生活/">生活</a>
+                        </li>
+
+            
+
+
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-3" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">最新文章
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-3">
+    <div class="row">
+      <div class="col-lg-4">
+        <article>
+          <figure class="g-pos-rel">
+            <img class="img-fluid w-100 g-mb-20" src="/assets/img-temp/900x600/img7.jpg" alt="Image Description">
+          </figure>
+          <h3 class="h4 g-mb-10"><a class="g-color-gray-dark-v2" href="#">Love the mother nature</a>
+          </h3>
+          <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+            <li class="list-inline-item">
+              <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">Kathy Reyes</a>
+            </li>
+            <li class="list-inline-item">/</li>
+            <li class="list-inline-item">July 20, 2016</li>
+            <li class="list-inline-item">/</li>
+            <li class="list-inline-item">
+              <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                <i class="fa fa-comments-o"></i> 18
+              </a>
+            </li>
+          </ul>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Top 10 Luxury Hotels - 5 Star Best Luxury Hotels</a>
+            </h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 07, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 24
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6"><a class="g-color-main" href="#">10 Most beautiful beaches</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 20, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 18
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Stylish things to do, see and buy this week</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 16, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 31
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">8 health benefits and drawbacks of coffee</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 30, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 12
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Stylish things to do, see and buy this week</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 16, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 31
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Top 10 Luxury Hotels - 5 Star Best Luxury Hotels</a>
+            </h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 07, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 24
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-4" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">最火文章
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-4">
+    <div class="row">
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Fashion</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 26, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Be ready, fashion of the year is coming this year</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Beaches</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 15, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Must be visited places in the USA - Florida Beaches</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Food</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera g-left-2"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 8, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Why your next glass of juice will cost you more</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-ml-15--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-7" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">新闻热点
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-7">
+    <div class="row">
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 16, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">You've been making French Pie all wrong - Until Now</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 02, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Unify facts, study finds - sensitive to gluten without having coeliac disease</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 18, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Why your next cup of cofee with milk will cost you more</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 12, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Incredible product and quality: Unify best template of the year</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 16, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Some post title will be implimented here and It's cool!</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 02, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Wireframe approach for the news blocks and pages</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 18, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Over thousands of components help you to boost your project</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 12, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">How to run a ticket: Best 10 point approaches for people who stands..</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Main -->
+<li class="nav-item g-mx-10--lg g-mx-20--xl">
+  <a id="nav-link--pages" class="nav-link text-uppercase g-color-primary--hover g-px-0" href="/">
+    主页
+  </a>
+</li>
+<!-- End Main -->
+
+
+
+
+
+
+
+
+            </ul>
+          </div>
+          <!-- End Navigation -->
+        </div>
+      </nav>
+    </div>
+  </header>
+  <!-- End Header -->
+
+
+    <section class="g-pt-50 g-pb-100">
+  <div class="container">
+    <div class="row">
+      <!-- Articles Content -->
+      <div class="col-lg-9 g-mb-50 g-mb-0--lg">
+        <article class="g-mb-60">
+          <header class="g-mb-30">
+            <h2 class="h1 g-mb-15">WebView 与 Html Input File 以及 Upload File 出现的问题</h2>
+
+            <ul class="list-inline d-sm-flex g-color-gray-dark-v4 mb-0">
+              <li class="list-inline-item">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                  小酒馆老板
+                </a>
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item">
+                2017/10/26 4:10:0
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item g-mr-10">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                        <i class="align-middle mr-2 icon-hotel-restaurant-242 u-line-icon-pro"></i>共有725个字
+                      </a>
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item g-mr-10">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                        <i class="align-middle mr-2 icon-hotel-restaurant-003 u-line-icon-pro"></i>预计阅读3分钟
+                      </a>
+              </li>
+            </ul>
+
+            <hr class="g-brd-gray-light-v4 g-my-15">
+
+
+
+                      <!-- Social Shares -->
+<div class="g-mb-30">
+
+    <ul class="list-inline text-uppercase mb-0">
+      <li class="list-inline-item g-mr-10">
+        <strong class="align-middle g-font-size-24 jiathis_counter_style"><a class="jiathis_counter_style"></a></strong>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <span class="g-color-gray-dark-v5">|</span>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_weixin btn u-btn-teal g-font-size-12 rounded g-px-20--sm g-py-10" style="color:white;">
+          <i class="fa fa-wechat g-mr-5--sm"></i>
+          <span class="g-hidden-xs-down">分享到微信</span>
+      </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tqq btn u-btn-twitter g-font-size-12 rounded g-px-20--sm g-py-10" href="#">
+              <i class="fa fa-qq g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 QQ</span>
+            </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tsina btn u-btn-lightred g-font-size-12 rounded g-px-20--sm g-py-10 " href="#">
+              <i class="fa fa-weibo g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 新浪微博</span>
+            </a>
+      </li>
+    </ul>
+</div>
+          <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+<!-- End Social Shares -->
+
+
+
+          </header>
+
+          <div class="">
+            <p>&#x5728;&#x9879;&#x76EE;&#x4E2D;&#x4F7F;&#x7528;&#x4E86;WebView&#x6765;&#x663E;&#x793A;&#x4E00;&#x4E9B;&#x5185;&#x5BB9;&#xFF0C;&#x4E4B;&#x540E;&#x5C31;&#x9047;&#x5230;&#x4E86;&#x4E00;&#x4E9B;&#x95EE;&#x9898;&#x3002;&#x603B;&#x7ED3;&#x4E86;&#x4E00;&#x4E0B;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://image.msiter.com/stock-photo-233150091.jpg" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://image.msiter.com/stock-photo-233150091.jpg" alt="Image Description">          </a><figcaption class="figure-caption g-font-size-12 g-color-gray-dark-v4 g-mt-5 text-center">        &#x4F60;&#x8FD8;&#x5F88;&#x5E74;&#x8F7B;,&#x5C06;&#x6765;&#x4F60;&#x4F1A;&#x9047;&#x5230;&#x5F88;&#x591A;&#x4EBA;,&#x7ECF;&#x5386;&#x5F88;&#x591A;&#x4E8B;,&#x5F97;&#x5230;&#x5F88;&#x591A;,&#x4E5F;&#x4F1A;&#x5931;&#x53BB;&#x5F88;&#x591A;<br><br>&#x4F46;&#x65E0;&#x8BBA;&#x5982;&#x4F55;,&#x6709;&#x4E24;&#x6837;&#x4E1C;&#x897F;,&#x4F60;&#x7EDD;&#x4E0D;&#x80FD;&#x4E22;&#x5F03;,&#x4E00;&#x4E2A;&#x53EB;&#x826F;&#x5FC3;,&#x53E6;&#x4E00;&#x4E2A;&#x53EB;&#x7406;&#x60F3;</figcaption></figure></p>
+<a id="more"></a>
+<h2 id="&#x9047;&#x5230;-Input-File-&#x51FA;&#x73B0;&#x7684;-&#x5D29;&#x6E83;&#x95EE;&#x9898;"><a href="#&#x9047;&#x5230;-Input-File-&#x51FA;&#x73B0;&#x7684;-&#x5D29;&#x6E83;&#x95EE;&#x9898;" class="headerlink" title="&#x9047;&#x5230; Input File &#x51FA;&#x73B0;&#x7684; &#x5D29;&#x6E83;&#x95EE;&#x9898;"></a>&#x9047;&#x5230; Input File &#x51FA;&#x73B0;&#x7684; &#x5D29;&#x6E83;&#x95EE;&#x9898;</h2><p>&#x8FD9;&#x4E2A;&#x95EE;&#x9898;&#x5176;&#x5B9E;&#x8FD8;&#x662F;&#x6BD4;&#x8F83;&#x597D;&#x89E3;&#x51B3; &#x65E0;&#x975E;&#x5C31;&#x662F;&#x6743;&#x9650;&#x95EE;&#x9898; &#x5177;&#x4F53;&#x7684;key&#x503C;</p>
+<p>&#x8BF7;&#x76F4;&#x63A5;&#x8BBF;&#x95EE; <a href="https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html" target="_blank" rel="noopener">Cocoa Keys</a></p>
+<h2 id="Model-&#x7684;ViewController-&#x5728;&#x4E0A;&#x4F20;&#x6587;&#x4EF6;&#x540E;-&#x4F1A;&#x76F4;&#x63A5;-dismiss&#x6389;"><a href="#Model-&#x7684;ViewController-&#x5728;&#x4E0A;&#x4F20;&#x6587;&#x4EF6;&#x540E;-&#x4F1A;&#x76F4;&#x63A5;-dismiss&#x6389;" class="headerlink" title="Model &#x7684;ViewController &#x5728;&#x4E0A;&#x4F20;&#x6587;&#x4EF6;&#x540E; &#x4F1A;&#x76F4;&#x63A5; dismiss&#x6389;"></a>Model &#x7684;ViewController &#x5728;&#x4E0A;&#x4F20;&#x6587;&#x4EF6;&#x540E; &#x4F1A;&#x76F4;&#x63A5; dismiss&#x6389;</h2><p>&#x89E3;&#x51B3;&#x529E;&#x6CD5; &#x5728; Model &#x51FA;&#x6765;&#x7684; ViewController &#x52A0;&#x5165; UINavigationController</p>
+<p>&#x4E4B;&#x540E;&#x91CD;&#x5199; UINavigationController &#x7684;&#x65B9;&#x6CD5;</p>
+<pre class="line-numbers language-objectivec g-mb-30"><code class="language-objectivec"><span class="token operator">-</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>dismissViewControllerAnimated<span class="token punctuation">:</span><span class="token punctuation">(</span>BOOL<span class="token punctuation">)</span>flag completion<span class="token punctuation">:</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">^</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">)</span>completion<span class="token punctuation">{</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">.</span>presentedViewController<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token punctuation">[</span><span class="token keyword">super</span> dismissViewControllerAnimated<span class="token punctuation">:</span>flag completion<span class="token punctuation">:</span>completion<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="&#x81EA;&#x5DF1;&#x91CD;&#x5199;pan-dismiss-&#x65B9;&#x6CD5;&#x7684;&#x969C;&#x788D;&#x89E3;&#x51B3;"><a href="#&#x81EA;&#x5DF1;&#x91CD;&#x5199;pan-dismiss-&#x65B9;&#x6CD5;&#x7684;&#x969C;&#x788D;&#x89E3;&#x51B3;" class="headerlink" title="&#x81EA;&#x5DF1;&#x91CD;&#x5199;pan dismiss &#x65B9;&#x6CD5;&#x7684;&#x969C;&#x788D;&#x89E3;&#x51B3;"></a>&#x81EA;&#x5DF1;&#x91CD;&#x5199;pan dismiss &#x65B9;&#x6CD5;&#x7684;&#x969C;&#x788D;&#x89E3;&#x51B3;</h3><p>&#x5728;&#x6211;&#x4EEC;&#x60F3;&#x91CD;&#x5199;dismiss&#x7684;&#x65B9;&#x6CD5;&#x65F6;&#xFF0C;&#x4F1A;&#x7ED1;&#x5B9A;&#x4E00;&#x4E2A;&#x624B;&#x52BF;&#x3002;&#x4F46;&#x662F;&#x5728; WebView&#x4E2D;&#x5DF2;&#x7ECF;&#x5B58;&#x5728;&#x4E86;&#x5F88;&#x591A;&#x624B;&#x52BF;&#x4E86;&#x3002;<br>&#x5176;&#x4E2D;&#x5C31;&#x5305;&#x62EC; &#x4E24;&#x4E2A; <code>UIScreenEdgePanGestureRecognizer</code>&#xFF0C;&#x4E00;&#x4E2A;&#x8FDB;&#x884C;&#x524D;&#x8FDB;&#x64CD;&#x4F5C; &#x4E00;&#x4E2A;&#x8FDB;&#x884C;&#x540E;&#x9000;&#x64CD;&#x4F5C;</p>
+<p>&#x6211;&#x4EEC;&#x60F3;&#x91CD;&#x5199;pan&#x65B9;&#x6CD5;&#x8FDB;&#x884C;&#x524D;&#x8FDB;&#x540E;&#x9000;dismiss&#x7684;&#x8BDD;&#xFF0C;&#x6682;&#x65F6;&#x53EA;&#x6709;&#x4E24;&#x79CD;&#x529E;&#x6CD5;&#xFF0C;&#x63A5;&#x4E0B;&#x6765;&#x6211;&#x4EEC;&#x770B;&#x770B;&#x90A3;&#x79CD;&#x65B9;&#x6CD5;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5427;</p>
+<h4 id="&#x7B2C;&#x4E00;&#x79CD;-&#x81EA;&#x5DF1;&#x53BB;&#x5199;-WebView-&#x4E2D;&#x7684;-pan-&#x624B;&#x52BF;"><a href="#&#x7B2C;&#x4E00;&#x79CD;-&#x81EA;&#x5DF1;&#x53BB;&#x5199;-WebView-&#x4E2D;&#x7684;-pan-&#x624B;&#x52BF;" class="headerlink" title="&#x7B2C;&#x4E00;&#x79CD; &#x81EA;&#x5DF1;&#x53BB;&#x5199; WebView &#x4E2D;&#x7684; pan &#x624B;&#x52BF;"></a>&#x7B2C;&#x4E00;&#x79CD; &#x81EA;&#x5DF1;&#x53BB;&#x5199; WebView &#x4E2D;&#x7684; pan &#x624B;&#x52BF;</h4><p>&#x9996;&#x5148;&#x60F3;&#x5230;&#x7684;&#x5C31;&#x662F;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x56E0;&#x4E3A;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x5F88;&#x7701;&#x4E8B;&#x513F;&#xFF0C;&#x53EF;&#x5B9A;&#x4E49;&#x7A0B;&#x5EA6;&#x9AD8;&#xFF0C;&#x5F53;&#x7136;&#x8FD9;&#x662F;&#x53EF;&#x884C;&#x7684;&#x60C5;&#x51B5;&#x4E0B;</p>
+<p>&#x4E8B;&#x5B9E;&#x8BC1;&#x660E;&#xFF0C;&#x6211;&#x4EEC;&#x5728;&#x7B2C;&#x4E00;&#x4E2A;&#x95EE;&#x9898;&#x5C31;&#x88AB;&#x62CC;&#x4F4F;&#x4E86;&#xFF0C;&#x6211;&#x4EEC;&#x6CA1;&#x6709;&#x529E;&#x6CD5;&#x53BB;&#x6E10;&#x8FDB;&#x5F0F;&#x7684; &#x524D;&#x8FDB;&#x7F51;&#x9875; &#x548C; &#x540E;&#x9000; &#x6240;&#x4EE5;&#x8FD9;&#x4E2A;&#x95EE;&#x9898;&#x4E0D;&#x5F97;&#x4E0D;&#x653E;&#x5F03;</p>
+<h4 id="&#x7B2C;&#x4E8C;&#x79CD;-&#x4F7F;&#x7528;-UIGestureRecognizerDelegate-&#x6765;&#x6682;&#x65F6;&#x5173;&#x95ED;-webview&#x4E2D;&#x7684;&#x624B;&#x52BF;"><a href="#&#x7B2C;&#x4E8C;&#x79CD;-&#x4F7F;&#x7528;-UIGestureRecognizerDelegate-&#x6765;&#x6682;&#x65F6;&#x5173;&#x95ED;-webview&#x4E2D;&#x7684;&#x624B;&#x52BF;" class="headerlink" title="&#x7B2C;&#x4E8C;&#x79CD; &#x4F7F;&#x7528; UIGestureRecognizerDelegate &#x6765;&#x6682;&#x65F6;&#x5173;&#x95ED; webview&#x4E2D;&#x7684;&#x624B;&#x52BF;"></a>&#x7B2C;&#x4E8C;&#x79CD; &#x4F7F;&#x7528; UIGestureRecognizerDelegate &#x6765;&#x6682;&#x65F6;&#x5173;&#x95ED; webview&#x4E2D;&#x7684;&#x624B;&#x52BF;</h4><p>&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x6700;&#x7EC8;&#x5B9E;&#x8DF5;&#x662F;&#x53EF;&#x4EE5;&#x7684;</p>
+<p>&#x9996;&#x5148;&#x6211;&#x4EEC;&#x83B7;&#x53D6;&#x5230; &#x540E;&#x9000;&#x7684;&#x624B;&#x52BF; &#x5728;&#x521B;&#x5EFA; WebView &#x4E4B;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x8FD9;&#x6837;&#x83B7;&#x53D6;</p>
+<h5 id="&#x83B7;&#x53D6;&#x5230;-&#x624B;&#x52BF;-&#x5E76;&#x4E14;&#x8BBE;&#x7F6E;-delegate"><a href="#&#x83B7;&#x53D6;&#x5230;-&#x624B;&#x52BF;-&#x5E76;&#x4E14;&#x8BBE;&#x7F6E;-delegate" class="headerlink" title="&#x83B7;&#x53D6;&#x5230; &#x624B;&#x52BF; &#x5E76;&#x4E14;&#x8BBE;&#x7F6E; delegate"></a>&#x83B7;&#x53D6;&#x5230; &#x624B;&#x52BF; &#x5E76;&#x4E14;&#x8BBE;&#x7F6E; delegate</h5><pre class="line-numbers language-objectivec g-mb-30"><code class="language-objectivec"><span class="token keyword">for</span> <span class="token punctuation">(</span>UIGestureRecognizer <span class="token operator">*</span>reconizer <span class="token keyword">in</span> <span class="token keyword">self</span><span class="token punctuation">.</span>wkWebView<span class="token punctuation">.</span>gestureRecognizers<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token comment" spellcheck="true">/// &#x5982;&#x679C;&#x83B7;&#x53D6;&#x7684; &#x624B;&#x52BF; &#x7C7B;&#x578B;&#x662F; ScreenEdgePanGestureRecognizer &#x7C7B;&#x578B;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">[</span>reconizer isKindOfClass<span class="token punctuation">:</span>UIScreenEdgePanGestureRecognizer<span class="token punctuation">.</span>class<span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            <span class="token comment" spellcheck="true">/// &#x5982;&#x679C;&#x624B;&#x52BF;&#x5BF9;&#x8C61;&#x662F; &#x8FD4;&#x56DE;&#x7684;&#x6536;&#x89C6;&#x5BF9;&#x8C61; &#x4F5C;&#x51FA;&#x4EE5;&#x4E0B;&#x5904;&#x7406;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>UIScreenEdgePanGestureRecognizer<span class="token operator">*</span><span class="token punctuation">)</span>reconizer<span class="token punctuation">)</span><span class="token punctuation">.</span>edges <span class="token operator">==</span> UIRectEdgeLeft<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                reconizer<span class="token punctuation">.</span>delegate <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+            <span class="token comment" spellcheck="true">/// &#x8BE5;&#x624B;&#x52BF;&#x5C31;&#x662F; &#x524D;&#x8FDB;&#x624B;&#x52BF;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>UIScreenEdgePanGestureRecognizer<span class="token operator">*</span><span class="token punctuation">)</span>reconizer<span class="token punctuation">)</span><span class="token punctuation">.</span>edges <span class="token operator">==</span> UIRectEdgeRight<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h5 id="&#x6839;&#x636E;WebView-&#x662F;&#x5426;&#x53EF;&#x4EE5;&#x8FD4;&#x56DE;-&#x63A7;&#x5236;&#x624B;&#x52BF;&#x662F;&#x5426;&#x53EF;&#x7528;"><a href="#&#x6839;&#x636E;WebView-&#x662F;&#x5426;&#x53EF;&#x4EE5;&#x8FD4;&#x56DE;-&#x63A7;&#x5236;&#x624B;&#x52BF;&#x662F;&#x5426;&#x53EF;&#x7528;" class="headerlink" title="&#x6839;&#x636E;WebView &#x662F;&#x5426;&#x53EF;&#x4EE5;&#x8FD4;&#x56DE; &#x63A7;&#x5236;&#x624B;&#x52BF;&#x662F;&#x5426;&#x53EF;&#x7528;"></a>&#x6839;&#x636E;WebView &#x662F;&#x5426;&#x53EF;&#x4EE5;&#x8FD4;&#x56DE; &#x63A7;&#x5236;&#x624B;&#x52BF;&#x662F;&#x5426;&#x53EF;&#x7528;</h5><p>&#x83B7;&#x53D6;&#x5230; delegate&#x4E4B;&#x540E;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;&#x64CD;&#x4F5C;&#x4E86; &#x63A5;&#x4E0B;&#x6765;&#x5B9E;&#x73B0; delegate &#x7684;&#x65B9;&#x6CD5;</p>
+<pre class="line-numbers language-objectivec g-mb-30"><code class="language-objectivec">
+<span class="token comment" spellcheck="true">/// &#x5F53;WebView &#x4E0D;&#x53EF;&#x4EE5;&#x8FD4;&#x56DE;&#x5230;&#x65F6;&#x5019;&#xFF0C;&#x6211;&#x4EEC;&#x4E0D;&#x8BA9;&#x8BE5;&#x624B;&#x52BF;&#x89E6;&#x53D1;</span>
+<span class="token operator">-</span><span class="token punctuation">(</span>BOOL<span class="token punctuation">)</span>gestureRecognizerShouldBegin<span class="token punctuation">:</span><span class="token punctuation">(</span>UIGestureRecognizer <span class="token operator">*</span><span class="token punctuation">)</span>gestureRecognizer<span class="token punctuation">{</span>
+
+    <span class="token keyword">return</span> <span class="token keyword">self</span><span class="token punctuation">.</span>wkWebView<span class="token punctuation">.</span>canGoBack<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h5 id="&#x5199;-&#x63A8;&#x51FA;&#x89C6;&#x56FE;&#x7684;&#x65B9;&#x6CD5;"><a href="#&#x5199;-&#x63A8;&#x51FA;&#x89C6;&#x56FE;&#x7684;&#x65B9;&#x6CD5;" class="headerlink" title="&#x5199; &#x63A8;&#x51FA;&#x89C6;&#x56FE;&#x7684;&#x65B9;&#x6CD5;"></a>&#x5199; &#x63A8;&#x51FA;&#x89C6;&#x56FE;&#x7684;&#x65B9;&#x6CD5;</h5><pre class="line-numbers language-objectivec g-mb-30"><code class="language-objectivec"><span class="token operator">-</span><span class="token punctuation">(</span>instancetype<span class="token punctuation">)</span>initWithRootViewController<span class="token punctuation">:</span><span class="token punctuation">(</span>UIViewController <span class="token operator">*</span><span class="token punctuation">)</span>rootViewController<span class="token punctuation">{</span>
+
+    <span class="token keyword">self</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token keyword">super</span> initWithRootViewController<span class="token punctuation">:</span>rootViewController<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        _presentdAnimation <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span>BaseViewControllerPresentdAnimation alloc<span class="token punctuation">]</span> init<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        _dismissedAnimation <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span>BaseViewControllerDismissedAnimation alloc<span class="token punctuation">]</span> init<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        _interactiveTransitioning <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span>BasePresentdAnimationInteractiveTransition alloc<span class="token punctuation">]</span>init<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">self</span><span class="token punctuation">.</span>navigationBarHidden <span class="token operator">=</span> true<span class="token punctuation">;</span>
+
+        <span class="token keyword">self</span><span class="token punctuation">.</span>transitioningDelegate <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>modalPresentationCapturesStatusBarAppearance <span class="token operator">=</span> true<span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">/// &#x5728;&#x83B7;&#x53D6;&#x5230; RootViewController &#x5B8C;&#x6210; &#x624B;&#x52BF;&#x7684;&#x7ED1;&#x5B9A; &#x8FD9;&#x6837;&#x5728; Wkwebview &#x624B;&#x52BF;&#x4E0D;&#x53EF;&#x7528;&#x7684;&#x65F6;&#x5019; &#x8BE5;&#x624B;&#x52BF;&#x5C31;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x4E86;</span>
+        _panGestureRecognizer <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span>UIScreenEdgePanGestureRecognizer alloc<span class="token punctuation">]</span> initWithTarget<span class="token punctuation">:</span><span class="token keyword">self</span> action<span class="token punctuation">:</span><span class="token keyword">@selector</span><span class="token punctuation">(</span>handlePanGestureRecognizerMethod<span class="token punctuation">:</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        _panGestureRecognizer<span class="token punctuation">.</span>edges <span class="token operator">=</span> UIRectEdgeLeft<span class="token punctuation">;</span>
+        <span class="token punctuation">[</span>rootViewController<span class="token punctuation">.</span>view addGestureRecognizer<span class="token punctuation">:</span>_panGestureRecognizer<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> <span class="token keyword">self</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token operator">-</span><span class="token punctuation">(</span>id<span class="token operator">&lt;</span>UIViewControllerAnimatedTransitioning<span class="token operator">&gt;</span><span class="token punctuation">)</span>animationControllerForPresentedController<span class="token punctuation">:</span><span class="token punctuation">(</span>UIViewController <span class="token operator">*</span><span class="token punctuation">)</span>presented presentingController<span class="token punctuation">:</span><span class="token punctuation">(</span>UIViewController <span class="token operator">*</span><span class="token punctuation">)</span>presenting sourceController<span class="token punctuation">:</span><span class="token punctuation">(</span>UIViewController <span class="token operator">*</span><span class="token punctuation">)</span>source<span class="token punctuation">{</span>
+
+    <span class="token keyword">return</span> _presentdAnimation <span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token operator">-</span><span class="token punctuation">(</span>id<span class="token operator">&lt;</span>UIViewControllerAnimatedTransitioning<span class="token operator">&gt;</span><span class="token punctuation">)</span>animationControllerForDismissedController<span class="token punctuation">:</span><span class="token punctuation">(</span>UIViewController <span class="token operator">*</span><span class="token punctuation">)</span>dismissed<span class="token punctuation">{</span>
+
+    <span class="token keyword">return</span> _dismissedAnimation<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token operator">-</span><span class="token punctuation">(</span>id<span class="token operator">&lt;</span>UIViewControllerInteractiveTransitioning<span class="token operator">&gt;</span><span class="token punctuation">)</span>interactionControllerForDismissal<span class="token punctuation">:</span><span class="token punctuation">(</span>id<span class="token operator">&lt;</span>UIViewControllerAnimatedTransitioning<span class="token operator">&gt;</span><span class="token punctuation">)</span>animator<span class="token punctuation">{</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>_dismissedAnimation<span class="token punctuation">.</span>isInteraction<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">return</span> _interactiveTransitioning<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> nil<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token operator">-</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>handlePanGestureRecognizerMethod<span class="token punctuation">:</span><span class="token punctuation">(</span>UIPanGestureRecognizer <span class="token operator">*</span><span class="token punctuation">)</span>pan<span class="token punctuation">{</span>
+
+    CGPoint point <span class="token operator">=</span> <span class="token punctuation">[</span>pan translationInView<span class="token punctuation">:</span><span class="token keyword">self</span><span class="token punctuation">.</span>view<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span>pan<span class="token punctuation">.</span>state<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">case</span> UIGestureRecognizerStateBegan<span class="token punctuation">:</span>
+
+            <span class="token keyword">self</span><span class="token punctuation">.</span>dismissedAnimation<span class="token punctuation">.</span>isInteraction <span class="token operator">=</span> true<span class="token punctuation">;</span>
+
+            <span class="token punctuation">[</span><span class="token keyword">self</span><span class="token punctuation">.</span>viewControllers<span class="token punctuation">.</span>firstObject dismissViewControllerAnimated<span class="token punctuation">:</span>true completion<span class="token punctuation">:</span>nil<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">case</span> UIGestureRecognizerStateChanged<span class="token punctuation">:</span>
+
+            <span class="token punctuation">[</span>_interactiveTransitioning updateInteractiveTransition<span class="token punctuation">:</span> <span class="token punctuation">(</span>CGFloat<span class="token punctuation">)</span>point<span class="token punctuation">.</span>x<span class="token operator">/</span><span class="token function">CGRectGetWidth</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">.</span>view<span class="token punctuation">.</span>frame<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token keyword">default</span><span class="token punctuation">:</span>
+
+            _dismissedAnimation<span class="token punctuation">.</span>isInteraction <span class="token operator">=</span> false<span class="token punctuation">;</span>
+
+            CGFloat locationX <span class="token operator">=</span> <span class="token function">ABS</span><span class="token punctuation">(</span>point<span class="token punctuation">.</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            CGFloat velocityX <span class="token operator">=</span> <span class="token punctuation">[</span>pan velocityInView<span class="token punctuation">:</span><span class="token keyword">self</span><span class="token punctuation">.</span>view<span class="token punctuation">]</span><span class="token punctuation">.</span>x<span class="token punctuation">;</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>velocityX <span class="token operator">&gt;=</span> <span class="token number">500</span> <span class="token operator">||</span> locationX <span class="token operator">&gt;=</span> <span class="token function">CGRectGetWidth</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">.</span>view<span class="token punctuation">.</span>frame<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                <span class="token punctuation">[</span>_interactiveTransitioning finishInteractiveTransition<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+
+                <span class="token punctuation">[</span>_interactiveTransitioning cancelInteractiveTransition<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>&#x6548;&#x679C;&#x5982;&#x4E0B;&#xFF1A;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://image.msiter.com/wkwebview-screen-pan-cancel.gif" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://image.msiter.com/wkwebview-screen-pan-cancel.gif" alt="Image Description">          </a></figure></p>
+
+          </div>
+
+          <!-- Sources & Tags -->
+<div class="g-mb-30">
+  <h6 class="g-color-gray-dark-v1 g-mb-15">
+
+    
+
+                <strong class="g-mr-5">专栏:</strong> <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="/categories/IOS/">IOS</a>
+      
+
+        </h6>
+  <h6 class="g-color-gray-dark-v1">
+          <strong class="g-mr-5">标签:</strong>
+
+          
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/WKWebView/">WKWebView</a>
+            
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/WebView/">WebView</a>
+            
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/UIWebView/">UIWebView</a>
+            
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/Input/">Input</a>
+            
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/File/">File</a>
+            
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/Bug/">Bug</a>
+            
+        </h6>
+</div>
+<!-- End Sources & Tags -->
+
+
+          <hr class="g-brd-gray-light-v4">
+
+          <!-- Social Shares -->
+<div class="g-mb-30">
+
+    <ul class="list-inline text-uppercase mb-0">
+      <li class="list-inline-item g-mr-10">
+        <strong class="align-middle g-font-size-24 jiathis_counter_style"><a class="jiathis_counter_style"></a></strong>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <span class="g-color-gray-dark-v5">|</span>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_weixin btn u-btn-teal g-font-size-12 rounded g-px-20--sm g-py-10" style="color:white;">
+          <i class="fa fa-wechat g-mr-5--sm"></i>
+          <span class="g-hidden-xs-down">分享到微信</span>
+      </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tqq btn u-btn-twitter g-font-size-12 rounded g-px-20--sm g-py-10" href="#">
+              <i class="fa fa-qq g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 QQ</span>
+            </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tsina btn u-btn-lightred g-font-size-12 rounded g-px-20--sm g-py-10 " href="#">
+              <i class="fa fa-weibo g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 新浪微博</span>
+            </a>
+      </li>
+    </ul>
+</div>
+          <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+<!-- End Social Shares -->
+
+
+
+          <div class="g-mb-60">
+  <!-- UY BEGIN -->
+  <div id="uyan_frame"></div>
+  <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1821358"></script>
+  <!-- UY END -->
+</div>
+
+
+        </article>
+
+        <div id="stickyblock-end"></div>
+      </div>
+      <!-- End Articles Content -->
+
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+
+        
+        <!-- Social Links -->
+        <div class="g-mb-50">
+          <div class="u-heading-v3-1 g-mb-30">
+            <h2 class="h5 u-heading-v3__title g-color-gray-dark-v1 text-uppercase g-brd-primary">最热专题</h2>
+          </div>
+
+          <ul class="list-unstyled mb-0">
+
+            
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        IOS
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">15</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        服务器
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">4</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        开发帮助
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">3</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        牢骚
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">1</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        Web 前端
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">1</span>
+              </li>
+
+              
+          </ul>
+        </div>
+        <!-- End Social Links -->
+
+
+        <div id="stickyblock-start" class="js-sticky-block g-sticky-block--lg g-pt-20" data-start-point="#stickyblock-start" data-end-point="#stickyblock-end" style="top: 0px; width: 255px; height: 957px;">
+
+  <div class="g-mb-40">
+
+
+
+
+
+      <!-- News Feed -->
+<div class="g-mb-40">
+  <div class="u-heading-v3-1 g-mb-30">
+    <h2 class="h5 u-heading-v3__title g-color-gray-dark-v1 text-uppercase g-brd-primary">最新日志</h2>
+  </div>
+
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/23/生活随处可见一斑20171123/">天通苑地铁 安检方式改变</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/23 9:18:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">使用 NodeJS APNS 给你的应用发消息</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/22 17:2:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">IOS10前 UITextFiled 的 placeholder 的问题</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/16 1:16:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/10/26/WebView 与 Html Input Bug/">WebView 与 Html Input File 以及 Upload File 出现的问题</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/10/26 4:10:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+
+  
+
+</div>
+<!-- End News Feed -->
+
+
+
+</div>
+
+
+      </div>
+      <!-- End Sidebar -->
+    </div>
+  </div>
+</section>
+
+<script src="/assets/js/components/hs.sticky-block.js"></script>
+<script type="text/javascript">
+
+    $(window).on('load', function () {
+      // initialization of sticky blocks
+      $.HSCore.components.HSStickyBlock.init('.js-sticky-block');
+    });
+
+</script>
+
+
+      <!-- JS Implementing Plugins -->
+<script src="/assets/vendor/custombox/custombox.min.js"></script>
+
+<!-- JS Unify -->
+<script src="/assets/js/components/hs.modal-window.js"></script>
+
+
+<!-- Footer -->
+<footer class="g-bg-black-opacity-0_9 g-color-white-opacity-0_8 ">
+  <br><br><br>
+  <div class="container g-mb-60">
+    <div class="row">
+
+      <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">关于我</h2>
+  </div>
+
+  <div class="g-mb-30">
+    <p class="g-color-white-opacity-0_8">努力学习的IOS程序员。目前在学习制作Hexo主题，主要还是为了做自己的一个博客.之后会好好学习linux以及服务器相关的知识.</p>
+  </div>
+
+  <address class="mb-0">
+    <div class="g-mb-30">
+      <h4 class="h6 g-font-weight-600">现居地</h4>
+      <p class="mb-0 g-color-white-opacity-0_8">北京 - 国家的首都 </p>
+    </div>
+
+    <!-- 配置标签相关视图 -->
+    
+
+      <div class="g-mb-30">
+        <h4 class="h6 g-font-weight-600">邮箱:</h4>
+
+        
+
+                <p class="mb-0 g-color-white-opacity-0_8">alphabetion@gmail.com</p>
+        
+
+                <p class="mb-0 g-color-white-opacity-0_8">jingwenzheng@baimaodai.com</p>
+        
+
+      </div>
+
+      
+
+
+
+    <div class="mb-0">
+      <h4 class="h6 g-font-weight-600">一言:</h4>
+      <p class="mb-0">
+        <a class="g-color-white-opacity-0_8" id="hitokoto" href="http://hitokoto.cn/">support@htmlstream.com</a>
+      </p>
+    </div>
+  </address>
+</div>
+<!-- End Footer Content -->
+
+
+        <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+
+
+  <!-- 配置标签相关视图 -->
+  
+    <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+      <h2 class="u-heading-v2__title h6 text-uppercase mb-0">标签</h2>
+    </div>
+    <ul class="u-list-inline g-font-size-12 g-mb-30">
+
+      
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/生活/">
+            生活
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/悲观/">
+            悲观
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/Objective-C/">
+            Objective-C
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/AsyncDisplayKit/">
+            AsyncDisplayKit
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/ios/">
+            ios
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/约束教程/">
+            约束教程
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/swift/">
+            swift
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/autolayout/">
+            autolayout
+          </a>
+        </li>
+        
+    </ul>
+    
+
+      <!-- 布局相关链接-->
+
+      <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+        <h2 class="u-heading-v2__title h6 text-uppercase mb-0">友情链接</h2>
+      </div>
+
+      <ul class="list-unstyled">
+        
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://baidu.com">
+              百度
+            </a>
+          </li>
+
+          
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://test.baidu.com">
+              测试链接
+            </a>
+          </li>
+
+          
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://baidu.com">
+              hexo
+            </a>
+          </li>
+
+          
+      </ul>
+
+
+
+</div>
+<!-- End Footer Content -->
+
+
+          <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">最近文章</h2>
+  </div>
+
+  
+    
+
+  <article class="media">
+
+
+  
+
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/23/生活随处可见一斑20171123/">天通苑地铁 安检方式改变</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/23 9:18:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/23/生活随处可见一斑20171123/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+  <a class="d-flex g-mt-3 mr-3" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">
+    <img class="g-width-60 g-height-60 rounded" src="http://image.msiter.com/stock-photo-236362221.jpg" alt="Image Description">
+  </a>
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">使用 NodeJS APNS 给你的应用发消息</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/22 17:2:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">IOS10前 UITextFiled 的 placeholder 的问题</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/16 1:16:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+  <a class="d-flex g-mt-3 mr-3" href="/2017/10/26/WebView 与 Html Input Bug/">
+    <img class="g-width-60 g-height-60 rounded" src="http://image.msiter.com/stock-photo-233150091.jpg" alt="Image Description">
+  </a>
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/10/26/WebView 与 Html Input Bug/">WebView 与 Html Input File 以及 Upload File 出现的问题</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/10/26 4:10:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/10/26/WebView 与 Html Input Bug/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+      
+</div>
+<!-- End Footer Content -->
+
+
+            <!-- Footer Content -->
+<div class="col-lg-3 col-md-6">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">订阅</h2>
+  </div>
+
+  <div class="g-mb-30">
+    <p class="g-color-white-opacity-0_8">订阅我可以更及时的获取到文章的推送，请在下方输入您的邮箱地址获取文章更新</p>
+    <div class="input-group border-0 g-rounded-30">
+      <input class="form-control border-0 g-rounded-left-30 g-px-12 g-py-8" type="email" placeholder="输入您的邮箱地址">
+      <div class="input-group-addon border-0 p-0">
+        <button class="btn u-btn-primary g-rounded-right-30 g-px-12 g-py-8" type="submit" role="button">订阅</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">社交</h2>
+  </div>
+
+  <p class="g-color-white-opacity-0_8">作为一个宅男，长期宅在家里，会不定期的更新文章。如果你想更新的了解到我的动态，请选择一下任意一种社交方式关注我。</p>
+  <ul class="list-inline mb-0">
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://www.facebook.com/aimobier">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://www.instagram.com/aimobier/">
+        <i class="fa fa-instagram"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://github.com/aimobier">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="http://weibo.com/aouns">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="#modal1" data-modal-target="#modal1" data-modal-effect="fadein">
+        <i class="fa fa-weixin"></i>
+</a>
+    </li>
+  </ul>
+</div>
+<!-- End Footer Content -->
+
+    </div>
+  </div>
+
+
+  <!-- Copyright Footer -->
+<div class="g-bg-black-opacity-0_1 g-color-white-opacity-0_8 text-center g-py-20">
+  <div class="container">
+    
+      
+        
+        <small class="g-font-size-7 g-mr-10 g-mb-10 g-mb-0--md">2015 - 2017 © All Rights Reserved. Msiter by
+        <a class="g-color-white-opacity-0_8" href="#">Jing WenZheng</a>
+      </small>
+  </div>
+</div>
+<!-- End Copyright Footer -->
+
+
+</footer>
+<!-- End Footer -->
+<a class="js-go-to u-go-to-v1" href="#" data-type="fixed" data-position='{
+ "bottom": 15,
+ "right": 15
+}' data-offset-top="400" data-compensation="#js-header" data-show-effect="zoomIn">
+  <i class="hs-icon hs-icon-arrow-top"></i>
+</a>
+
+<script type="text/javascript">
+  $(function() {
+
+    // initialization of go to
+    $.HSCore.components.HSGoTo.init('.js-go-to');
+    $.HSCore.components.HSModalWindow.init('[data-modal-target]');
+    $.getJSON("https://sslapi.hitokoto.cn/?encode=json", function(json) {
+      $("#hitokoto").html(json["hitokoto"]);
+    });
+  });
+</script>
+
+
+    </main>
+
+    <div class="u-outer-spaces-helper"></div>
+
+
+  </body>
+</html>

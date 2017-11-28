@@ -1,0 +1,2221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+      <!-- Title -->
+      
+      <title>RxSwift 学习 未完待续 | 荆文征</title>
+
+    <!-- Required Meta Tags Always Come First -->
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700%7COpen+Sans:400,600,700">
+
+    <!-- CSS Global Compulsory -->
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/bootstrap.min.css">
+
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="/assets/vendor/icon-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/vendor/icon-line-pro/style.css">
+    <link rel="stylesheet" href="/assets/vendor/icon-hs/style.css">
+    <link rel="stylesheet" href="/assets/vendor/animate.css">
+    <link rel="stylesheet" href="/assets/vendor/hs-megamenu/src/hs.megamenu.css">
+    <link rel="stylesheet" href="/assets/vendor/hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" href="/assets/vendor/slick-carousel/slick/slick.css">
+    <link rel="stylesheet" href="/assets/vendor/fancybox/jquery.fancybox.css">
+
+    <!-- Revolution Slider -->
+    <link rel="stylesheet" href="/assets/vendor/revolution-slider/revolution/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="/assets/vendor/revolution-slider/revolution/css/settings.css">
+    <link rel="stylesheet" href="/revolution-slider/carousel-gallery/assets/css/style.css">
+
+    <!-- CSS Unify Theme -->
+    <link rel="stylesheet" href="/assets/css/styles.bm-classic.css">
+
+    <!-- CSS Customization -->
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <!-- CSS Implementing Plugins -->
+    <link  rel="stylesheet" href="/assets/vendor/fancybox/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/css/prism-atom-dark.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<!-- JS Global Compulsory -->
+<script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/jquery-migrate/jquery-migrate.min.js"></script>
+<script src="/assets/vendor/popper.js/index.js"></script>
+<script src="/assets/vendor/bootstrap/bootstrap.min.js"></script>
+
+<!-- JS Implementing Plugins -->
+<script src="/assets/vendor/appear.js"></script>
+<script src="/assets/vendor/slick-carousel/slick/slick.js"></script>
+<script src="/assets/vendor/hs-megamenu/src/hs.megamenu.js"></script>
+<script src="/assets/vendor/fancybox/jquery.fancybox.min.js"></script>
+
+<!-- JS Unify -->
+<script src="/assets/js/hs.core.js"></script>
+<script src="/assets/js/components/hs.header.js"></script>
+<script src="/assets/js/helpers/hs.hamburgers.js"></script>
+<script src="/assets/js/components/hs.dropdown.js"></script>
+<script src="/assets/js/components/hs.carousel.js"></script>
+<script src="/assets/js/components/hs.go-to.js"></script>
+<script src="/assets/js/components/hs.popup.js"></script>
+
+<!-- JS Revolution Slider -->
+<script src="/assets/vendor/revolution-slider/revolution/js/jquery.themepunch.tools.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/jquery.themepunch.revolution.min.js"></script>
+
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.actions.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.carousel.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.kenburn.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.layeranimation.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.migration.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.navigation.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.parallax.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.video.min.js"></script>
+
+<!-- JS Customization -->
+<script src="/assets/js/custom.js"></script>
+
+<!-- JS Implementing Plugins -->
+<script  src="/assets/vendor/fancybox/jquery.fancybox.min.js"></script>
+
+<!-- JS Unify -->
+<script  src="/assets/js/components/hs.popup.js"></script>
+
+<script src="https://cdn.wilddog.com/sdk/js/2.5.17/wilddog-sync.js"></script>
+
+<script>
+  function SETValue(key, value) {
+    if (typeof(Storage) !== "undefined") {
+      var curTime = new Date().getTime();
+      localStorage.setItem(key, JSON.stringify({
+        data: value,
+        time: curTime
+      }));
+    }
+  }
+
+  function GETvalue(key) {
+    if (typeof(Storage) !== "undefined") {
+      var data = localStorage.getItem(key);
+      if(data) {
+        var dataObj = JSON.parse(data);
+        if (new Date().getTime() - dataObj.time > 1000*60*60) {
+          //alert("信息已过期")
+        } else {
+          //console.log("data="+dataObj.data);
+          //console.log(JSON.parse(dataObj.data));
+          var dataObjDatatoJson = dataObj.data
+          return dataObjDatatoJson;
+        }
+      }
+    }
+  }
+
+  function REQuest(url, finish) {
+
+    var value = GETvalue(url);
+
+    if (value) {
+      finish(value);
+      return;
+    }
+
+    $.ajax({
+      type: "get",
+      dataType: "jsonp",
+      cache: true,
+      url: url,
+      success: function(data) {
+        SETValue(url, data);
+        finish(data);
+      }
+    });
+  }
+
+
+  $(document).on('ready', function() {
+    // initialization of header
+    $.HSCore.components.HSHeader.init($('#js-header'));
+    $.HSCore.helpers.HSHamburgers.init('.hamburger');
+
+    // initialization of MegaMenu
+    $('.js-mega-menu').HSMegaMenu();
+
+    // initialization of HSDropdown component
+    $.HSCore.components.HSDropdown.init($('[data-dropdown-target]'), {
+      afterOpen: function() {
+        $(this).find('input[type="search"]').focus();
+      }
+    });
+    // initialization of popups
+                                $.HSCore.components.HSPopup.init('.js-fancybox');
+
+                                // initialization of gallery with thumbs
+                                $.HSCore.components.HSPopup.init('.js-fancybox-thumbs', {
+                                  thumbs: {
+                                    showOnStart: true
+                                  }
+                                });
+
+    // initialization of go to
+    $.HSCore.components.HSGoTo.init('.js-go-to');
+  });
+</script>
+
+<script>
+
+//  百度站长 推送
+
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+  <body>
+    <main>
+
+  <!-- Header -->
+  <header id="js-header" class="u-header u-header--static u-shadow-v19">
+    <!-- Top Bar -->
+    <div class="u-header__section g-brd-bottom g-brd-gray-light-v4 g-py-18">
+      <div class="container">
+        <div class="row align-items-center">
+
+          <!-- Logo -->
+<div class="col-md-3 g-hidden-md-down">
+  <a href="bm-classic-home-page-1.html" class="navbar-brand">
+    <img src="/assets/img/logo.png" alt="Logo">
+  </a>
+</div>
+<!-- End Logo -->
+
+
+          <!-- Subscribe Form -->
+<div class="col-6 col-md-5">
+  <form class="input-group rounded">
+    <input class="form-control w-100 g-brd-secondary-light-v2 g-brd-primary--focus g-color-secondary-dark-v1 g-placeholder-secondary-dark-v1 g-bg-white g-font-weight-400 g-font-size-13 rounded g-px-20 g-py-12" type="text" placeholder="输入以搜索该博客文章">
+    <span class="input-group-addon g-brd-none g-py-0 g-pr-0">
+      <button class="btn u-btn-white g-color-primary--hover g-bg-secondary g-font-weight-600 g-font-size-13 text-uppercase rounded g-py-12 g-px-20" type="submit">
+        <span class="g-hidden-md-down">Search</span>
+        <i class="g-hidden-lg-up fa fa-search"></i>
+      </button>
+    </span>
+  </form>
+</div>
+<!-- End Subscribe Form -->
+
+
+          <!-- Language -->
+<div id="clock" class="col-4 col-lg-2 g-pos-rel g-px-15 ml-auto">
+</div>
+<!-- End Language -->
+
+
+<script type="text/javascript">
+
+var config = {
+  syncURL: "https://wd2622139095udguuj.wilddogio.com" //输入节点 URL
+};
+wilddog.initializeApp(config);
+var ref = wilddog.sync().ref("browerlog");
+
+ref.push({
+  "url": window.location.href,
+  "date": Math.round(new Date().getTime())
+});
+
+ref.orderByChild("url").equalTo(window.location.href).on('value', function(snapshot) {
+
+  $("#clock").text("No."+Object.keys(snapshot.val()).length);
+
+  }, function (error) {
+});
+
+</script>
+
+
+          <!-- Account -->
+<div class="col-1" id="account">
+  <a id="account-dropdown-invoker" class="media align-items-center float-right g-text-underline--none--hover" href="#"
+     aria-controls="account-dropdown"
+     aria-haspopup="true"
+     aria-expanded="false"
+     data-dropdown-event="hover"
+     data-dropdown-target="#account-dropdown"
+     data-dropdown-type="css-animation"
+     data-dropdown-duration="300"
+     data-dropdown-hide-on-scroll="false"
+     data-dropdown-animation-in="fadeIn"
+     data-dropdown-animation-out="fadeOut">
+    <div class="d-flex g-width-30 g-height-30 mr-2">
+      <img class="img-fluid rounded-circle" src="http://blog.msiter.com/favicon/avatar.jpg" alt="Image Description">
+    </div>
+    <div class="media-body">
+      <span class="d-block g-hidden-sm-down g-color-main g-font-weight-600 g-font-size-13">文征</span>
+    </div>
+  </a>
+
+  <div id="account-dropdown" class="list-unstyled text-right g-width-160 g-brd-around g-brd-secondary-light-v2 g-bg-white rounded g-pos-abs g-right-0 g-py-5 g-mt-57" aria-labelledby="account-dropdown-invoker">
+
+    暂时没想好怎么做
+
+  </div>
+
+
+</div>
+<!-- End Account -->
+
+<script type="text/javascript">
+
+$("#account").mouseover(function(){
+
+
+});
+
+$("#account").mouseout(function(){
+
+});
+
+</script>
+
+
+        </div>
+      </div>
+    </div>
+    <!-- End Top Bar -->
+
+    <div class="u-header__section u-header__section--light g-bg-white g-transition-0_3 g-py-10">
+      <nav class="js-mega-menu navbar navbar-expand-lg g-px-0">
+        <div class="container g-px-15">
+          <!-- Logo -->
+          <a class="navbar-brand g-hidden-lg-up" href="bm-classic-home-page-1.html">
+            <img src="/assets/img/logo.png" alt="Logo">
+          </a>
+          <!-- End Logo -->
+
+          <!-- Responsive Toggle Button -->
+          <button class="navbar-toggler navbar-toggler-right btn g-line-height-1 g-brd-none g-pa-0 ml-auto" type="button"
+                  aria-label="Toggle navigation"
+                  aria-expanded="false"
+                  aria-controls="navBar"
+                  data-toggle="collapse"
+                  data-target="#navBar">
+            <span class="hamburger hamburger--slider g-pa-0">
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
+            </span>
+          </button>
+          <!-- End Responsive Toggle Button -->
+
+          <!-- Navigation -->
+          <div class="collapse navbar-collapse align-items-center flex-sm-row g-pt-10 g-pt-5--lg" id="navBar">
+            <ul class="navbar-nav g-font-weight-600">
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-1" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">标签
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-1">
+    <div class="row">
+      <div class="col-lg-2">
+        <ul class="list-unstyled mb-0" style="ov">
+
+          
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/生活/">生活</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/悲观/">悲观</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/Objective-C/">Objective-C</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/AsyncDisplayKit/">AsyncDisplayKit</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/ios/">ios</a></li>
+
+            
+
+        </ul>
+      </div>
+      <div class="col-lg-1">
+
+      </div>
+      <div class="col-lg-9" style="height:auto;" >
+
+        <!-- Background Gray Colored -->
+        <ul class="u-list-inline">
+
+          
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/生活/">生活</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/悲观/">悲观</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Objective-C/">Objective-C</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/AsyncDisplayKit/">AsyncDisplayKit</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/ios/">ios</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/约束教程/">约束教程</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/swift/">swift</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/autolayout/">autolayout</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/AttributedString/">AttributedString</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/iOS8-html2AttributedString-error/">iOS8 html2AttributedString error</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/技巧/">技巧</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/IOS/">IOS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mongodb/">mongodb</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mongoose/">mongoose</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/nodejs/">nodejs</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/RX/">RX</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/java/">java</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/spring-boot/">spring boot</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mybatis/">mybatis</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WKWebView/">WKWebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Systematic-distinction/">Systematic distinction</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WebKit/">WebKit</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WebView/">WebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/UIWebView/">UIWebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Input/">Input</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/File/">File</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Bug/">Bug</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/破解/">破解</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/抓包/">抓包</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/reactiv/">reactiv</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/rxswift/">rxswift</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/DB/">DB</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/realm/">realm</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/swagger/">swagger</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/api/">api</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/travis-ci/">travis-ci</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/cocoapods/">cocoapods</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/NodeJS/">NodeJS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/APNs/">APNs</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/八爪鱼/">八爪鱼</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/html/">html</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/js/">js</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Javascript/">Javascript</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/鼠标悬浮/">鼠标悬浮</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/越狱/">越狱</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/cydia/">cydia</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/制作源/">制作源</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/error/">error</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/奇怪的问题/">奇怪的问题</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/无趣，心理学/">无趣，心理学</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/async/">async</a>
+                        </li>
+
+            
+
+        </ul>
+        <!-- End Background Gray Colored -->
+
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-5" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">栏目
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-primary g-left-15 g-right-15 g-px-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-5">
+    <div class="row">
+      <div class="col-lg-12">
+        <ul class="list-inline text-center mb-0">
+
+
+
+          
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/牢骚/">牢骚</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/IOS/">IOS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/服务器/">服务器</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/开发帮助/">开发帮助</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/Web-前端/">Web 前端</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/生活/">生活</a>
+                        </li>
+
+            
+
+
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-3" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">最新文章
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-3">
+    <div class="row">
+      <div class="col-lg-4">
+        <article>
+          <figure class="g-pos-rel">
+            <img class="img-fluid w-100 g-mb-20" src="/assets/img-temp/900x600/img7.jpg" alt="Image Description">
+          </figure>
+          <h3 class="h4 g-mb-10"><a class="g-color-gray-dark-v2" href="#">Love the mother nature</a>
+          </h3>
+          <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+            <li class="list-inline-item">
+              <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">Kathy Reyes</a>
+            </li>
+            <li class="list-inline-item">/</li>
+            <li class="list-inline-item">July 20, 2016</li>
+            <li class="list-inline-item">/</li>
+            <li class="list-inline-item">
+              <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                <i class="fa fa-comments-o"></i> 18
+              </a>
+            </li>
+          </ul>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Top 10 Luxury Hotels - 5 Star Best Luxury Hotels</a>
+            </h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 07, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 24
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6"><a class="g-color-main" href="#">10 Most beautiful beaches</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 20, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 18
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Stylish things to do, see and buy this week</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 16, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 31
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">8 health benefits and drawbacks of coffee</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 30, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 12
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Stylish things to do, see and buy this week</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 16, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 31
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Top 10 Luxury Hotels - 5 Star Best Luxury Hotels</a>
+            </h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 07, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 24
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-4" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">最火文章
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-4">
+    <div class="row">
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Fashion</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 26, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Be ready, fashion of the year is coming this year</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Beaches</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 15, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Must be visited places in the USA - Florida Beaches</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Food</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera g-left-2"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 8, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Why your next glass of juice will cost you more</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-ml-15--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-7" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">新闻热点
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-7">
+    <div class="row">
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 16, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">You've been making French Pie all wrong - Until Now</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 02, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Unify facts, study finds - sensitive to gluten without having coeliac disease</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 18, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Why your next cup of cofee with milk will cost you more</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 12, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Incredible product and quality: Unify best template of the year</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 16, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Some post title will be implimented here and It's cool!</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 02, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Wireframe approach for the news blocks and pages</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 18, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Over thousands of components help you to boost your project</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 12, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">How to run a ticket: Best 10 point approaches for people who stands..</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Main -->
+<li class="nav-item g-mx-10--lg g-mx-20--xl">
+  <a id="nav-link--pages" class="nav-link text-uppercase g-color-primary--hover g-px-0" href="/">
+    主页
+  </a>
+</li>
+<!-- End Main -->
+
+
+
+
+
+
+
+
+            </ul>
+          </div>
+          <!-- End Navigation -->
+        </div>
+      </nav>
+    </div>
+  </header>
+  <!-- End Header -->
+
+
+    <section class="g-pt-50 g-pb-100">
+  <div class="container">
+    <div class="row">
+      <!-- Articles Content -->
+      <div class="col-lg-9 g-mb-50 g-mb-0--lg">
+        <article class="g-mb-60">
+          <header class="g-mb-30">
+            <h2 class="h1 g-mb-15">RxSwift 学习 未完待续</h2>
+
+            <ul class="list-inline d-sm-flex g-color-gray-dark-v4 mb-0">
+              <li class="list-inline-item">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                  小酒馆老板
+                </a>
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item">
+                2016/7/6 21:16:43
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item g-mr-10">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                        <i class="align-middle mr-2 icon-hotel-restaurant-242 u-line-icon-pro"></i>共有2,216个字
+                      </a>
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item g-mr-10">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                        <i class="align-middle mr-2 icon-hotel-restaurant-003 u-line-icon-pro"></i>预计阅读9分钟
+                      </a>
+              </li>
+            </ul>
+
+            <hr class="g-brd-gray-light-v4 g-my-15">
+
+
+
+                      <!-- Social Shares -->
+<div class="g-mb-30">
+
+    <ul class="list-inline text-uppercase mb-0">
+      <li class="list-inline-item g-mr-10">
+        <strong class="align-middle g-font-size-24 jiathis_counter_style"><a class="jiathis_counter_style"></a></strong>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <span class="g-color-gray-dark-v5">|</span>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_weixin btn u-btn-teal g-font-size-12 rounded g-px-20--sm g-py-10" style="color:white;">
+          <i class="fa fa-wechat g-mr-5--sm"></i>
+          <span class="g-hidden-xs-down">分享到微信</span>
+      </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tqq btn u-btn-twitter g-font-size-12 rounded g-px-20--sm g-py-10" href="#">
+              <i class="fa fa-qq g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 QQ</span>
+            </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tsina btn u-btn-lightred g-font-size-12 rounded g-px-20--sm g-py-10 " href="#">
+              <i class="fa fa-weibo g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 新浪微博</span>
+            </a>
+      </li>
+    </ul>
+</div>
+          <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+<!-- End Social Shares -->
+
+
+
+          </header>
+
+          <div class="">
+            <h2 id="&#x7B80;&#x4ECB;"><a href="#&#x7B80;&#x4ECB;" class="headerlink" title="&#x7B80;&#x4ECB;"></a>&#x7B80;&#x4ECB;</h2><h3 id="&#x4E3A;&#x4EC0;&#x4E48;&#x4F7F;&#x7528;-RxSwift"><a href="#&#x4E3A;&#x4EC0;&#x4E48;&#x4F7F;&#x7528;-RxSwift" class="headerlink" title="&#x4E3A;&#x4EC0;&#x4E48;&#x4F7F;&#x7528; RxSwift"></a>&#x4E3A;&#x4EC0;&#x4E48;&#x4F7F;&#x7528; RxSwift</h3><p>&#x5176;&#x5B9E;&#x8FD9;&#x4E2A;&#x95EE;&#x9898;&#x5C31;&#x662F;&#x5728;&#x95EE;&#xFF0C;RxSwift&#x5B83;&#x53EF;&#x4EE5;&#x505A;&#x4EC0;&#x4E48;&#x5462;&#xFF1F;&#x5728;&#x4ED6;&#x4EEC;&#x7F16;&#x5199;&#x7A0B;&#x5E8F;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x603B;&#x662F;&#x4F1A;&#x7275;&#x6D89;&#x5230;&#x9700;&#x8981;&#x68C0;&#x6D4B;&#x67D0;&#x4E9B;&#x503C;&#x7684;&#x53D8;&#x5316;&#x3002;&#x6BD4;&#x5982;&#x3002;textFiled Text&#x53D8;&#x5316;&#xFF1F;&#x6570;&#x636E;&#x8BF7;&#x6C42;&#x5B8C;&#x6210;&#x5931;&#x8D25;&#x7684;&#x53D8;&#x5316;&#xFF1F;&#x952E;&#x76D8;&#x5F39;&#x8D77;&#x9690;&#x85CF;&#x7684;&#x53D8;&#x5316;&#xFF0C;&#x800C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x505A;&#x5F88;&#x591A;&#x4E0D;&#x4E00;&#x6837;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x53BB;&#x68C0;&#x6D4B;&#x8FD9;&#x4E9B;&#x4E1C;&#x897F;&#x7684;&#x53D8;&#x5316;&#x60C5;&#x51B5;&#xFF0C;&#x53EF;&#x80FD;&#x4F1A;&#x662F;delegate&#xFF0C;Notifinotion&#xFF0C;KVO&#x7B49;&#x7B49;&#x3002;</p>
+<p>&#x4E8E;&#x662F;&#x4E4E;&#x5C31;&#x6709;&#x4EBA;&#x60F3;&#x5230;&#x4E86;&#xFF0C;&#x4E3A;&#x4EC0;&#x4E48;&#x4E0D;&#x8BBE;&#x8BA1;&#x4E00;&#x79CD;&#x5904;&#x7406;&#x673A;&#x5236;&#x6765;&#x7EDF;&#x4E00;&#x5904;&#x7406;&#x8FD9;&#x4E9B;&#x4E1C;&#x897F;&#x5462;&#xFF1F;&#x6240;&#x4EE5; <code>reactivex</code> &#x8FD9;&#x79CD;&#x673A;&#x5236;&#x51FA;&#x73B0;&#x4E86;&#xFF0C;&#x800C;&#x8FD9;&#x91CC;&#x7684; <code>RxSwift</code> &#x5C31;&#x662F;&#x8FD9;&#x4E48;&#x4E00;&#x4E2A;&#x673A;&#x5236;&#x4E0B;&#x7684;&#x4E00;&#x4E2A;&#x6269;&#x5C55;&#x3002;<br>&#x6240;&#x4EE5;RxSwift &#x4E3A;&#x4EC0;&#x4E48;&#x7528;&#x5B83;&#xFF1F;&#x4F60;&#x53EF;&#x4EE5;&#x7406;&#x89E3;&#x4E86;&#x5417;&#xFF1F;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://image.msiter.com/stock-photo-184019953.jpg" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://image.msiter.com/stock-photo-184019953.jpg" alt="Image Description">          </a><figcaption class="figure-caption g-font-size-12 g-color-gray-dark-v4 g-mt-5 text-center">        &#x5B66;&#x6821;&#x91CC;&#x8FD8;&#x662F;&#x76F8;&#x5BF9;&#x5355;&#x7EAF;&#x7684;&#x5730;&#x65B9;&#xFF0C;&#x627E;&#x4E0D;&#x5230;&#x5973;&#x670B;&#x53CB;&#xFF0C;&#x57FA;&#x672C;&#x8FD8;&#x662F;&#x56E0;&#x4E3A;&#x4F60;&#x4E11;&#x3002;</figcaption></figure></p>
+<a id="more"></a>
+<h3 id="RxSwift-&#x6982;&#x5FF5;"><a href="#RxSwift-&#x6982;&#x5FF5;" class="headerlink" title="RxSwift &#x6982;&#x5FF5;"></a>RxSwift &#x6982;&#x5FF5;</h3><p>&#x6BCF;&#x4E00;&#x4E2A;<code>Observable</code> &#x7684;&#x5B9E;&#x4F8B;&#x76F8;&#x5F53;&#x4E8E;&#x4E00;&#x4E2A;Swift&#x4E2D;&#x7684;Sequence&#x3002;</p>
+<p>&#x4F46;&#x662F;&#x533A;&#x522B;&#x5728;&#x4E8E;&#xFF0C;Swift&#x4E2D;&#x7684;SequenceType&#x662F;&#x540C;&#x6B65;&#x7684;&#x5FAA;&#x73AF;&#xFF0C;&#x800C; <code>Observable</code> &#x662F;&#x5F02;&#x6B65;&#x7684;&#x3002;</p>
+<ul class="g-list-style-circle">
+<li>&#x4E00;&#x4E2A; <code>Observable (ObservableType)</code>  &#x76F8;&#x5F53;&#x4E8E;&#x4E00;&#x4E2A;&#x5E8F;&#x5217;<code>Sequence(SequenceType)</code> .</li>
+<li><code>ObservableType.subscribe(_:)</code> &#x65B9;&#x6CD5;&#x5176;&#x5B9E;&#x5C31;&#x76F8;&#x5F53;&#x4E8E;  <code>SequenceType.generate()</code></li>
+<li><code>Observable</code> &#x5BF9;&#x8C61;&#x4F1A;&#x5728;&#x6709;&#x4EFB;&#x4F55; <code>Event</code> &#x65F6;&#x5019;&#xFF0C;&#x5C06;&#x628A; observer (ObserverType) &#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x901A;&#x8FC7; <code>ObservableType.subscribe(_:)</code> &#x81EA;&#x52A8;&#x53D1;&#x51FA;&#x3002;&#x5E76;&#x4E0D;&#x9700;&#x8981; observer (ObserverType) &#x8C03;&#x7528; <code>Next()</code>&#x65B9;&#x6CD5;</li>
+</ul>
+<p>&#x5982;&#x679C;&#x4E00;&#x4E2A;  <code>Observable</code> &#x53D1;&#x9001;&#x4E86;&#x4E00;&#x4E2A; <code>(Event.Next(Element))</code> &#x4E0B;&#x4E00;&#x6B65;&#x6307;&#x4EE4;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x5B83;&#x5C06;&#x4F1A;&#x7EE7;&#x7EED;&#x53D1;&#x9001;&#x540E;&#x7EED;&#x66F4;&#x591A;&#x7684; <code>Event</code> &#xFF0C;&#x7136;&#x800C;&#x5982;&#x679C;&#x5B83;&#x53D1;&#x51FA;&#x7684;&#x662F;&#x4E00;&#x4E2A;  <code>(Event.Error(ErrorType))</code> &#x9519;&#x8BEF;&#x52A8;&#x4F5C;&#xFF0C;&#x6216;&#x8005;&#x662F;&#x4E00;&#x4E2A; <code>(Event.Completed)</code> &#x6B63;&#x5E38;&#x7ED3;&#x675F;&#x5B8C;&#x6210;&#x52A8;&#x4F5C;&#x7684;&#x8BDD;&#x3002;&#x5B83;&#x5C06;&#x901A;&#x77E5;&#x4E0D;&#x5728;&#x53D1;&#x51FA;&#x4EFB;&#x4F55;&#x52A8;&#x4F5C;&#x3002;</p>
+<p>&#x5E8F;&#x5217;&#x7684;&#x8BED;&#x6CD5;&#x53EF;&#x4EE5;&#x5F88;&#x660E;&#x663E;&#x7684;&#x8868;&#x8FBE;&#x8FD9;&#x4E00;&#x70B9;:</p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token builtin">Next</span><span class="token operator">*</span> <span class="token punctuation">(</span><span class="token builtin">Error</span> <span class="token operator">|</span> <span class="token builtin">Completed</span><span class="token punctuation">)</span><span class="token operator">?</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>&#x56FE;&#x8868;&#x53EF;&#x4EE5;&#x76F4;&#x89C2;&#x7684;&#x89E3;&#x91CA;&#x8FD9;&#x4E00;&#x5207;</p>
+<pre class="line-numbers language-js g-mb-30"><code class="language-js"><span class="token operator">--</span><span class="token number">1</span><span class="token operator">--</span><span class="token number">2</span><span class="token operator">--</span><span class="token number">3</span><span class="token operator">--</span><span class="token number">4</span><span class="token operator">--</span><span class="token number">5</span><span class="token operator">--</span><span class="token number">6</span><span class="token operator">--</span><span class="token operator">|</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">&gt;</span> <span class="token comment" spellcheck="true">// &quot;|&quot; = &#x6B63;&#x5E38;&#x7EC8;&#x6B62;</span>
+
+<span class="token operator">--</span>a<span class="token operator">--</span>b<span class="token operator">--</span>c<span class="token operator">--</span>d<span class="token operator">--</span>e<span class="token operator">--</span>f<span class="token operator">--</span>X<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">&gt;</span> <span class="token comment" spellcheck="true">// &quot;X&quot; = &#x9519;&#x8BEF;&#x7EC8;&#x6B62;</span>
+
+<span class="token operator">--</span>tap<span class="token operator">--</span>tap<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span>tap<span class="token operator">--</span><span class="token operator">&gt;</span> <span class="token comment" spellcheck="true">// &quot;|&quot; = &#x7EE7;&#x7EED;&#x8FDB;&#x884C;, &#x5982;&#x540C;&#x4E00;&#x4E2A;&#x6309;&#x94AE;&#x70B9;&#x51FB;&#x4E8B;&#x4EF6;&#x7684;&#x4E00;&#x4E2A;&#x5E8F;&#x5217;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>&#x8FD9;&#x4E9B;&#x56FE;&#x8868;&#x88AB;&#x79F0;&#x4E3A;marble diagrams&#x3002;&#x4F60;&#x53EF;&#x4EE5;&#x5B66;&#x4E60;&#x66F4;&#x591A;&#x5173;&#x4E8E;&#x4ED6;&#x4EEC;&#x5728; <a href="http://rxmarbles.com/" target="_blank" rel="noopener">rxmarbles.com</a>&#x3002;</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+<h3 id="Observables-&#x548C;-observers-&#x53C8;&#x540D;-subscribers"><a href="#Observables-&#x548C;-observers-&#x53C8;&#x540D;-subscribers" class="headerlink" title="Observables &#x548C; observers (&#x53C8;&#x540D; subscribers)"></a>Observables &#x548C; observers (&#x53C8;&#x540D; subscribers)</h3><p><code>Observables</code> &#x89C2;&#x6D4B;&#x6570;&#x636E;&#x5C06;&#x4E0D;&#x4F1A;&#x6267;&#x884C;&#x9664;&#x975E;&#x6709;&#x7528;&#x6237;&#x7528;&#x6237;&#x8BA2;&#x9605;&#x4E86;&#x5B83;&#x3002;&#x5728;&#x4E0B;&#x9762;&#x7684;&#x793A;&#x4F8B;&#x4E2D;&#xFF0C;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x5173;&#x95ED;&#x5C06;&#x6C38;&#x8FDC;&#x4E0D;&#x4F1A;&#x88AB;&#x6267;&#x884C;&#xFF0C;&#x56E0;&#x4E3A;&#x6CA1;&#x6709;&#x8BA2;&#x9605;<code>observers</code>&#xFF1A;</p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;Observable with no subscribers&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token number">_</span> <span class="token operator">=</span> <span class="token builtin">Observable</span><span class="token operator">&lt;</span><span class="token builtin">String</span><span class="token operator">&gt;</span><span class="token punctuation">.</span>create <span class="token punctuation">{</span> observerOfString <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">Disposable</span> <span class="token keyword">in</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;This will never be printed&quot;</span><span class="token punctuation">)</span>
+        observerOfString<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token function">Next</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F62C;&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        observerOfString<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token builtin">Completed</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token builtin">NopDisposable</span><span class="token punctuation">.</span>instance
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>&#x5728;&#x4E0B;&#x9762;&#x7684;&#x793A;&#x4F8B;&#x4E2D;, &#x5728;&#x7ED3;&#x675F;&#x4E4B;&#x524D;&#x4F1A;&#x8C03;&#x7528; <code>subscribe(_:)</code>:</p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;Observable with subscriber&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token number">_</span> <span class="token operator">=</span> <span class="token builtin">Observable</span><span class="token operator">&lt;</span><span class="token builtin">String</span><span class="token operator">&gt;</span><span class="token punctuation">.</span>create <span class="token punctuation">{</span> observerOfString <span class="token keyword">in</span>
+            <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;Observable created&quot;</span><span class="token punctuation">)</span>
+            observerOfString<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token function">Next</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F609;&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            observerOfString<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token builtin">Completed</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token builtin">NopDisposable</span><span class="token punctuation">.</span>instance
+        <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span>subscribe <span class="token punctuation">{</span> event <span class="token keyword">in</span>
+            <span class="token function">print</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>&#x4E0D;&#x7528;&#x62C5;&#x5FC3;&#x8FD9;&#x4E9B;&#x521B;&#x5EFA; Observable &#x7684;&#x7EC6;&#x8282;&#xFF0C;&#x9A6C;&#x4E0A;&#x5C31;&#x8981;&#x5B66;&#x4E60;&#x4E86;</p>
+<p>&#x5728;&#x4EE5;&#x4E0A;&#x7684;&#x6817;&#x5B50;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x8FD4;&#x56DE;&#x7684;&#x90FD;&#x662F;&#x4E00;&#x4E2A; NopDisposable.instance &#xFF0C;&#x800C;&#x5728;&#x5B9E;&#x9645;&#x7684;&#x60C5;&#x51B5;&#x4E2D;&#x662F;&#x9700;&#x8981; &#x8FD4;&#x56DE;&#x4E00;&#x4E2A; DisposeBag &#x7684;&#x5B9E;&#x4F8B;&#x7684;&#xFF0C;&#x6765;&#x59A5;&#x5584;&#x7684;&#x5904;&#x7406;&#x8FD9;&#x4E9B;&#x4EE3;&#x7801;&#x3002; &#x81F3;&#x4E8E;&#x4E3A;&#x4EC0;&#x4E48;&#xFF1F;&#x55EF;&#x3002; &#x2026;&#x2026;   practice makes permanent &#x1F642; &#x719F;&#x80FD;&#x751F;&#x5DE7;&#xFF1F; &#x4F60;&#x53EF;&#x4EE5;&#x67E5;&#x770B;&#x66F4;&#x591A;&#x4ECB;&#x7ECD; <a href="https://github.com/ReactiveX/RxSwift/blob/master/Documentation/GettingStarted.md#disposing" target="_blank" rel="noopener">Disposing</a> &#xFF0C; <a href="https://github.com/ReactiveX/RxSwift/blob/master/Documentation/GettingStarted.md" target="_blank" rel="noopener">Getting Started guide</a>.</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+<h3 id="&#x521B;&#x5EFA;&#x548C;&#x8BA2;&#x9605;&#x4E00;&#x4E2A;-Observables"><a href="#&#x521B;&#x5EFA;&#x548C;&#x8BA2;&#x9605;&#x4E00;&#x4E2A;-Observables" class="headerlink" title="&#x521B;&#x5EFA;&#x548C;&#x8BA2;&#x9605;&#x4E00;&#x4E2A; Observables"></a>&#x521B;&#x5EFA;&#x548C;&#x8BA2;&#x9605;&#x4E00;&#x4E2A; Observables</h3><p>&#x6709;&#x4EE5;&#x4E0B;&#x8FD9;&#x51E0;&#x79CD;&#x65B9;&#x6CD5;&#x6765;&#x521B;&#x5EFA;&#x548C;&#x8BA2;&#x9605;&#x4E00;&#x4E2A; <code>Observables</code></p>
+<h4 id="never"><a href="#never" class="headerlink" title="never"></a>never</h4><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A; <code>Observables</code> &#xFF0C;&#x4E0D;&#x53D1;&#x51FA;&#x4EFB;&#x4F55;&#x9879;&#x76EE;&#xFF0C;&#x4E0D;&#x7EC8;&#x6B62; &#x5C31;&#x662F;&#x4EFB;&#x6027;&#xFF01;&#xFF01;&#xFF01;&#xFF01;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-32bc4bdfb7ba6a73.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-32bc4bdfb7ba6a73.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;never&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">let</span> neverSequence <span class="token operator">=</span> <span class="token builtin">Observable</span><span class="token operator">&lt;</span><span class="token builtin">String</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><span class="token function">never</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">let</span> neverSequenceSubscription <span class="token operator">=</span> neverSequence
+        <span class="token punctuation">.</span>subscribe <span class="token punctuation">{</span> <span class="token number">_</span> <span class="token keyword">in</span>
+            <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;This will never be printed&quot;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    neverSequenceSubscription<span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="empty"><a href="#empty" class="headerlink" title="empty"></a>empty</h4><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x53EA;&#x53D1;&#x9001;&#x5B8C;&#x6210;&#x52A8;&#x4F5C;&#x7684; <code>Observables</code> &#x5BF9;&#x8C61;&#x3002; &#x8001;&#x5B50;&#x4E0D;&#x95EE;&#x8FC7;&#x7A0B;&#xFF0C;&#x53EA;&#x770B;&#x7ED3;&#x679C;&#xFF01;&#xFF01;&#xFF01;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-42da08b0fd5b9cea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-42da08b0fd5b9cea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;empty&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token builtin">Observable</span><span class="token operator">&lt;</span><span class="token builtin">Int</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span>subscribe <span class="token punctuation">{</span> event <span class="token keyword">in</span>
+            <span class="token function">print</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>&#x8FD9;&#x4E2A;&#x5B9E;&#x4F8B;&#x8FD8;&#x4ECB;&#x7ECD;&#x4E86;&#x521B;&#x5EFA;&#x548C;&#x8BA2;&#x9605;&#x4E00;&#x4E2A; Observables &#x5BF9;&#x8C61;&#xFF0C;&#x5176;&#x5B9E;&#x5C31;&#x662F;&#x6267;&#x884C;&#x4E86; subscribe &#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x3002;</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+<h4 id="just"><a href="#just" class="headerlink" title="just"></a>just</h4><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x53D1;&#x9001;&#x5236;&#x5B9A;&#x52A8;&#x4F5C;&#x7684;&#x7684; <code>Observables</code> &#x5BF9;&#x8C61;&#x3002;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-dc8ba7d0f279a460.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-dc8ba7d0f279a460.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;just&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token builtin">Observable</span><span class="token punctuation">.</span><span class="token function">just</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F534;&quot;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span>subscribe <span class="token punctuation">{</span> event <span class="token keyword">in</span>
+            <span class="token function">print</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>&#x8FD9;&#x4E2A;&#x5B9E;&#x4F8B;&#x8FD8;&#x4ECB;&#x7ECD;&#x4E86;&#x521B;&#x5EFA;&#x548C;&#x8BA2;&#x9605;&#x4E00;&#x4E2A; Observables &#x5BF9;&#x8C61;&#xFF0C;&#x5176;&#x5B9E;&#x5C31;&#x662F;&#x6267;&#x884C;&#x4E86; <code>subscribe</code> &#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x3002;</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+<h4 id="of"><a href="#of" class="headerlink" title="of"></a>of</h4><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5177;&#x6709;&#x56FA;&#x5B9A;&#x6570;&#x91CF;&#x7684; <code>Observables</code> &#x5BF9;&#x8C61;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-dc8ba7d0f279a460.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-dc8ba7d0f279a460.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;of&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token builtin">Observable</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F436;&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&#x1F431;&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&#x1F42D;&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&#x1F439;&quot;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span>subscribeNext <span class="token punctuation">{</span> element <span class="token keyword">in</span>
+            <span class="token function">print</span><span class="token punctuation">(</span>element<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x8FD8;&#x4ECB;&#x7ECD;&#x4E86; subscribeNext(<em>:) &#x8FD9;&#x79CD;&#x7B80;&#x5355;&#x7684;&#x65B9;&#x6CD5;<br>&#x4E0D;&#x50CF; subscribe(</em>:),&#x5B83;&#x662F;&#x5B9A;&#x8BED;&#x4E86;&#x6240;&#x6709;&#x7684;&#x52A8;&#x4F5C; &#x5305;&#x62EC; &#xFF08;Next, Error, and Completed&#xFF09;<br>subscribeNext &#x5C06;&#x4F1A;&#x5FFD;&#x7565;&#x6240;&#x6709;&#x7684; (Error and Completed )&#x52A8;&#x4F5C;&#xFF0C;&#x53EA;&#x4F1A;&#x751F;&#x4EA7;&#x51FA;&#x4E00;&#x4E2A; Next &#x52A8;&#x4F5C;&#x3001;<br>&#x6211;&#x4EEC;&#x8FD9;&#x91CC;&#x540C;&#x6837;&#x4E5F;&#x6709; &#x5B8C;&#x6210; &#x548C; &#x5931;&#x8D25; &#x5BF9;&#x5E94;&#x7684;&#x7B80;&#x5355;&#x65B9;&#x6CD5;&#x3002; subscribeError(<em>:) and subscribeCompleted(</em>:)&#xFF0C;&#x5F53;&#x4F60;&#x53EA;&#x60F3;&#x68C0;&#x6D4B;&#x662F;&#x5BF9;&#x5E94;&#x7684;&#x52A8;&#x4F5C;&#x7684;&#x65F6;&#x5019;<br>&#x5982;&#x679C;&#x4F60;&#x60F3;&#x8BA2;&#x9605;&#x6240;&#x6709;&#x7684;&#x52A8;&#x4F5C;&#x7684;&#x4F60;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;   subscribe(onNext:onError:onCompleted:onDisposed:)` &#x5C31;&#x50CF;&#x4E0B;&#x9762;&#x7684;&#x4F8B;&#x5B50; &#x1F447;<br>&#x770B;&#x4E86;&#x4EE5;&#x4E0B;&#x81EA;&#x5DF1;&#x5199;&#x7684;&#x3002;&#x4E0D;&#x77E5;&#x9053;&#x600E;&#x4E48;&#x8BF4;&#xFF01;  &#x8349;  &#xFF01;subscribe &#x5C31;&#x662F;&#x62E6;&#x622A;&#x6240;&#x6709;&#x7684;&#x64CD;&#x4F5C;&#xFF01;  &#x6BD4;&#x5982; next error &#x548C; complted&#x3002;<br>&#x800C;&#x8FD9;&#x4E9B;&#x68C0;&#x6D4B;&#x90FD;&#x6709;&#x5355;&#x72EC;&#x7684;&#x7B80;&#x4FBF;&#x65B9;&#x6CD5; subscribeNext  subscribeError subscribeCompleted</p>
+<p>Example</p>
+<pre class="line-numbers language-txt g-mb-30"><code class="language-txt">someObservable.subscribe(
+    onNext: { print(&quot;Element:&quot;, $0) },
+    onError: { print(&quot;Error:&quot;, $0) },
+    onCompleted: { print(&quot;Completed&quot;) },
+    onDisposed: { print(&quot;Disposed&quot;) }
+)
+</code></pre></em>    </div>    <!-- End Taglines Bordered -->    
+<h4 id="toObservable"><a href="#toObservable" class="headerlink" title="toObservable"></a>toObservable</h4><p>&#x5C06;&#x4E00;&#x4E2A; sequence(SequenceType),&#x8F6C;&#x6362;&#x6210;&#x4E3A;&#x4E00;&#x4E2A; <code>Observable</code> ,&#x53EF;&#x4EE5;&#x662F;&#x4EFB;&#x4F55;&#x5B9E;&#x73B0;&#x4E86;(SequenceType)&#x534F;&#x8BAE;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x6BD4;&#x5982;Array, Dictionary, or Set</p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;toObservable&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token punctuation">[</span><span class="token string">&quot;&#x1F436;&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&#x1F431;&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&#x1F42D;&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&#x1F439;&quot;</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">toObservable</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span>subscribeNext <span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span>$<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>&#x8BE5;&#x4F8B;&#x5B50;&#x4F7F;&#x7528;&#x4E86; $0 &#x8FD9;&#x4E00;&#x79CD;&#x53C2;&#x6570;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x663E;&#x5F0F;&#x547D;&#x540D;&#x7684;&#x53C2;&#x6570;</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+<h4 id="create"><a href="#create" class="headerlink" title="create"></a>create</h4><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A; <code>Observable</code> &#x5E8F;&#x5217;<br>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-62884a006c12cc68.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-62884a006c12cc68.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;create&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">let</span> myJust <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token punctuation">(</span>element<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">Observable</span><span class="token operator">&lt;</span><span class="token builtin">String</span><span class="token operator">&gt;</span> <span class="token keyword">in</span>
+        <span class="token keyword">return</span> <span class="token builtin">Observable</span><span class="token punctuation">.</span>create <span class="token punctuation">{</span> observer <span class="token keyword">in</span>
+            observer<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token function">Next</span><span class="token punctuation">(</span>element<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            observer<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token builtin">Completed</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token builtin">NopDisposable</span><span class="token punctuation">.</span>instance
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">myJust</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F534;&quot;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span>subscribe <span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span>$<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="range"><a href="#range" class="headerlink" title="range"></a>range</h4><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A; &#x53EF;&#x4EE5;&#x53D1;&#x5C04;&#x4E00;&#x7CFB;&#x5217;&#x7684;&#x8FDE;&#x7EED;&#x6574;&#x6570;&#xFF0C;&#x7136;&#x540E;&#x7EC8;&#x6B62; &#x7684; <code>Observable</code>&#x5BF9;&#x8C61;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-5fa8215035a92cb7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-5fa8215035a92cb7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;range&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token builtin">Observable</span><span class="token punctuation">.</span><span class="token function">range</span><span class="token punctuation">(</span>start<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token builtin">count</span><span class="token punctuation">:</span> <span class="token number">10</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span>subscribe <span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span>$<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="repeatElement"><a href="#repeatElement" class="headerlink" title="repeatElement"></a>repeatElement</h4><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65E0;&#x9650;&#x5730;&#x53D1;&#x5C04;&#x7ED9;&#x5B9A;&#x7684;&#x5143;&#x7D20; <code>Observable</code>&#x3002;  &#x8C4C;&#x8C46;&#x541B;&#xFF1F;&#xFF1F;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-00b2005946443344.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-00b2005946443344.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;repeatElement&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token builtin">Observable</span><span class="token punctuation">.</span><span class="token function">repeatElement</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F534;&quot;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">take</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span>subscribeNext <span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span>$<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>&#x8BE5;&#x6817;&#x5B50;&#x4E2D;&#x4F7F;&#x7528; take &#x65B9;&#x6CD5;&#x6765;&#x9650;&#x5236;&#x53D1;&#x5C04;&#x7ED9;&#x5B9A;&#x5143;&#x7D20;&#x7684;&#x6B21;&#x6570;</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+<h4 id="generate"><a href="#generate" class="headerlink" title="generate"></a>generate</h4><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x53EA;&#x6709;&#x5F53;&#x63D0;&#x4F9B;&#x7684;&#x6240;&#x6709;&#x7684;&#x5224;&#x65AD;&#x6761;&#x4EF6;&#x90FD;&#x4E3A; true &#x7684;&#x65F6;&#x5019;&#xFF0C;&#x624D;&#x4F1A;&#x7ED9;&#x51FA;&#x52A8;&#x4F5C;&#x7684;  <code>Observable</code> !  &#x8001;&#x5B50; &#x521A;&#x6B63;&#x4E0D;&#x963F;</p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;generate&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token builtin">Observable</span><span class="token punctuation">.</span><span class="token function">generate</span><span class="token punctuation">(</span>
+            initialState<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+            condition<span class="token punctuation">:</span> <span class="token punctuation">{</span> $<span class="token number">0</span> <span class="token operator">&lt;</span> <span class="token number">3</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            iterate<span class="token punctuation">:</span> <span class="token punctuation">{</span> $<span class="token number">0</span> <span class="token operator">+</span> <span class="token number">1</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">)</span>
+        <span class="token punctuation">.</span>subscribeNext <span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span>$<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="deferred"><a href="#deferred" class="headerlink" title="deferred"></a>deferred</h4><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5168;&#x65B0;&#x7684;  <code>Observable</code> &#xFF0C;&#x4F60;TM&#x624D;&#x662F;&#x642C;&#x8FD0;&#x5DE5;&#xFF0C;&#x8001;&#x5B50;&#x662F;&#x5927;&#x81EA;&#x7136;&#x7684;&#x521B;&#x9020;&#x8005;&#xFF01;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-e83303a845a37808.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-e83303a845a37808.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;deferred&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">var</span> <span class="token builtin">count</span> <span class="token operator">=</span> <span class="token number">1</span>
+
+    <span class="token keyword">let</span> deferredSequence <span class="token operator">=</span> <span class="token builtin">Observable</span><span class="token operator">&lt;</span><span class="token builtin">String</span><span class="token operator">&gt;</span><span class="token punctuation">.</span>deferred <span class="token punctuation">{</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;Creating <span class="token interpolation"><span class="token delimiter variable">\(</span><span class="token builtin">count</span><span class="token delimiter variable">)</span></span>&quot;</span><span class="token punctuation">)</span>
+        <span class="token builtin">count</span> <span class="token operator">+</span><span class="token operator">=</span> <span class="token number">1</span>
+
+        <span class="token keyword">return</span> <span class="token builtin">Observable</span><span class="token punctuation">.</span>create <span class="token punctuation">{</span> observer <span class="token keyword">in</span>
+            <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;Emitting...&quot;</span><span class="token punctuation">)</span>
+            observer<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F436;&quot;</span><span class="token punctuation">)</span>
+            observer<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F431;&quot;</span><span class="token punctuation">)</span>
+            observer<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F435;&quot;</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token builtin">NopDisposable</span><span class="token punctuation">.</span>instance
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    deferredSequence
+        <span class="token punctuation">.</span>subscribeNext <span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span>$<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+
+    deferredSequence
+        <span class="token punctuation">.</span>subscribeNext <span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span>$<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="error"><a href="#error" class="headerlink" title="error"></a>error</h4><p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x4E0D;&#x505A;&#x4EFB;&#x4F55;&#x64CD;&#x4F5C;&#xFF0C;&#x76F4;&#x63A5;&#x4E22;&#x4E00;&#x4E2A;&#x9519;&#x8BEF;&#x7ED9;&#x4F60;&#x7684; <code>Observable</code>. &#x5BF9;&#x65B9;&#x4E0D;&#x60F3;&#x548C;&#x4F60; BB&#xFF0C;&#x5E76;&#x4E22;&#x7ED9;&#x4F60;&#x4E00;&#x4E2A;&#x9519;&#x8BEF; &#x1F610;</p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;error&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token builtin">Observable</span><span class="token operator">&lt;</span><span class="token builtin">Int</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token builtin">Error</span><span class="token punctuation">.</span><span class="token builtin">Test</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span>subscribe <span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span>$<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="doOn"><a href="#doOn" class="headerlink" title="doOn"></a>doOn</h4><p>&#x4E3A;&#x6BCF;&#x4E00;&#x4E2A;&#x53D1;&#x51FA;&#x7684;&#x4E8B;&#x4EF6;&#x548C;&#x8FD4;&#x56DE;&#x7684;&#x6267;&#x884C;&#x5236;&#x5B9A;&#x64CD;&#x4F5C;&#x3002; &#x6536;&#x8D39;&#x7AD9;&#xFF1F;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-61b525586595f814.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-61b525586595f814.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">&quot;doOn&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token builtin">Observable</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F34E;&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&#x1F350;&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&#x1F34A;&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&#x1F34B;&quot;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span>doOn <span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;Intercepted:&quot;</span><span class="token punctuation">,</span> $<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span>subscribeNext <span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span>$<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>&#x8FD9;&#x91CC;&#x4E5F;&#x6709;&#x3002; doOnNext(<em>:), doOnError(</em>:), and doOnCompleted(<em>:) &#x7B80;&#x4FBF;&#x65B9;&#x6CD5;&#x3002; &#x4E5F;&#x6709; doOn(onNext(</em>:)onError(<em>:)onCompleted(</em>:)) &#x8FD9;&#x6837;&#x7684;&#x65B9;&#x6CD5;</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+<h2 id="Working-with-Subjects"><a href="#Working-with-Subjects" class="headerlink" title="Working with Subjects"></a>Working with Subjects</h2><p>&#x4F7F;&#x7528; Subjects &#x8FDB;&#x884C;&#x5DE5;&#x4F5C;&#xFF0C;&#x4E00;&#x4E2A; Subject &#x53EF;&#x4EE5;&#x7406;&#x89E3;&#x4E3A;&#x4E00;&#x4E2A;&#x4E2D;&#x95F4;&#x4EBA;&#xFF0C;&#x4ED6;&#x65E2;&#x53EF;&#x4EE5;&#x89C2;&#x5BDF;&#x8005;&#x89C2;&#x5BDF;&#xFF0C;&#x5411;&#x89C2;&#x5BDF;&#x8005;&#x63D0;&#x4F9B;&#x52A8;&#x4F5C;&#x3002;&#x4E5F;&#x53EF;&#x4EE5;&#x5F53;&#x4F5C;&#x89C2;&#x5BDF;&#x8005;&#x53BB;&#x89C2;&#x5BDF;&#xFF0C;&#x6765;&#x63A5;&#x53D7;&#x5BF9;&#x8C61;&#x3002; &#x5927;&#x6982;&#x7684;&#x610F;&#x601D;&#x3002;&#x53EF;&#x653B;&#x53EF;&#x53D7;&#xFF1F;&#xFF1F;&#xFF1F;</p>
+<h3 id="PublishSubject"><a href="#PublishSubject" class="headerlink" title="PublishSubject"></a>PublishSubject</h3><p>&#x5411;&#x6240;&#x6709;&#x8BA2;&#x9605;&#x8005;&#x53D1;&#x5E03;&#x52A8;&#x4F5C;&#x3002;&#x5728;&#x4ED6;&#x4EEC;&#x8BA2;&#x9605;&#x4E4B;&#x540E;&#x3002;&#x8FD9;&#x4E2A;&#x65F6;&#x95F4;&#x662F;&#x6709;&#x5173;&#x7CFB;&#x7684;&#x54E6;&#x3002;&#x4ECE;&#x4E0B;&#x56FE;&#x4E5F;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x7B2C;&#x4E8C;&#x4E2A;&#x8BA2;&#x9605;&#x7684;&#x7528;&#x6237;&#xFF0C;&#x5DF2;&#x7ECF;&#x9519;&#x8FC7;&#x4E86;&#x63A5;&#x53D7;&#x7EA2;&#x7EFF;&#x7684;&#x65F6;&#x95F4;&#x3002;&#x6240;&#x4EE5;&#x4ED6;&#x53EA;&#x63A5;&#x53D7;&#x5230;&#x4E86;&#xFF0C;&#x84DD;&#x8272;&#x548C;&#x9519;&#x8BEF;&#x52A8;&#x4F5C;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-52e8b61b5b1553ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-52e8b61b5b1553ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">let</span> subject <span class="token operator">=</span> <span class="token builtin">PublishSubject</span><span class="token operator">&lt;</span><span class="token builtin">String</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span>subscribe<span class="token punctuation">{</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;&#x7B2C;&#x4E00;&#x6B21;&#x8BA2;&#x9605;&quot;</span><span class="token punctuation">,</span>$<span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F436;&quot;</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F431;&quot;</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span>subscribe<span class="token punctuation">{</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;&#x7B2C;&#x4E8C;&#x6B21;&#x8BA2;&#x9605;&quot;</span><span class="token punctuation">,</span>$<span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F170;&#xFE0F;&quot;</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F171;&#xFE0F;&quot;</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>&#x5728;&#x8FD9;&#x4EFD;&#x4EE3;&#x7801;&#x4E2D;&#x7B2C;&#x4E00;&#x4E2A;&#x8BA2;&#x9605;&#x53EF;&#x4EE5;&#x5C55;&#x793A;4&#x4E2A;&#xFF1F;&#x800C;&#x7B2C;&#x4E8C;&#x6B21;&#xFF0C;&#x5C31;&#x53EA;&#x80FD;&#x63A5;&#x6536;&#x5230; &#x5C0F;&#x732B;&#x548C;&#x5C0F;&#x72D7;&#x3002;</p>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>&#x5728;&#x8FD9;&#x4EFD;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x4F7F;&#x7528;&#x7684;&#x662F;  onNext(<em>:) &#x7B80;&#x4FBF;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x5F53;&#x7136;&#x4E5F;&#x6709; &#x9519;&#x8BEF; &#x548C; &#x5B8C;&#x6210;&#x7684;&#x7B80;&#x4FBF;&#x65B9;&#x6CD5; onError(</em>:) , onCompleted() . &#x4F60;&#x4E5F;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x98DF;&#x7528; on(.Error(<em>:)) on(.Completed(</em>:)) on(.Next(<em>:))  &#x8FD9;&#x548C;&#x4E4B;&#x524D;&#x7684;&#x5982;&#x51FA;&#x4E00;&#x8F99; (</em>:)</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+<h3 id="ReplaySubject"><a href="#ReplaySubject" class="headerlink" title="ReplaySubject"></a>ReplaySubject</h3><p>&#x54B1;&#x4EEC;&#x4E4B;&#x524D;&#x521B;&#x5EFA;&#x7684; PublishSubject &#xFF0C;&#x5982;&#x679C;&#x5728;&#x8BA2;&#x9605;&#x4E4B;&#x524D;&#x7684;&#x65F6;&#x95F4;&#x662F;&#x4E0D;&#x4F1A;&#x63A5;&#x6536;&#x5230;&#x7684;&#xFF0C;&#x800C;&#x8FD9;&#x4E2A;&#x5462; &#x53EF;&#x4EE5;&#x6307;&#x5B9A;&#xFF0C;&#x7F13;&#x5B58;&#x7684;&#x4E2A;&#x6570;&#xFF0C;&#x6BD4;&#x5982; 2 &#xFF0C;&#x90A3;&#x4E48;&#x54B1;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x63A5;&#x53D7;&#x8BA2;&#x9605;&#x65F6;&#x95F4;&#x4E4B;&#x524D;&#x4E24;&#x6B21;&#x7684; &#x52A8;&#x4F5C;&#x4E8B;&#x4EF6;&#x3002;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-e5b881a5fd17a49d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-e5b881a5fd17a49d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">let</span> subject <span class="token operator">=</span> <span class="token builtin">ReplaySubject</span><span class="token operator">&lt;</span><span class="token builtin">String</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>bufferSize<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span>subscribe<span class="token punctuation">{</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;&#x7B2C;&#x4E00;&#x6B21;&#x8BA2;&#x9605;&quot;</span><span class="token punctuation">,</span>$<span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F436;&quot;</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F431;&quot;</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span>subscribe<span class="token punctuation">{</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;&#x7B2C;&#x4E8C;&#x6B21;&#x8BA2;&#x9605;&quot;</span><span class="token punctuation">,</span>$<span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F170;&#xFE0F;&quot;</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F171;&#xFE0F;&quot;</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>&#x5728;&#x8FD9;&#x4EFD;&#x4EE3;&#x7801;&#x4E2D;&#xFF0C;&#x7B2C;&#x4E8C;&#x6B21;&#x7684;&#x989D;&#x8BA2;&#x9605;&#x7684;&#x65F6;&#x5019; &#x5C31;&#x4F1A; &#x662F; &#x5C0F;&#x732B; A &#x548C; B&#x4E86;&#xFF5E;</p>
+<h3 id="BehaviorSubject"><a href="#BehaviorSubject" class="headerlink" title="BehaviorSubject"></a>BehaviorSubject</h3><p>&#x5411;&#x6240;&#x6709;&#x7684;&#x8BA2;&#x9605;&#x8005;&#x5E7F;&#x64AD;&#x65B0;&#x7684;&#x4E8B;&#x4EF6;&#xFF0C;&#x5E76;&#x4E14;&#x4F20;&#x9012; &#x5F53;&#x524D; &#x7684;&#x6700;&#x65B0;&#x503C;&#xFF0C;&#x521D;&#x59CB;&#x503C;&#x3002;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://upload-images.jianshu.io/upload_images/755009-ee65a318eaf1ab57.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://upload-images.jianshu.io/upload_images/755009-ee65a318eaf1ab57.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Image Description">          </a></figure></p>
+<p>&#x600E;&#x4E48;&#x611F;&#x89C9;&#x5C31;&#x662F;  ReplaySubject &#x4E4B;&#x540E; buffSize &#x662F; 1 &#x7684;&#x53D8;&#x5F62;&#x5462;&#x3002;&#x3002;&#x3002;&#x3002;&#x9664;&#x4E86;&#x591A;&#x4E86;&#x4E00;&#x4E2A;&#x521D;&#x59CB;&#x503C;&#x3002;&#x3002;&#x3002;</p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token keyword">let</span> disposeBag <span class="token operator">=</span> <span class="token function">DisposeBag</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">let</span> subject <span class="token operator">=</span>  <span class="token function">BehaviorSubject</span><span class="token punctuation">(</span>value<span class="token punctuation">:</span> <span class="token string">&quot;&#x1F534;&quot;</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span>subscribe<span class="token punctuation">{</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;&#x7B2C;&#x4E00;&#x6B21;&#x8BA2;&#x9605;&quot;</span><span class="token punctuation">,</span>$<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F436;&quot;</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F431;&quot;</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span>subscribe<span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;&#x7B2C;&#x4E8C;&#x6B21;&#x8BA2;&#x9605;&quot;</span><span class="token punctuation">,</span>$<span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F170;&#xFE0F;&quot;</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F171;&#xFE0F;&quot;</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>&#x5728;&#x7B2C;&#x4E8C;&#x6B21;&#x8BA2;&#x9605;&#x51FA;&#x73B0;&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x591A;&#x51FA;&#x73B0;&#x4E00;&#x6B21;&#x3002;&#x6700;&#x65B0;&#x503C;&#x3002;&#x800C;&#x7B2C;&#x4E00;&#x6B21;&#x8BA2;&#x9605;&#x5219;&#x4F1A;&#x51FA;&#x73B0;&#x4E00;&#x4E2A; &#x521D;&#x59CB;&#x503C;&#x3002;</p>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>&#x770B;&#x4E86;&#x8FD9;&#x4E09;&#x4E2A;&#x4F8B;&#x5B50;&#x6709;&#x6CA1;&#x6709;&#x597D;&#x50CF;&#x9057;&#x6F0F;&#x4E86;&#x4EC0;&#x4E48; &#xFF0C;&#x4E00;&#x4E2A; Completed &#x4E8B;&#x4EF6;&#x3002; PublishSubject, ReplaySubject, &#x548C; BehaviorSubject &#x4E0D;&#x4F1A;&#x5728;&#x81EA;&#x52A8;&#x53D1;&#x51FA; &#x5B8C;&#x6210;&#x4E8B;&#x4EF6;&#x7684;&#x3002;</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+<h3 id="Variable"><a href="#Variable" class="headerlink" title="Variable"></a>Variable</h3><p>BehaviorSubject &#x53D8;&#x79CD;&#x3002;&#x3002;&#x3002;  &#x5C31;&#x662F;&#x8BF4;&#x5462;&#xFF0C;BehaviorSubject &#x4E0D;&#x662F;&#x4E0D;&#x4F1A;&#x81EA;&#x52A8;&#x53D1;&#x9001; Completed &#x4E8B;&#x4EF6;&#x5417;&#xFF1F;  Variable &#x4F1A;&#x3002;&#x6CA1;&#x4E86;&#x3002;</p>
+<pre class="line-numbers language-swift g-mb-30"><code class="language-swift"><span class="token keyword">let</span> variable <span class="token operator">=</span> <span class="token function">Variable</span><span class="token punctuation">(</span><span class="token string">&quot;&#x1F534;&quot;</span><span class="token punctuation">)</span>
+subject<span class="token punctuation">.</span>subscribe<span class="token punctuation">{</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;&#x7B2C;&#x4E00;&#x6B21;&#x8BA2;&#x9605;&quot;</span><span class="token punctuation">,</span>$<span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+variable<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token string">&quot;&#x1F436;&quot;</span>
+variable<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token string">&quot;&#x1F431;&quot;</span>
+subject<span class="token punctuation">.</span>subscribe<span class="token punctuation">{</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;&#x7B2C;&#x4E00;&#x6B21;&#x8BA2;&#x9605;&quot;</span><span class="token punctuation">,</span>$<span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">.</span><span class="token function">addDisposableTo</span><span class="token punctuation">(</span>disposeBag<span class="token punctuation">)</span>
+variable<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token string">&quot;&#x1F170;&#xFE0F;&quot;</span>
+variable<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token string">&quot;&#x1F171;&#xFE0F;&quot;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>Variable &#x5BF9;&#x8C61; &#x8C03;&#x7528;  asObservable() &#x65B9;&#x6CD5;&#x53EF;&#x4EE5;&#x83B7;&#x53D6;&#x4ED6;&#x53D8;&#x79CD;&#x524D;&#x7684;  BehaviorSubject &#x5BF9;&#x8C61;&#x3002; Variable &#x5BF9;&#x8C61; &#x4E0D;&#x80FD;&#x5B9E;&#x73B0; onNext &#x65B9;&#x6CD5;&#xFF0C;&#x4F46;&#x662F;&#x4F60;&#x53EF;&#x4EE5;&#x8C03;&#x7528;&#x4ED6;&#x7684; value &#x53C2;&#x6570;&#xFF0C;&#x6765; get &#x548C;set &#x5B83;&#x7684;&#x503C;&#x3002;</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+
+          </div>
+
+          <!-- Sources & Tags -->
+<div class="g-mb-30">
+  <h6 class="g-color-gray-dark-v1 g-mb-15">
+
+    
+
+                <strong class="g-mr-5">专栏:</strong> <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="/categories/IOS/">IOS</a>
+      
+
+        </h6>
+  <h6 class="g-color-gray-dark-v1">
+          <strong class="g-mr-5">标签:</strong>
+
+          
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/ios/">ios</a>
+            
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/swift/">swift</a>
+            
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/RX/">RX</a>
+            
+        </h6>
+</div>
+<!-- End Sources & Tags -->
+
+
+          <hr class="g-brd-gray-light-v4">
+
+          <!-- Social Shares -->
+<div class="g-mb-30">
+
+    <ul class="list-inline text-uppercase mb-0">
+      <li class="list-inline-item g-mr-10">
+        <strong class="align-middle g-font-size-24 jiathis_counter_style"><a class="jiathis_counter_style"></a></strong>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <span class="g-color-gray-dark-v5">|</span>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_weixin btn u-btn-teal g-font-size-12 rounded g-px-20--sm g-py-10" style="color:white;">
+          <i class="fa fa-wechat g-mr-5--sm"></i>
+          <span class="g-hidden-xs-down">分享到微信</span>
+      </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tqq btn u-btn-twitter g-font-size-12 rounded g-px-20--sm g-py-10" href="#">
+              <i class="fa fa-qq g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 QQ</span>
+            </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tsina btn u-btn-lightred g-font-size-12 rounded g-px-20--sm g-py-10 " href="#">
+              <i class="fa fa-weibo g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 新浪微博</span>
+            </a>
+      </li>
+    </ul>
+</div>
+          <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+<!-- End Social Shares -->
+
+
+
+          <div class="g-mb-60">
+  <!-- UY BEGIN -->
+  <div id="uyan_frame"></div>
+  <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1821358"></script>
+  <!-- UY END -->
+</div>
+
+
+        </article>
+
+        <div id="stickyblock-end"></div>
+      </div>
+      <!-- End Articles Content -->
+
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+
+        
+        <!-- Social Links -->
+        <div class="g-mb-50">
+          <div class="u-heading-v3-1 g-mb-30">
+            <h2 class="h5 u-heading-v3__title g-color-gray-dark-v1 text-uppercase g-brd-primary">最热专题</h2>
+          </div>
+
+          <ul class="list-unstyled mb-0">
+
+            
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        IOS
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">15</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        服务器
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">4</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        开发帮助
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">3</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        牢骚
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">1</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        Web 前端
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">1</span>
+              </li>
+
+              
+          </ul>
+        </div>
+        <!-- End Social Links -->
+
+
+        <div id="stickyblock-start" class="js-sticky-block g-sticky-block--lg g-pt-20" data-start-point="#stickyblock-start" data-end-point="#stickyblock-end" style="top: 0px; width: 255px; height: 957px;">
+
+  <div class="g-mb-40">
+
+
+
+
+
+      <!-- News Feed -->
+<div class="g-mb-40">
+  <div class="u-heading-v3-1 g-mb-30">
+    <h2 class="h5 u-heading-v3__title g-color-gray-dark-v1 text-uppercase g-brd-primary">最新日志</h2>
+  </div>
+
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/23/生活随处可见一斑20171123/">天通苑地铁 安检方式改变</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/23 9:18:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">使用 NodeJS APNS 给你的应用发消息</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/22 17:2:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">IOS10前 UITextFiled 的 placeholder 的问题</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/16 1:16:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/10/26/WebView 与 Html Input Bug/">WebView 与 Html Input File 以及 Upload File 出现的问题</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/10/26 4:10:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+
+  
+
+</div>
+<!-- End News Feed -->
+
+
+
+</div>
+
+
+      </div>
+      <!-- End Sidebar -->
+    </div>
+  </div>
+</section>
+
+<script src="/assets/js/components/hs.sticky-block.js"></script>
+<script type="text/javascript">
+
+    $(window).on('load', function () {
+      // initialization of sticky blocks
+      $.HSCore.components.HSStickyBlock.init('.js-sticky-block');
+    });
+
+</script>
+
+
+      <!-- JS Implementing Plugins -->
+<script src="/assets/vendor/custombox/custombox.min.js"></script>
+
+<!-- JS Unify -->
+<script src="/assets/js/components/hs.modal-window.js"></script>
+
+
+<!-- Footer -->
+<footer class="g-bg-black-opacity-0_9 g-color-white-opacity-0_8 ">
+  <br><br><br>
+  <div class="container g-mb-60">
+    <div class="row">
+
+      <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">关于我</h2>
+  </div>
+
+  <div class="g-mb-30">
+    <p class="g-color-white-opacity-0_8">努力学习的IOS程序员。目前在学习制作Hexo主题，主要还是为了做自己的一个博客.之后会好好学习linux以及服务器相关的知识.</p>
+  </div>
+
+  <address class="mb-0">
+    <div class="g-mb-30">
+      <h4 class="h6 g-font-weight-600">现居地</h4>
+      <p class="mb-0 g-color-white-opacity-0_8">北京 - 国家的首都 </p>
+    </div>
+
+    <!-- 配置标签相关视图 -->
+    
+
+      <div class="g-mb-30">
+        <h4 class="h6 g-font-weight-600">邮箱:</h4>
+
+        
+
+                <p class="mb-0 g-color-white-opacity-0_8">alphabetion@gmail.com</p>
+        
+
+                <p class="mb-0 g-color-white-opacity-0_8">jingwenzheng@baimaodai.com</p>
+        
+
+      </div>
+
+      
+
+
+
+    <div class="mb-0">
+      <h4 class="h6 g-font-weight-600">一言:</h4>
+      <p class="mb-0">
+        <a class="g-color-white-opacity-0_8" id="hitokoto" href="http://hitokoto.cn/">support@htmlstream.com</a>
+      </p>
+    </div>
+  </address>
+</div>
+<!-- End Footer Content -->
+
+
+        <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+
+
+  <!-- 配置标签相关视图 -->
+  
+    <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+      <h2 class="u-heading-v2__title h6 text-uppercase mb-0">标签</h2>
+    </div>
+    <ul class="u-list-inline g-font-size-12 g-mb-30">
+
+      
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/生活/">
+            生活
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/悲观/">
+            悲观
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/Objective-C/">
+            Objective-C
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/AsyncDisplayKit/">
+            AsyncDisplayKit
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/ios/">
+            ios
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/约束教程/">
+            约束教程
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/swift/">
+            swift
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/autolayout/">
+            autolayout
+          </a>
+        </li>
+        
+    </ul>
+    
+
+      <!-- 布局相关链接-->
+
+      <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+        <h2 class="u-heading-v2__title h6 text-uppercase mb-0">友情链接</h2>
+      </div>
+
+      <ul class="list-unstyled">
+        
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://baidu.com">
+              百度
+            </a>
+          </li>
+
+          
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://test.baidu.com">
+              测试链接
+            </a>
+          </li>
+
+          
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://baidu.com">
+              hexo
+            </a>
+          </li>
+
+          
+      </ul>
+
+
+
+</div>
+<!-- End Footer Content -->
+
+
+          <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">最近文章</h2>
+  </div>
+
+  
+    
+
+  <article class="media">
+
+
+  
+
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/23/生活随处可见一斑20171123/">天通苑地铁 安检方式改变</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/23 9:18:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/23/生活随处可见一斑20171123/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+  <a class="d-flex g-mt-3 mr-3" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">
+    <img class="g-width-60 g-height-60 rounded" src="http://image.msiter.com/stock-photo-236362221.jpg" alt="Image Description">
+  </a>
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">使用 NodeJS APNS 给你的应用发消息</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/22 17:2:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">IOS10前 UITextFiled 的 placeholder 的问题</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/16 1:16:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+  <a class="d-flex g-mt-3 mr-3" href="/2017/10/26/WebView 与 Html Input Bug/">
+    <img class="g-width-60 g-height-60 rounded" src="http://image.msiter.com/stock-photo-233150091.jpg" alt="Image Description">
+  </a>
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/10/26/WebView 与 Html Input Bug/">WebView 与 Html Input File 以及 Upload File 出现的问题</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/10/26 4:10:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/10/26/WebView 与 Html Input Bug/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+      
+</div>
+<!-- End Footer Content -->
+
+
+            <!-- Footer Content -->
+<div class="col-lg-3 col-md-6">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">订阅</h2>
+  </div>
+
+  <div class="g-mb-30">
+    <p class="g-color-white-opacity-0_8">订阅我可以更及时的获取到文章的推送，请在下方输入您的邮箱地址获取文章更新</p>
+    <div class="input-group border-0 g-rounded-30">
+      <input class="form-control border-0 g-rounded-left-30 g-px-12 g-py-8" type="email" placeholder="输入您的邮箱地址">
+      <div class="input-group-addon border-0 p-0">
+        <button class="btn u-btn-primary g-rounded-right-30 g-px-12 g-py-8" type="submit" role="button">订阅</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">社交</h2>
+  </div>
+
+  <p class="g-color-white-opacity-0_8">作为一个宅男，长期宅在家里，会不定期的更新文章。如果你想更新的了解到我的动态，请选择一下任意一种社交方式关注我。</p>
+  <ul class="list-inline mb-0">
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://www.facebook.com/aimobier">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://www.instagram.com/aimobier/">
+        <i class="fa fa-instagram"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://github.com/aimobier">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="http://weibo.com/aouns">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="#modal1" data-modal-target="#modal1" data-modal-effect="fadein">
+        <i class="fa fa-weixin"></i>
+</a>
+    </li>
+  </ul>
+</div>
+<!-- End Footer Content -->
+
+    </div>
+  </div>
+
+
+  <!-- Copyright Footer -->
+<div class="g-bg-black-opacity-0_1 g-color-white-opacity-0_8 text-center g-py-20">
+  <div class="container">
+    
+      
+        
+        <small class="g-font-size-7 g-mr-10 g-mb-10 g-mb-0--md">2015 - 2017 © All Rights Reserved. Msiter by
+        <a class="g-color-white-opacity-0_8" href="#">Jing WenZheng</a>
+      </small>
+  </div>
+</div>
+<!-- End Copyright Footer -->
+
+
+</footer>
+<!-- End Footer -->
+<a class="js-go-to u-go-to-v1" href="#" data-type="fixed" data-position='{
+ "bottom": 15,
+ "right": 15
+}' data-offset-top="400" data-compensation="#js-header" data-show-effect="zoomIn">
+  <i class="hs-icon hs-icon-arrow-top"></i>
+</a>
+
+<script type="text/javascript">
+  $(function() {
+
+    // initialization of go to
+    $.HSCore.components.HSGoTo.init('.js-go-to');
+    $.HSCore.components.HSModalWindow.init('[data-modal-target]');
+    $.getJSON("https://sslapi.hitokoto.cn/?encode=json", function(json) {
+      $("#hitokoto").html(json["hitokoto"]);
+    });
+  });
+</script>
+
+
+    </main>
+
+    <div class="u-outer-spaces-helper"></div>
+
+
+  </body>
+</html>

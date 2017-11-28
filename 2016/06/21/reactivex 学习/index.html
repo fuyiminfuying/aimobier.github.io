@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+      <!-- Title -->
+      
+      <title>reactivex 学习 | 荆文征</title>
+
+    <!-- Required Meta Tags Always Come First -->
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700%7COpen+Sans:400,600,700">
+
+    <!-- CSS Global Compulsory -->
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/bootstrap.min.css">
+
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="/assets/vendor/icon-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/vendor/icon-line-pro/style.css">
+    <link rel="stylesheet" href="/assets/vendor/icon-hs/style.css">
+    <link rel="stylesheet" href="/assets/vendor/animate.css">
+    <link rel="stylesheet" href="/assets/vendor/hs-megamenu/src/hs.megamenu.css">
+    <link rel="stylesheet" href="/assets/vendor/hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" href="/assets/vendor/slick-carousel/slick/slick.css">
+    <link rel="stylesheet" href="/assets/vendor/fancybox/jquery.fancybox.css">
+
+    <!-- Revolution Slider -->
+    <link rel="stylesheet" href="/assets/vendor/revolution-slider/revolution/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="/assets/vendor/revolution-slider/revolution/css/settings.css">
+    <link rel="stylesheet" href="/revolution-slider/carousel-gallery/assets/css/style.css">
+
+    <!-- CSS Unify Theme -->
+    <link rel="stylesheet" href="/assets/css/styles.bm-classic.css">
+
+    <!-- CSS Customization -->
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <!-- CSS Implementing Plugins -->
+    <link  rel="stylesheet" href="/assets/vendor/fancybox/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/css/prism-atom-dark.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<!-- JS Global Compulsory -->
+<script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/jquery-migrate/jquery-migrate.min.js"></script>
+<script src="/assets/vendor/popper.js/index.js"></script>
+<script src="/assets/vendor/bootstrap/bootstrap.min.js"></script>
+
+<!-- JS Implementing Plugins -->
+<script src="/assets/vendor/appear.js"></script>
+<script src="/assets/vendor/slick-carousel/slick/slick.js"></script>
+<script src="/assets/vendor/hs-megamenu/src/hs.megamenu.js"></script>
+<script src="/assets/vendor/fancybox/jquery.fancybox.min.js"></script>
+
+<!-- JS Unify -->
+<script src="/assets/js/hs.core.js"></script>
+<script src="/assets/js/components/hs.header.js"></script>
+<script src="/assets/js/helpers/hs.hamburgers.js"></script>
+<script src="/assets/js/components/hs.dropdown.js"></script>
+<script src="/assets/js/components/hs.carousel.js"></script>
+<script src="/assets/js/components/hs.go-to.js"></script>
+<script src="/assets/js/components/hs.popup.js"></script>
+
+<!-- JS Revolution Slider -->
+<script src="/assets/vendor/revolution-slider/revolution/js/jquery.themepunch.tools.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/jquery.themepunch.revolution.min.js"></script>
+
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.actions.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.carousel.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.kenburn.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.layeranimation.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.migration.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.navigation.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.parallax.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
+<script src="/assets/vendor/revolution-slider/revolution/js/extensions/revolution.extension.video.min.js"></script>
+
+<!-- JS Customization -->
+<script src="/assets/js/custom.js"></script>
+
+<!-- JS Implementing Plugins -->
+<script  src="/assets/vendor/fancybox/jquery.fancybox.min.js"></script>
+
+<!-- JS Unify -->
+<script  src="/assets/js/components/hs.popup.js"></script>
+
+<script src="https://cdn.wilddog.com/sdk/js/2.5.17/wilddog-sync.js"></script>
+
+<script>
+  function SETValue(key, value) {
+    if (typeof(Storage) !== "undefined") {
+      var curTime = new Date().getTime();
+      localStorage.setItem(key, JSON.stringify({
+        data: value,
+        time: curTime
+      }));
+    }
+  }
+
+  function GETvalue(key) {
+    if (typeof(Storage) !== "undefined") {
+      var data = localStorage.getItem(key);
+      if(data) {
+        var dataObj = JSON.parse(data);
+        if (new Date().getTime() - dataObj.time > 1000*60*60) {
+          //alert("信息已过期")
+        } else {
+          //console.log("data="+dataObj.data);
+          //console.log(JSON.parse(dataObj.data));
+          var dataObjDatatoJson = dataObj.data
+          return dataObjDatatoJson;
+        }
+      }
+    }
+  }
+
+  function REQuest(url, finish) {
+
+    var value = GETvalue(url);
+
+    if (value) {
+      finish(value);
+      return;
+    }
+
+    $.ajax({
+      type: "get",
+      dataType: "jsonp",
+      cache: true,
+      url: url,
+      success: function(data) {
+        SETValue(url, data);
+        finish(data);
+      }
+    });
+  }
+
+
+  $(document).on('ready', function() {
+    // initialization of header
+    $.HSCore.components.HSHeader.init($('#js-header'));
+    $.HSCore.helpers.HSHamburgers.init('.hamburger');
+
+    // initialization of MegaMenu
+    $('.js-mega-menu').HSMegaMenu();
+
+    // initialization of HSDropdown component
+    $.HSCore.components.HSDropdown.init($('[data-dropdown-target]'), {
+      afterOpen: function() {
+        $(this).find('input[type="search"]').focus();
+      }
+    });
+    // initialization of popups
+                                $.HSCore.components.HSPopup.init('.js-fancybox');
+
+                                // initialization of gallery with thumbs
+                                $.HSCore.components.HSPopup.init('.js-fancybox-thumbs', {
+                                  thumbs: {
+                                    showOnStart: true
+                                  }
+                                });
+
+    // initialization of go to
+    $.HSCore.components.HSGoTo.init('.js-go-to');
+  });
+</script>
+
+<script>
+
+//  百度站长 推送
+
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+  <body>
+    <main>
+
+  <!-- Header -->
+  <header id="js-header" class="u-header u-header--static u-shadow-v19">
+    <!-- Top Bar -->
+    <div class="u-header__section g-brd-bottom g-brd-gray-light-v4 g-py-18">
+      <div class="container">
+        <div class="row align-items-center">
+
+          <!-- Logo -->
+<div class="col-md-3 g-hidden-md-down">
+  <a href="bm-classic-home-page-1.html" class="navbar-brand">
+    <img src="/assets/img/logo.png" alt="Logo">
+  </a>
+</div>
+<!-- End Logo -->
+
+
+          <!-- Subscribe Form -->
+<div class="col-6 col-md-5">
+  <form class="input-group rounded">
+    <input class="form-control w-100 g-brd-secondary-light-v2 g-brd-primary--focus g-color-secondary-dark-v1 g-placeholder-secondary-dark-v1 g-bg-white g-font-weight-400 g-font-size-13 rounded g-px-20 g-py-12" type="text" placeholder="输入以搜索该博客文章">
+    <span class="input-group-addon g-brd-none g-py-0 g-pr-0">
+      <button class="btn u-btn-white g-color-primary--hover g-bg-secondary g-font-weight-600 g-font-size-13 text-uppercase rounded g-py-12 g-px-20" type="submit">
+        <span class="g-hidden-md-down">Search</span>
+        <i class="g-hidden-lg-up fa fa-search"></i>
+      </button>
+    </span>
+  </form>
+</div>
+<!-- End Subscribe Form -->
+
+
+          <!-- Language -->
+<div id="clock" class="col-4 col-lg-2 g-pos-rel g-px-15 ml-auto">
+</div>
+<!-- End Language -->
+
+
+<script type="text/javascript">
+
+var config = {
+  syncURL: "https://wd2622139095udguuj.wilddogio.com" //输入节点 URL
+};
+wilddog.initializeApp(config);
+var ref = wilddog.sync().ref("browerlog");
+
+ref.push({
+  "url": window.location.href,
+  "date": Math.round(new Date().getTime())
+});
+
+ref.orderByChild("url").equalTo(window.location.href).on('value', function(snapshot) {
+
+  $("#clock").text("No."+Object.keys(snapshot.val()).length);
+
+  }, function (error) {
+});
+
+</script>
+
+
+          <!-- Account -->
+<div class="col-1" id="account">
+  <a id="account-dropdown-invoker" class="media align-items-center float-right g-text-underline--none--hover" href="#"
+     aria-controls="account-dropdown"
+     aria-haspopup="true"
+     aria-expanded="false"
+     data-dropdown-event="hover"
+     data-dropdown-target="#account-dropdown"
+     data-dropdown-type="css-animation"
+     data-dropdown-duration="300"
+     data-dropdown-hide-on-scroll="false"
+     data-dropdown-animation-in="fadeIn"
+     data-dropdown-animation-out="fadeOut">
+    <div class="d-flex g-width-30 g-height-30 mr-2">
+      <img class="img-fluid rounded-circle" src="http://blog.msiter.com/favicon/avatar.jpg" alt="Image Description">
+    </div>
+    <div class="media-body">
+      <span class="d-block g-hidden-sm-down g-color-main g-font-weight-600 g-font-size-13">文征</span>
+    </div>
+  </a>
+
+  <div id="account-dropdown" class="list-unstyled text-right g-width-160 g-brd-around g-brd-secondary-light-v2 g-bg-white rounded g-pos-abs g-right-0 g-py-5 g-mt-57" aria-labelledby="account-dropdown-invoker">
+
+    暂时没想好怎么做
+
+  </div>
+
+
+</div>
+<!-- End Account -->
+
+<script type="text/javascript">
+
+$("#account").mouseover(function(){
+
+
+});
+
+$("#account").mouseout(function(){
+
+});
+
+</script>
+
+
+        </div>
+      </div>
+    </div>
+    <!-- End Top Bar -->
+
+    <div class="u-header__section u-header__section--light g-bg-white g-transition-0_3 g-py-10">
+      <nav class="js-mega-menu navbar navbar-expand-lg g-px-0">
+        <div class="container g-px-15">
+          <!-- Logo -->
+          <a class="navbar-brand g-hidden-lg-up" href="bm-classic-home-page-1.html">
+            <img src="/assets/img/logo.png" alt="Logo">
+          </a>
+          <!-- End Logo -->
+
+          <!-- Responsive Toggle Button -->
+          <button class="navbar-toggler navbar-toggler-right btn g-line-height-1 g-brd-none g-pa-0 ml-auto" type="button"
+                  aria-label="Toggle navigation"
+                  aria-expanded="false"
+                  aria-controls="navBar"
+                  data-toggle="collapse"
+                  data-target="#navBar">
+            <span class="hamburger hamburger--slider g-pa-0">
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
+            </span>
+          </button>
+          <!-- End Responsive Toggle Button -->
+
+          <!-- Navigation -->
+          <div class="collapse navbar-collapse align-items-center flex-sm-row g-pt-10 g-pt-5--lg" id="navBar">
+            <ul class="navbar-nav g-font-weight-600">
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-1" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">标签
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-1">
+    <div class="row">
+      <div class="col-lg-2">
+        <ul class="list-unstyled mb-0" style="ov">
+
+          
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/生活/">生活</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/悲观/">悲观</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/Objective-C/">Objective-C</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/AsyncDisplayKit/">AsyncDisplayKit</a></li>
+
+            
+
+                      <li class="g-brd-bottom g-brd-gray-light-v4 g-py-10">
+                        <a class="g-color-main g-color-main--hover" href="/tags/ios/">ios</a></li>
+
+            
+
+        </ul>
+      </div>
+      <div class="col-lg-1">
+
+      </div>
+      <div class="col-lg-9" style="height:auto;" >
+
+        <!-- Background Gray Colored -->
+        <ul class="u-list-inline">
+
+          
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/生活/">生活</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/悲观/">悲观</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Objective-C/">Objective-C</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/AsyncDisplayKit/">AsyncDisplayKit</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/ios/">ios</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/约束教程/">约束教程</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/swift/">swift</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/autolayout/">autolayout</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/AttributedString/">AttributedString</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/iOS8-html2AttributedString-error/">iOS8 html2AttributedString error</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/技巧/">技巧</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/IOS/">IOS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mongodb/">mongodb</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mongoose/">mongoose</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/nodejs/">nodejs</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/RX/">RX</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/java/">java</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/spring-boot/">spring boot</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/mybatis/">mybatis</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WKWebView/">WKWebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Systematic-distinction/">Systematic distinction</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WebKit/">WebKit</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/WebView/">WebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/UIWebView/">UIWebView</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Input/">Input</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/File/">File</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Bug/">Bug</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/破解/">破解</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/抓包/">抓包</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/reactiv/">reactiv</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/rxswift/">rxswift</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/DB/">DB</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/realm/">realm</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/swagger/">swagger</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/api/">api</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/travis-ci/">travis-ci</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/cocoapods/">cocoapods</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/NodeJS/">NodeJS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/APNs/">APNs</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/八爪鱼/">八爪鱼</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/html/">html</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/js/">js</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/Javascript/">Javascript</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/鼠标悬浮/">鼠标悬浮</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/越狱/">越狱</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/cydia/">cydia</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/制作源/">制作源</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/error/">error</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/奇怪的问题/">奇怪的问题</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/无趣，心理学/">无趣，心理学</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item g-mb-10">
+                          <a class="u-tags-v1 g-color-main g-bg-gray-light-v4 g-bg-black--hover g-color-white--hover g-py-4 g-px-10" href="/tags/async/">async</a>
+                        </li>
+
+            
+
+        </ul>
+        <!-- End Background Gray Colored -->
+
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-5" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">栏目
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-primary g-left-15 g-right-15 g-px-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-5">
+    <div class="row">
+      <div class="col-lg-12">
+        <ul class="list-inline text-center mb-0">
+
+
+
+          
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/牢骚/">牢骚</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/IOS/">IOS</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/服务器/">服务器</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/开发帮助/">开发帮助</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/Web-前端/">Web 前端</a>
+                        </li>
+
+            
+
+                        <li class="list-inline-item">
+                          <a class="d-inline-block g-color-white-opacity-0_8 g-color-white--hover g-px-10 g-py-15" href="/categories/生活/">生活</a>
+                        </li>
+
+            
+
+
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-3" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">最新文章
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-3">
+    <div class="row">
+      <div class="col-lg-4">
+        <article>
+          <figure class="g-pos-rel">
+            <img class="img-fluid w-100 g-mb-20" src="/assets/img-temp/900x600/img7.jpg" alt="Image Description">
+          </figure>
+          <h3 class="h4 g-mb-10"><a class="g-color-gray-dark-v2" href="#">Love the mother nature</a>
+          </h3>
+          <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+            <li class="list-inline-item">
+              <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">Kathy Reyes</a>
+            </li>
+            <li class="list-inline-item">/</li>
+            <li class="list-inline-item">July 20, 2016</li>
+            <li class="list-inline-item">/</li>
+            <li class="list-inline-item">
+              <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                <i class="fa fa-comments-o"></i> 18
+              </a>
+            </li>
+          </ul>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Top 10 Luxury Hotels - 5 Star Best Luxury Hotels</a>
+            </h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 07, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 24
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6"><a class="g-color-main" href="#">10 Most beautiful beaches</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 20, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 18
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Stylish things to do, see and buy this week</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 16, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 31
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">8 health benefits and drawbacks of coffee</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 30, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 12
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Stylish things to do, see and buy this week</a></h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 16, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 31
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media g-mb-20">
+          <a class="d-flex mr-3" href="#"><img class="g-width-120 g-height-70" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description"></a>
+          <div class="media-body">
+            <h3 class="h6">
+              <a class="g-color-main" href="#">Top 10 Luxury Hotels - 5 Star Best Luxury Hotels</a>
+            </h3>
+            <ul class="u-list-inline g-font-size-12 g-color-gray-dark-v4">
+              <li class="list-inline-item">July 07, 2016</li>
+              <li class="list-inline-item">/</li>
+              <li class="list-inline-item">
+                <a class="g-color-gray-dark-v4 g-text-underline--none--hover" href="#">
+                  <i class="fa fa-comments-o"></i> 24
+                </a>
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-mx-20--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-4" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">最火文章
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-4">
+    <div class="row">
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img1.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Fashion</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 26, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Be ready, fashion of the year is coming this year</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img2.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Beaches</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 15, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Must be visited places in the USA - Florida Beaches</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <article class="u-block-hover">
+          <figure class="g-bg-cover g-bg-black-gradient-opacity-v1--after">
+            <img class="img-fluid u-block-hover__main--zoom-v1" src="/assets/img-temp/500x320/img3.jpg" alt="Image Description">
+          </figure>
+          <span class="g-pos-abs g-top-20 g-left-20">
+          <a class="btn btn-sm u-btn-red rounded-0" href="#">Food</a>
+        </span>
+          <span class="u-icon-v3 u-icon-size--sm g-bg-white g-color-black g-rounded-50x g-cursor-pointer g-pos-abs g-top-20 g-right-20">
+          <i class="icon-camera g-left-2"></i>
+        </span>
+          <header class="g-pos-abs g-bottom-10 g-left-20 g-right-20">
+            <small class="g-color-white">
+              <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 8, 2016
+            </small>
+            <h3 class="h4 g-font-weight-600 g-mt-5">
+              <a class="g-color-white g-color-white--hover" href="#">Why your next glass of juice will cost you more</a>
+            </h3>
+          </header>
+        </article>
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Mega Menu Item -->
+<li class="hs-has-mega-menu nav-item g-mx-10--lg g-ml-15--xl"
+    data-animation-in="fadeIn"
+    data-animation-out="fadeOut"
+    data-position="right">
+  <a id="mega-menu-label-7" class="nav-link text-uppercase g-px-0" href="#" aria-haspopup="true" aria-expanded="false">新闻热点
+    <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-5"></i></a>
+
+  <!-- Mega Menu -->
+  <div class="hs-mega-menu u-shadow-v11 g-text-transform-none g-font-weight-400 g-brd-top g-brd-primary g-brd-top-2 g-bg-white g-left-15 g-right-15 g-pa-30 g-mt-17 g-mt-7--lg--scrolling" aria-labelledby="mega-menu-label-7">
+    <div class="row">
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 16, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">You've been making French Pie all wrong - Until Now</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 02, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Unify facts, study finds - sensitive to gluten without having coeliac disease</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 18, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Why your next cup of cofee with milk will cost you more</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 12, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Incredible product and quality: Unify best template of the year</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 16, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Some post title will be implimented here and It's cool!</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> Aug 02, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Wireframe approach for the news blocks and pages</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+
+      <div class="col-lg-3 g-mb-20 g-mb-0--lg">
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 18, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">Over thousands of components help you to boost your project</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+
+        <hr class="g-mt-15 g-mb-10">
+
+        <!-- Article -->
+        <article>
+          <div class="g-font-size-12 g-mb-5">
+            <i class="icon-clock g-pos-rel g-top-1 g-mr-2"></i> July 12, 2016
+          </div>
+
+          <h3 class="h6">
+            <a class="g-color-main" href="#">How to run a ticket: Best 10 point approaches for people who stands..</a>
+          </h3>
+        </article>
+        <!-- End Article -->
+      </div>
+    </div>
+  </div>
+  <!-- End Mega Menu -->
+</li>
+<!-- End Mega Menu Item -->
+
+              <!-- Main -->
+<li class="nav-item g-mx-10--lg g-mx-20--xl">
+  <a id="nav-link--pages" class="nav-link text-uppercase g-color-primary--hover g-px-0" href="/">
+    主页
+  </a>
+</li>
+<!-- End Main -->
+
+
+
+
+
+
+
+
+            </ul>
+          </div>
+          <!-- End Navigation -->
+        </div>
+      </nav>
+    </div>
+  </header>
+  <!-- End Header -->
+
+
+    <section class="g-pt-50 g-pb-100">
+  <div class="container">
+    <div class="row">
+      <!-- Articles Content -->
+      <div class="col-lg-9 g-mb-50 g-mb-0--lg">
+        <article class="g-mb-60">
+          <header class="g-mb-30">
+            <h2 class="h1 g-mb-15">reactivex 学习</h2>
+
+            <ul class="list-inline d-sm-flex g-color-gray-dark-v4 mb-0">
+              <li class="list-inline-item">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                  小酒馆老板
+                </a>
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item">
+                2016/6/21 23:22:0
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item g-mr-10">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                        <i class="align-middle mr-2 icon-hotel-restaurant-242 u-line-icon-pro"></i>共有2,501个字
+                      </a>
+              </li>
+              <li class="list-inline-item g-mx-10">/</li>
+              <li class="list-inline-item g-mr-10">
+                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#">
+                        <i class="align-middle mr-2 icon-hotel-restaurant-003 u-line-icon-pro"></i>预计阅读9分钟
+                      </a>
+              </li>
+            </ul>
+
+            <hr class="g-brd-gray-light-v4 g-my-15">
+
+
+
+                      <!-- Social Shares -->
+<div class="g-mb-30">
+
+    <ul class="list-inline text-uppercase mb-0">
+      <li class="list-inline-item g-mr-10">
+        <strong class="align-middle g-font-size-24 jiathis_counter_style"><a class="jiathis_counter_style"></a></strong>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <span class="g-color-gray-dark-v5">|</span>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_weixin btn u-btn-teal g-font-size-12 rounded g-px-20--sm g-py-10" style="color:white;">
+          <i class="fa fa-wechat g-mr-5--sm"></i>
+          <span class="g-hidden-xs-down">分享到微信</span>
+      </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tqq btn u-btn-twitter g-font-size-12 rounded g-px-20--sm g-py-10" href="#">
+              <i class="fa fa-qq g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 QQ</span>
+            </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tsina btn u-btn-lightred g-font-size-12 rounded g-px-20--sm g-py-10 " href="#">
+              <i class="fa fa-weibo g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 新浪微博</span>
+            </a>
+      </li>
+    </ul>
+</div>
+          <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+<!-- End Social Shares -->
+
+
+
+          </header>
+
+          <div class="">
+            <p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://image.msiter.com/stock-photo-179922657.jpg" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://image.msiter.com/stock-photo-179922657.jpg" alt="Image Description">          </a><figcaption class="figure-caption g-font-size-12 g-color-gray-dark-v4 g-mt-5 text-center">        &#x5E86;&#x5E78;&#x4F60;&#x6765;&#x81EA;&#x8FDC;&#x65B9;&#x4E0D;&#x6E05;&#x695A;&#x6211;&#x7684;&#x8FC7;&#x5F80;&#x3002;</figcaption></figure></p>
+<h3 id="&#x6563;&#x8BB0;"><a href="#&#x6563;&#x8BB0;" class="headerlink" title="&#x6563;&#x8BB0;"></a>&#x6563;&#x8BB0;</h3><p>&#x597D;&#x4E45;&#x6CA1;&#x6709;&#x5B66;&#x4E60;&#x5230;&#x65B0;&#x7684;&#x4E1C;&#x897F;&#x4E86;&#xFF0C;&#x4E4B;&#x524D;&#x4E00;&#x76F4;&#x60F3;&#x5B66;&#x4E60; <code>ReactiveCocoa</code>,&#x4F46;&#x662F;&#x770B;&#x4E86;&#x4E00;&#x70B9;&#x4E4B;&#x540E;&#xFF0C;&#x89C9;&#x7684;&#x5F88;&#x662F;&#x7E41;&#x7410;&#xFF0C;&#x800C;&#x4E14;&#x611F;&#x89C9;&#x5F88;&#x591A;api&#x65B9;&#x6CD5;&#xFF0C;&#x518D;&#x52A0;&#x4E0A;&#x9879;&#x76EE;&#x5F88;&#x7D27;&#x8FEB;&#x6CA1;&#x6709;&#x65F6;&#x95F4;&#x53BB;&#x5B66;&#x4E60;&#x65B0;&#x7684;&#x4E1C;&#x897F;&#x4E86;&#x3002;&#x6211;&#x5C31;&#x6682;&#x65F6;&#x6401;&#x7F6E;&#x4E86;&#xFF0C;&#x73B0;&#x5728;&#x9879;&#x76EE;&#x505A;&#x7684;&#x4E5F;&#x5DEE;&#x4E0D;&#x591A;&#x4E86;&#xFF0C;&#x89C9;&#x5F97;&#x8FD9;&#x4E2A;&#x5B66;&#x4E60;&#x8FDB;&#x5EA6;&#x662F;&#x65F6;&#x5019;&#x63D0;&#x4E0A;&#x8FDB;&#x7A0B;&#x3002;</p>
+<p>&#x518D;&#x5F00;&#x59CB;&#x5B66;&#x4E60;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x53D1;&#x73B0;&#x4E86;<code>RxSwift</code>.&#x5728;&#x4E4B;&#x540E;&#x53D1;&#x73B0;&#x4E86; <code>reactivex</code> &#x3002;&#x8FDB;&#x5165;&#x4E86;&#x5B98;&#x7F51;&#x53D1;&#x73B0;&#x81EA;&#x5DF1;&#x53EF;&#x80FD;&#xFF0C;&#x627E;&#x5230;&#x4E86;&#x4E00;&#x4E2A; &#x7C7B;&#x4F3C;&#x4E8E; <code>Realm</code>&#x548C;<code>swagger</code> &#x7684;&#x5E9E;&#x7136;&#x5927;&#x7269;&#xFF0C; &#x7EDD;&#x5BF9;&#x8981;&#x597D;&#x597D;&#x5B66;&#x4E60;&#xFF0C;&#x5728;&#x52A0;&#x4E0A;&#x81EA;&#x5DF1;&#x5B66;&#x4E60;&#x7684;&#x672C;&#x8EAB;&#x5C31;&#x662F;swift&#x3002;&#x81EA;&#x7136;&#x9009;&#x62E9;&#x4E86; RXswift&#x3002;</p>
+<p>&#x597D;&#x4E86;&#xFF0C;&#x5E9F;&#x8BDD;&#x4E0D;&#x591A;&#x8BF4;&#x4E86;&#xFF0C;&#x5F00;&#x59CB;&#x5B66;&#x4E60;&#x5427;&#xFF0C;&#x8BF7;&#x8010;&#x5FC3;&#x770B;&#x4E0B;&#x53BB;&#x3002;&#x56E0;&#x4E3A;&#x6211;&#x4E5F;&#x662F;&#x7FFB;&#x8BD1;&#xFF0C;&#x6240;&#x4EE5;&#x5982;&#x679C;&#x6709;&#x4EFB;&#x4F55;&#x89C9;&#x5F97;&#x4E0D;&#x5E94;&#x8BE5;&#x7684;&#x5730;&#x65B9;&#xFF0C;&#x53EF;&#x4EE5;&#x63D0;&#x9192;&#x6211;&#x3002;</p>
+<a id="more"></a>
+<h3 id="ReactiveX"><a href="#ReactiveX" class="headerlink" title="ReactiveX"></a>ReactiveX</h3><p>&#x5728;&#x8FDB;&#x5165;ReactiveX&#x7684;&#x5B98;&#x65B9;&#x7F51;&#x7AD9;&#x540E;&#xFF0C;&#x5C31;&#x770B;&#x5230;&#x4E86;&#x5B83;&#x5BF9;&#x81EA;&#x5DF1;&#x7684;&#x8BC4;&#x4EF7;</p>
+    <!-- Taglines Bordered -->    <div class="g-brd-around g-brd-gray-light-v4 g-brd-2 g-brd-red-left g-line-height-1_8 g-pa-30 g-mb-30">      <em style="padding:0px;margin:0px;">
+<p>ReactiveX is a combination of the best ideas from<br>the Observer pattern, the Iterator pattern, and functional programming</p>
+</em>    </div>    <!-- End Taglines Bordered -->    
+<p>reactivex&#x7EC4;&#x5408;&#x662F;&#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;&#xFF0C;&#x8FED;&#x4EE3;&#x5668;&#x6A21;&#x5F0F;&#x548C;&#x51FD;&#x6570;&#x5F0F;&#x7F16;&#x7A0B;&#x6700;&#x597D;&#x7684;&#x60F3;&#x6CD5;&#x3002;</p>
+<p>ok ~ &#x597D;&#x5427;&#xFF0C;&#x7B97;&#x4F60;&#x540A;&#x3002;&#x4EC0;&#x4E48;&#x610F;&#x601D;&#xFF01;</p>
+<h3 id="Observable-&#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;"><a href="#Observable-&#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;" class="headerlink" title="Observable &#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;"></a>Observable &#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;</h3><h4 id="&#x7B80;&#x4ECB;"><a href="#&#x7B80;&#x4ECB;" class="headerlink" title="&#x7B80;&#x4ECB;"></a>&#x7B80;&#x4ECB;</h4><p>&#x5728;reactivex &#x89C2;&#x5BDF;&#x8005; &#x8BA2;&#x9605; &#x53EF;&#x89C2;&#x5BDF;&#x5BF9;&#x8C61;&#x3002;&#x7136;&#x540E;&#xFF0C;&#x89C2;&#x5BDF;&#x8005; &#x4F1A;&#x5BF9; &#x53EF;&#x89C2;&#x5BDF;&#x5BF9;&#x8C61; &#x4EE5;&#x4EFB;&#x610F;&#x987A;&#x5E8F;&#x53D1;&#x51FA;&#x7684;&#x4EFB;&#x4F55;&#x9879;&#x76EE;&#x4E22;&#x56DE;&#x4F5C;&#x51FA;&#x53CD;&#x5E94;&#x3002;&#x8FD9;&#x79CD;&#x6A21;&#x5F0F;&#x6709;&#x5229;&#x4E8E;&#x5E76;&#x53D1;&#x64CD;&#x4F5C;&#xFF0C;&#x4ED6;&#x4E0D;&#x9700;&#x8981;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x963B;&#x585E;&#x5BF9;&#x8C61;&#x6765;&#x7B49;&#x5F85; &#x53EF;&#x89C2;&#x5BDF;&#x8005; &#x53D1;&#x51FA;&#x4EFB;&#x4F55;&#x6307;&#x4EE4;,&#x800C;&#x662F;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x54E8;&#x5175;&#x7684;&#x5F62;&#x5F0F;&#x7684;&#x89C2;&#x5BDF;&#x5458;&#xFF0C;&#x968F;&#x65F6;&#x51C6;&#x5907;&#x4F5C;&#x51FA;&#x9002;&#x5F53;&#x7684;&#x53CD;&#x5E94;&#x9488;&#x5BF9;&#x4E8E; &#x53EF;&#x89C2;&#x5BDF;&#x5BF9;&#x8C61; &#x53D1;&#x51FA;&#x7684;&#x9879;&#x76EE;&#x3002;</p>
+<p>      <figure class="mb-4">      <a class="js-fancybox-thumbs" href="http://reactivex.io/assets/operators/legend.png" title="Lightbox Gallery" data-fancybox-gallery="lightbox-gallery-2" data-fancybox-speed="500" data-fancybox-slide-speed="1000">            <img class="img-fluid" src="http://reactivex.io/assets/operators/legend.png" alt="Image Description">          </a></figure></p>
+<p>See Also</p>
+<ul class="g-list-style-circle">
+<li><a href="http://reactivex.io/documentation/single.html" target="_blank" rel="noopener">Single</a> &#x2014; &#x4E00;&#x4E2A;&#x9488;&#x5BF9;&#x4E8E;&#x53EF;&#x89C2;&#x5BDF;&#x5BF9;&#x8C61;&#x53EA;&#x53D1;&#x51FA;&#x4E00;&#x6B21;&#x9879;&#x76EE;&#x7684;&#x4E13;&#x95E8;&#x7248;&#x672C;</li>
+<li><a href="http://channel9.msdn.com/Series/Rx-Workshop/Rx-Workshop-Introduction" target="_blank" rel="noopener">Rx Workshop: Introduction</a></li>
+<li><a href="http://www.introtorx.com/Content/v1.0.10621.0/02_KeyTypes.html#IObservable" target="_blank" rel="noopener">Introduction to Rx: IObservable</a></li>
+<li><a href="http://docs.couchbase.com/developer/java-2.0/observables.html" target="_blank" rel="noopener">Mastering observables</a> (&#x6765;&#x81EA; Couchbase &#x670D;&#x52A1;&#x5668;&#x7684;&#x6587;&#x6863;)</li>
+<li><a href="https://medium.com/@andrestaltz/2-minute-introduction-to-rx-24c8ca793877" target="_blank" rel="noopener">2 minute introduction to Rx</a>  &#x4F5C;&#x8005;: Andre Staltz(&#x201C;Think of an Observable as an asynchronous immutable array.&#x201D;) (&#x628A;&#x4E00;&#x4E2A;&#x53EF;&#x89C2;&#x5BDF;&#x5BF9;&#x8C61;&#x8BA4;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x5F02;&#x6B65;&#x4E0D;&#x53EF;&#x6539;&#x53D8;&#x7684;&#x6570;&#x7EC4;)</li>
+<li><a href="https://egghead.io/lessons/javascript-introducing-the-observable" target="_blank" rel="noopener">Introducing the Observable</a> by Jafar Husain (JavaScript Video Tutorial)</li>
+<li><a href="https://egghead.io/lessons/javascript-introducing-the-observable" target="_blank" rel="noopener">Observable object</a> (RxJS) by Dennis Stoyanov</li>
+<li><a href="https://afterecho.uk/blog/turning-a-callback-into-an-rx-observable.html" target="_blank" rel="noopener">Turning a callback into an Rx Observable</a> by @afterecho</li>
+</ul>
+<h4 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h4><p>&#x5728;&#x8BB8;&#x591A;&#x7F16;&#x7A0B;&#x9879;&#x76EE;&#x4E2D;&#xFF0C;&#x4EBA;&#x4EEC;&#x5F80;&#x5F80;&#x66F4;&#x503E;&#x5411;&#x4E8E;&#x5728;&#x4E00;&#x4E2A;&#x65F6;&#x95F4;&#x6267;&#x884C;&#x4E00;&#x4E2A;&#x6307;&#x4EE4;&#x6267;&#x884C;&#x6216;&#x8005;&#x5B8C;&#x6210;&#x4E00;&#x4E2A;&#x589E;&#x91CF;&#x64CD;&#x4F5C;&#x3002;&#x4F46;&#x662F;&#x5728;reactivex&#x4E2D;&#xFF0C;&#x8BB8;&#x591A;&#x6307;&#x4EE4;&#x53EF;&#x4EE5;&#x5E76;&#x884C;&#x6267;&#x884C;&#x3002;&#x5176;&#x7ED3;&#x679C;&#x4F1A;&#x5728;&#x540E;&#x6765;&#x4EE5;&#x4EFB;&#x610F;&#x987A;&#x5E8F;&#x88AB;&#x89C2;&#x5BDF;&#x8005;&#x6293;&#x83B7;&#x3002;&#x800C;&#x4E0D;&#x662F;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x5B8C;&#x6210;&#x6570;&#x636E;&#x7684;&#x8F6C;&#x6362;&#x7B49;&#x64CD;&#x4F5C;&#x65B9;&#x6CD5;&#xFF0C;&#x7136;&#x540E;&#x4EE5;&#x4E00;&#x4E2A; &#x88AB;&#x89C2;&#x5BDF;&#x8005;&#x7684;&#x8EAB;&#x4EFD;&#x53BB;&#x8BA2;&#x9605;&#x4E86;&#x4E00;&#x4E2A;&#x89C2;&#x5BDF;&#x8005;&#x3002;</p>
+<p>&#x8FD9;&#x79CD;&#x65B9;&#x6CD5;&#x7684;&#x4E00;&#x4E2A;&#x4F18;&#x70B9;&#x662F;&#xFF0C;&#x5F53;&#x4F60;&#x6709;&#x4E00;&#x5806;&#x4E0D;&#x4F9D;&#x8D56;&#x4E8E;&#x5F7C;&#x6B64;&#x7684;&#x4EFB;&#x52A1;&#x65F6;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x540C;&#x65F6;&#x542F;&#x52A8;&#x5B83;&#x4EEC;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x7B49;&#x5F85;&#x6BCF;&#x4E00;&#x4E2A;&#x5B8C;&#x6210;&#x4E4B;&#x524D;&#x5F00;&#x59CB;&#x4E0B;&#x4E00;&#x4E2A;-&#x8FD9;&#x6837;&#xFF0C;&#x4F60;&#x7684;&#x603B;&#x6267;&#x884C;&#x65F6;&#x95F4;&#x5C31;&#x662F;&#x4F60;&#x4E00;&#x5806;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x65F6;&#x95F4;&#x6700;&#x957F;&#x7684;&#x90A3;&#x4E00;&#x4E2A;&#xFF0C;&#x5C31;&#x50CF;&#x662F;&#x6728;&#x677F;&#x7EC4;&#x6210;&#x6C34;&#x6876;&#xFF0C;&#x88C5;&#x7684;&#x6C34;&#x591A;&#x5C11;&#x5728;&#x4E8E;&#x6700;&#x77ED;&#x7684;&#x90A3;&#x5757;&#x6728;&#x677F;&#x4E00;&#x6837;&#x7684;&#x9053;&#x91CC;&#x3002;</p>
+<p>&#x6709;&#x8BB8;&#x591A;&#x672F;&#x8BED;&#x7528;&#x6765;&#x63CF;&#x8FF0;&#x8FD9;&#x79CD;&#x5F02;&#x6B65;&#x7F16;&#x7A0B;&#x548C;&#x8BBE;&#x8BA1;&#x6A21;&#x578B;&#x3002;&#x672C;&#x6587;&#x6863;&#x5C06;&#x4F7F;&#x7528;&#x4EE5;&#x4E0B;&#x672F;&#x8BED;&#xFF1A;&#x4E00;&#x4E2A;&#x89C2;&#x5BDF;&#x8005;&#x8BA2;&#x9605;&#x89C2;&#x5BDF;&#x3002;&#x4E00;&#x4E2A;&#x53EF;&#x89C2;&#x5BDF;&#x7684;&#x53D1;&#x5C04;&#x9879;&#x76EE;&#x6216;&#x901A;&#x8FC7;&#x8C03;&#x7528;&#x89C2;&#x5BDF;&#x5458;&#x7684;&#x65B9;&#x6CD5;&#x53D1;&#x9001;&#x901A;&#x77E5;&#x7ED9;&#x5B83;&#x7684;&#x89C2;&#x5BDF;&#x5458;&#x3002;</p>
+<p>&#x5728;&#x5176;&#x4ED6;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x6709;&#x65F6;&#x4E5F;&#x79F0;&#x89C2;&#x5BDF;&#x5458;&#x4E3A;&#x201C;&#x7528;&#x6237;&#x201D;&#x201C;&#x89C2;&#x770B;&#x7684;&#x4EBA;&#x201D;&#x6216;&#x201C;&#x5806;&#x201D;&#x3002;&#x8FD9;&#x79CD;&#x6A21;&#x5F0F;&#x4E00;&#x822C;&#x662F;&#x901A;&#x5E38;&#x88AB;&#x79F0;&#x4E3A;&#x201C;&#x53CD;&#x5E94;&#x6A21;&#x5F0F;&#x201D;</p>
+<h4 id="&#x5EFA;&#x7ACB;&#x89C2;&#x5BDF;&#x5458;"><a href="#&#x5EFA;&#x7ACB;&#x89C2;&#x5BDF;&#x5458;" class="headerlink" title="&#x5EFA;&#x7ACB;&#x89C2;&#x5BDF;&#x5458;"></a>&#x5EFA;&#x7ACB;&#x89C2;&#x5BDF;&#x5458;</h4><p>&#x5728;&#x4E00;&#x4E2A;&#x666E;&#x901A;&#x7684;&#x65B9;&#x6CD5;&#x8C03;&#x7528;&#x662F;&#x5F02;&#x6B65;&#x7684;&#xFF0C;&#x6CA1;&#x6709;&#x6392;&#x5E8F;&#xFF0C;&#x5E76;&#x884C;&#x8C03;&#x7528;&#x5178;&#x578B;&#x7684;reactivex -&#x6D41;&#x7A0B;&#x662F;&#x8FD9;&#x6837;&#x7684;&#xFF1A;</p>
+<ol>
+<li>&#x8C03;&#x7528;&#x65B9;&#x6CD5;&#x3002;</li>
+<li>&#x5C06;&#x8BE5;&#x65B9;&#x6CD5;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#x5B58;&#x50A8;&#x5728;&#x4E00;&#x4E2A;&#x53D8;&#x91CF;&#x4E2D;</li>
+<li>&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x53D8;&#x91CF;&#x548C;&#x5B83;&#x7684;&#x65B0;&#x503C;&#x6765;&#x505A;&#x4E00;&#x4E9B;&#x6709;&#x7528;&#x7684;&#x4E8B;&#x60C5;&#x3002;</li>
+</ol>
+<p>&#x6216;&#x8005;&#xFF0C;&#x50CF;&#x8FD9;&#x6837;&#x7684;&#xFF1A;</p>
+<pre class="line-numbers language-txt g-mb-30"><code class="language-txt">// &#x6253;&#x7535;&#x8BDD;&#xFF0C;&#x628A;&#x5B83;&#x7684;&#x8FD4;&#x56DE;&#x503C; &#x8D4B;&#x503C;&#x7ED9;` returnval `
+returnval =&#x65B9;&#x6CD5;&#xFF08;&#x53C2;&#x6570;&#xFF09;&#xFF1B;
+// returnval &#x53BB;&#x505A;&#x70B9;&#x6709;&#x7528;&#x7684;&#x4E8B;&#x513F;
+</code></pre><p>&#x5728;&#x5F02;&#x6B65;&#x6A21;&#x578B;&#x4E2D;&#xFF0C;&#x6D41;&#x7A0B;&#x4F1A;&#x50CF;&#x8FD9;&#x6837;&#xFF1A;</p>
+<ol>
+<li>&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x505A;&#x4E00;&#x4E9B;&#x6709;&#x7528;&#x7684;&#x4ECE;&#x5F02;&#x6B65;&#x8C03;&#x7528;&#x8FD4;&#x56DE;&#x503C;&#xFF1B;&#x8BE5;&#x65B9;&#x6CD5;&#x662F;&#x89C2;&#x5BDF;&#x8005;&#x7684;&#x4E00;&#x90E8;&#x5206;&#x3002;&#x4E5F;&#x5C31;&#x662F; A &#x8C03;&#x7528;&#x65B9;&#x6CD5;&#x505A;&#x51FA;&#x4E00;&#x4E9B;&#x8C03;&#x6574;&#x540E; &#x53CD;&#x6094; A</li>
+<li>&#x5B9A;&#x4E49;&#x5F02;&#x6B65;&#x8C03;&#x7528;&#x65B9;&#x6CD5;&#x672C;&#x8EAB;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x53EF;&#x89C2;&#x5BDF;&#x7684;&#x5BF9;&#x8C61;</li>
+<li>&#x9644;&#x52A0;&#x7684;&#x89C2;&#x6D4B;&#x5668;&#xFF0C;&#x901A;&#x8FC7;&#x8BA2;&#x9605;&#x5B83;&#x89C2;&#x5BDF;&#xFF08;&#x8FD9;&#x4E5F;&#x5BFC;&#x81F4;&#x53EF;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x5F00;&#x59CB;&#x884C;&#x52A8;&#xFF09;</li>
+<li>&#x7EE7;&#x7EED;&#x4F60;&#x7684;&#x4E1A;&#x52A1;&#xFF1B;&#x6BCF;&#x5F53;&#x8C03;&#x7528;&#x8FD4;&#x56DE;&#x65F6;&#xFF0C;&#x89C2;&#x5BDF;&#x8005;&#x7684;&#x65B9;&#x6CD5;&#x5C06;&#x5F00;&#x59CB;&#x64CD;&#x4F5C;&#x5B83;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#x6216;&#x503C;-&#x6240;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x9879;&#x76EE;&#x3002;</li>
+</ol>
+<p>&#x770B;&#x8D77;&#x6765;&#x50CF;&#x8FD9;&#x6837;&#xFF1A;</p>
+<pre class="line-numbers language-txt g-mb-30"><code class="language-txt">// &#x5B9A;&#x4E49;&#xFF0C;&#x4F46;&#x4E0D;&#x8C03;&#x7528;&#xFF0C;&#x7528;&#x6237; onNext  &#x5904;&#x7406;
+// &#x5728;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x89C2;&#x5BDF;&#x8005;&#x662F;&#x975E;&#x5E38;&#x7B80;&#x5355;&#x7684;&#xFF0C;&#x53EA;&#x6709;&#x4E00;&#x4E2A;`onNext`&#x5904;&#x7406;
+def myOnNext = { it -&gt; do something useful with it };
+// &#x5B9A;&#x4E49;&#xFF0C;&#x4F46;&#x4E0D;&#x8C03;&#x7528;&#xFF0C;&#x53EF;&#x89C2;&#x5BDF;&#x5230;&#x7684;
+def myObservable = someObservable(itsParameters);
+// &#x8BA2;&#x9605;&#x7528;&#x6237;&#x53EF;&#x89C1;&#xFF0C;&#x5E76;&#x8C03;&#x7528;&#x89C2;&#x5BDF;
+myObservable.subscribe(myOnNext);
+// &#x7EE7;&#x7EED;&#x6211;&#x7684;&#x4E1A;&#x52A1;
+</code></pre><h5 id="onNext-onCompleted-and-onError"><a href="#onNext-onCompleted-and-onError" class="headerlink" title="onNext, onCompleted, and onError"></a>onNext, onCompleted, and onError</h5><p>&#x60A8;&#x7684;&#x89C2;&#x5BDF;&#x8005;&#x5B9E;&#x73B0;&#x4EE5;&#x4E0B;&#x65B9;&#x6CD5;&#x7684;&#x4E00;&#x4E9B;&#x8BA2;&#x9605;&#x65B9;&#x6CD5;&#x5B50;&#x96C6;&#x53EF;&#x4EE5;&#x5C06;&#x4E00;&#x4E2A;&#x89C2;&#x5BDF;&#x8005;&#x8FDE;&#x63A5;&#x5230;&#x4E00;&#x4E2A;&#x53EF;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#xFF1A;</p>
+<h6 id="onNext"><a href="#onNext" class="headerlink" title="onNext"></a>onNext</h6><p>&#x65E0;&#x8BBA;&#x4EFB;&#x4F55;&#x65F6;&#x5019;&#xFF0C;&#x4E00;&#x4E2A;&#x53EF;&#x89C2;&#x5BDF;&#x5BF9;&#x8C61;&#x8C03;&#x7528;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x53D1;&#x51FA;&#x4E00;&#x4E2A;&#x9879;&#x76EE;&#xFF0C;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x4F1A;&#x628A; &#x88AB;&#x89C2;&#x5BDF;&#x8005;&#x53D1;&#x51FA;&#x7684;&#x8FD9;&#x4E2A;&#x9879;&#x76EE;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x7EE7;&#x7EED;&#x4F20;&#x9012;&#x4E0B;&#x53BB;</p>
+<h6 id="onError"><a href="#onError" class="headerlink" title="onError"></a>onError</h6><p>&#x4E00;&#x4E2A;&#x88AB;&#x89C2;&#x5BDF;&#x8005;&#x9047;&#x5230;&#x975E;&#x9884;&#x671F;&#x7684;&#x6570;&#x636E;&#x548C;&#x4E00;&#x4E9B;&#x9519;&#x8BEF;&#xFF0C;&#x5C31;&#x4F1A;&#x8C03;&#x7528;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x63A5;&#x4E0B;&#x6765;&#x5B83;&#x4E0D;&#x4F1A;&#x8C03;&#x7528; <code>onCompleted</code> &#x6216;&#x8005; <code>onNext</code> &#x65B9;&#x6CD5;&#xFF0C;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x5C06;&#x9519;&#x8BEF;&#x7684;&#x6307;&#x793A;&#x4F5C;&#x4E3A;&#x53C2;&#x6570;</p>
+<h6 id="onCompleted"><a href="#onCompleted" class="headerlink" title="onCompleted"></a>onCompleted</h6><p>&#x6CA1;&#x6709;&#x53D1;&#x751F;&#x9519;&#x8BEF;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x5B8C;&#x6210;&#x64CD;&#x4F5C;&#x540E;&#xFF0C;&#x8C03;&#x7528;&#x7684;&#x65B9;&#x6CD5;&#x3002;</p>
+<p>&#x901A;&#x8FC7;&#x5BF9;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x6761;&#x6B3E;&#xFF0C;&#x5B83;&#x53EF;&#x4EE5;&#x8C03;&#x7528;<code>OnNext</code>&#x96F6;&#x6B21;&#x6216;&#x66F4;&#x591A;&#x6B21;&#xFF0C;&#x7136;&#x540E;&#x53EF;&#x4EE5;&#x6839;&#x636E;&#x8C03;&#x7528;&#x7ED3;&#x679C;&#x8C03;&#x7528; &#x6700;&#x540E;&#x4E00;&#x6B21; onCompleted&#x6216;OnError&#x3002;&#x6309;&#x7167;&#x60EF;&#x4F8B;&#xFF0C;&#x5728;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#x4E2D;&#xFF0C;&#x8C03;&#x7528;<code>OnNext</code>&#x901A;&#x5E38;&#x88AB;&#x79F0;&#x4E3A;&#x201C;&#x6392;&#x653E;&#x201D;&#x7684;&#x9879;&#x76EE;&#xFF0C;&#x800C;&#x53EB;<code>onCompleted</code>&#x6216;<code>onError</code>&#x88AB;&#x79F0;&#x4E3A;&#x201C;&#x901A;&#x77E5;&#x201D;&#x3002;</p>
+<p>&#x53C2;&#x89C1;&#xFF1A;</p>
+<ul class="g-list-style-circle">
+<li><a href="http://www.introtorx.com/Content/v1.0.10621.0/02_KeyTypes.html#IObserver" target="_blank" rel="noopener">Introduction to Rx: IObserver</a></li>
+</ul>
+<h5 id="&#x6CE8;&#x9500;-Unsubscribing"><a href="#&#x6CE8;&#x9500;-Unsubscribing" class="headerlink" title="&#x6CE8;&#x9500; Unsubscribing"></a>&#x6CE8;&#x9500; Unsubscribing</h5><p>&#x5728;&#x4E00;&#x4E9B;reactivex&#x5B9E;&#x73B0;&#xFF0C;&#x6709;&#x4E00;&#x4E2A;&#x4E13;&#x95E8;&#x7684;&#x89C2;&#x5BDF;&#x8005;&#x63A5;&#x53E3;&#xFF0C;&#x7B7E;&#x7EA6;&#x8005;&#xFF0C;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;<code>Unsubscribing</code>&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x4F60;&#x53EF;&#x4EE5;&#x8C03;&#x7528;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x6765;&#x8868;&#x660E;&#xFF0C;&#x7528;&#x6237;&#x4E0D;&#x518D;&#x5BF9;&#x76EE;&#x524D;&#x4EFB;&#x4F55;&#x8BA2;&#x9605;&#x611F;&#x5174;&#x8DA3;&#x3002;&#x8FD9;&#x4E9B;&#x89C2;&#x6D4B;&#x53EF;&#x4EE5;&#xFF08;&#x5982;&#x679C;&#x4ED6;&#x4EEC;&#x6CA1;&#x6709;&#x5176;&#x4ED6;&#x611F;&#x5174;&#x8DA3;&#x7684;&#x89C2;&#x5BDF;&#x5458;&#xFF09;&#x9009;&#x62E9;&#x505C;&#x6B62;&#x4EA7;&#x751F;&#x65B0;&#x7684;&#x7269;&#x54C1;&#x53D1;&#x51FA;&#x3002;</p>
+<p>&#x8FD9;&#x4E00;&#x7ED3;&#x679C;&#x5C06;&#x7EA7;&#x8054;&#x9000;&#x8BA2;&#x901A;&#x8FC7;&#x8FD0;&#x8425;&#x5546;&#xFF0C;&#x9002;&#x7528;&#x4E8E;&#x89C2;&#x5BDF;&#xFF0C;&#x89C2;&#x5BDF;&#x8005;&#x8BA2;&#x9605;&#x7684;&#x94FE;&#xFF0C;&#x8FD9;&#x5C06;&#x5BFC;&#x81F4;&#x5728;&#x4EA7;&#x4E1A;&#x94FE;&#x7684;&#x5404;&#x4E2A;&#x73AF;&#x8282;&#x505C;&#x6B62;&#x53D1;&#x5C04;&#x9879;&#x76EE;&#x3002;&#x8FD9;&#x4E0D;&#x4FDD;&#x8BC1;&#x7ACB;&#x5373;&#x53D1;&#x751F;&#xFF0C;&#x4F46;&#x662F;&#xFF0C;&#x5B83;&#x662F;&#x53EF;&#x80FD;&#x7684;&#x4E00;&#x4E2A;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x4EA7;&#x751F;&#x548C;&#x5C1D;&#x8BD5;&#x53D1;&#x5C04;&#x4E00;&#x6BB5;&#x65F6;&#x95F4;&#xFF0C;&#x5373;&#x4F7F;&#x6CA1;&#x6709;&#x89C2;&#x5BDF;&#x8005;&#x4ECD;&#x7136;&#x89C2;&#x5BDF;&#x8FD9;&#x4E9B;&#x6392;&#x653E;&#x91CF;&#x3002;</p>
+<h5 id="&#x5173;&#x4E8E;&#x547D;&#x540D;&#x7EA6;&#x5B9A;&#x7684;&#x4E00;&#x4E9B;&#x6CE8;&#x91CA;"><a href="#&#x5173;&#x4E8E;&#x547D;&#x540D;&#x7EA6;&#x5B9A;&#x7684;&#x4E00;&#x4E9B;&#x6CE8;&#x91CA;" class="headerlink" title="&#x5173;&#x4E8E;&#x547D;&#x540D;&#x7EA6;&#x5B9A;&#x7684;&#x4E00;&#x4E9B;&#x6CE8;&#x91CA;"></a>&#x5173;&#x4E8E;&#x547D;&#x540D;&#x7EA6;&#x5B9A;&#x7684;&#x4E00;&#x4E9B;&#x6CE8;&#x91CA;</h5><p>reactivex&#x6BCF;&#x4E2A;&#x8BED;&#x8A00;&#x7684;&#x5177;&#x4F53;&#x5B9E;&#x73B0;&#x6709;&#x81EA;&#x5DF1;&#x7684;&#x547D;&#x540D;&#x4E60;&#x60EF;&#x3002;&#x6709;&#x6CA1;&#x6709;&#x89C4;&#x8303;&#x7684;&#x547D;&#x540D;&#x6807;&#x51C6;&#xFF0C;&#x867D;&#x7136;&#x6709;&#x8BB8;&#x591A;&#x5171;&#x6027;&#x4E4B;&#x95F4;&#x7684;&#x5B9E;&#x73B0;</p>
+<p>&#x6B64;&#x5916;&#xFF0C;&#x8FD9;&#x4E9B;&#x540D;&#x79F0;&#x4E2D;&#x7684;&#x4E00;&#x4E9B;&#x5728;&#x5176;&#x4ED6;&#x4E0A;&#x4E0B;&#x6587;&#x4E2D;&#x6709;&#x4E0D;&#x540C;&#x7684;&#x542B;&#x4E49;&#xFF0C;&#x6216;&#x5728;&#x4E00;&#x4E2A;&#x7279;&#x5B9A;&#x7684;&#x5B9E;&#x73B0;&#x8BED;&#x8A00;&#x7684;&#x6210;&#x8BED;&#x4E2D;&#x663E;&#x5F97;&#x6709;&#x4E9B;&#x5C34;&#x5C2C;&#x3002;</p>
+<p>&#x4F8B;&#x5982;&#x6709;&#x4E8B;&#x4EF6;&#x7684;&#x547D;&#x540D;&#x6A21;&#x5F0F;&#xFF08;&#x4F8B;&#x5982;OnNext&#xFF0C;OnCompleted&#xFF0C;OnError&#xFF09;&#x3002;&#x5728;&#x67D0;&#x4E9B;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x8FD9;&#x6837;&#x7684;&#x540D;&#x79F0;&#x5C06;&#x8868;&#x793A;&#x65B9;&#x6CD5;&#xFF0C;&#x901A;&#x8FC7;&#x8BE5;&#x4E8B;&#x4EF6;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x7684;&#x6CE8;&#x518C;&#x3002;&#x7136;&#x800C;&#xFF0C;&#x4ED6;&#x4EEC;&#x7684;&#x540D;&#x5B57;reactivex&#xFF0C;&#x4E8B;&#x4EF6;&#x5904;&#x7406;&#x5668;&#x3002;</p>
+<h4 id="&#x201C;&#x70ED;&#x201D;&#x548C;&#x201C;&#x51B7;&#x201D;&#x7684;-&#x88AB;&#x89C2;&#x6D4B;&#x8005;"><a href="#&#x201C;&#x70ED;&#x201D;&#x548C;&#x201C;&#x51B7;&#x201D;&#x7684;-&#x88AB;&#x89C2;&#x6D4B;&#x8005;" class="headerlink" title="&#x201C;&#x70ED;&#x201D;&#x548C;&#x201C;&#x51B7;&#x201D;&#x7684; &#x88AB;&#x89C2;&#x6D4B;&#x8005;"></a>&#x201C;&#x70ED;&#x201D;&#x548C;&#x201C;&#x51B7;&#x201D;&#x7684; &#x88AB;&#x89C2;&#x6D4B;&#x8005;</h4><p>&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#x88AB;&#x89C2;&#x5BDF;&#x8005;&#x4F1A;&#x53D1;&#x51FA;&#x4FE1;&#x606F;&#xFF1F;&#x8FD9;&#x53D6;&#x51B3;&#x4E8E;&#x88AB;&#x89C2;&#x5BDF;&#x8005;&#x3002;&#x201C;&#x70ED;&#x201D;&#x7684;&#x89C2;&#x5BDF;&#x53EF;&#x80FD;&#x5F53;&#x4ED6;&#x521A;&#x88AB;&#x521B;&#x5EFA;&#x6CA1;&#x591A;&#x4E45;&#x5C31;&#x53D1;&#x51FA;&#x4FE1;&#x606F;&#xFF0C;&#x6240;&#x4EE5;&#x540E;&#x6765;&#x8BA2;&#x9605;&#x7684;&#x89C2;&#x5BDF;&#x8005;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x4FE1;&#x606F;&#x5C31;&#x662F;&#x4E2D;&#x95F4;&#x7684;&#x67D0;&#x4E9B;&#x5730;&#x65B9;&#x3002;&#x201C;&#x51B7;&#x201D;&#x7684;&#x89C2;&#x5BDF;&#xFF0C;&#x76F4;&#x5230;&#x4E00;&#x4E2A;&#x8BA2;&#x9605;&#x8005;&#x89C2;&#x5BDF;&#x4ED6;&#x7684;&#x53D8;&#x5316;&#xFF0C;&#x4ED6;&#x624D;&#x5F00;&#x59CB;&#x53D1;&#x751F;&#x4FE1;&#x606F;&#x3002;&#x6240;&#x4EE5;&#x89C2;&#x5BDF;&#x8005;&#x5C31;&#x770B;&#x5230;&#x4ED6;&#x7684;&#x6574;&#x4E2A;&#x4FE1;&#x606F;&#x8FC7;&#x7A0B;</p>
+<p>&#x5728;reactivex&#x4E00;&#x4E9B;&#x5B9E;&#x65BD;&#x65B9;&#x6848;&#x4E2D;&#xFF0C;&#x4E5F;&#x6709;&#x4E00;&#x4E9B;&#x79F0;&#x4E3A;&#x201C;&#x8FDE;&#x63A5;&#x201D;&#x7684;&#x89C2;&#x5BDF;&#x3002;&#x9664;&#x975E;&#x4E00;&#x4E2A;&#x89C2;&#x5BDF;&#x8005;&#x8BA2;&#x9605;&#x4E86;&#x8FD9;&#x4E2A;&#x8FDE;&#x63A5;&#x5BF9;&#x8C61;&#x5E76;&#x4E14;&#x8C03;&#x7528;&#x5B83;&#x7684; <code>Connect</code> &#x65B9;&#x6CD5;&#xFF0C;&#x5426;&#x5219;&#x88AB;&#x89C2;&#x5BDF;&#x8005;&#x4E0D;&#x4F1A;&#x53D1;&#x51FA;&#x4FE1;&#x606F;</p>
+<h4 id="&#x901A;&#x8FC7;&#x53EF;&#x89C2;&#x5BDF;&#x7B97;&#x5B50;&#x7684;&#x5408;&#x6210;"><a href="#&#x901A;&#x8FC7;&#x53EF;&#x89C2;&#x5BDF;&#x7B97;&#x5B50;&#x7684;&#x5408;&#x6210;" class="headerlink" title="&#x901A;&#x8FC7;&#x53EF;&#x89C2;&#x5BDF;&#x7B97;&#x5B50;&#x7684;&#x5408;&#x6210;"></a>&#x901A;&#x8FC7;&#x53EF;&#x89C2;&#x5BDF;&#x7B97;&#x5B50;&#x7684;&#x5408;&#x6210;</h4><p>&#x89C2;&#x5BDF;&#x8005;&#x548C;&#x88AB;&#x89C2;&#x5BDF;&#x8005;&#x4EC5;&#x4EC5;&#x53EA;&#x662F; <code>ReactiveX</code>&#x7684;&#x5F00;&#x59CB;&#x3002;&#x7531;&#x4ED6;&#x4EEC;&#x81EA;&#x5DF1;&#xFF0C;&#x4ED6;&#x4EEC;&#x53EA;&#x4E0D;&#x8FC7;&#x662F;&#x4E00;&#x4E2A;&#x8F7B;&#x5FAE;&#x7684;&#x6269;&#x5C55;&#x7684;&#x6807;&#x51C6;&#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;&#xFF0C;&#x66F4;&#x9002;&#x5408;&#x5904;&#x7406;&#x4E00;&#x7CFB;&#x5217;&#x7684;&#x4E8B;&#x4EF6;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x4E00;&#x4E2A;&#x5355;&#x4E00;&#x7684;&#x56DE;&#x8C03;&#x3002;</p>
+<p>&#x771F;&#x6B63;&#x7684;&#x529B;&#x91CF;&#x6765;&#x81EA;&#x4E8E;<code>reactive extensions</code>&#xFF08;&#x5373;<code>reactivex</code>&#xFF09;-&#x8FD0;&#x8425;&#x5546;&#x53EF;&#x4EE5;&#x53D8;&#x6362;&#xFF0C;&#x7ED3;&#x5408;&#xFF0C;&#x64CD;&#x7EB5;&#xFF0C;&#x5E76;&#x4E0E;&#x53D1;&#x5C04;&#x7684;&#x89C2;&#x6D4B;&#x503C;&#x5E8F;&#x5217;&#x7684;&#x5DE5;&#x4F5C;&#x9879;&#x76EE;&#x3002;</p>
+<p>&#x8FD9;&#x4E9B;&#x63A5;&#x6536;&#x8FD0;&#x8425;&#x5546;&#x5141;&#x8BB8;&#x4F60;&#x4E00;&#x8D77;&#x6784;&#x6210;&#x5F02;&#x6B65;&#x5E8F;&#x5217;&#x5728;&#x58F0;&#x660E;&#x7684;&#x65B9;&#x5F0F;&#x4E0E;&#x6240;&#x6709;&#x7684;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x7684;&#x6548;&#x7387;&#x6548;&#x76CA;&#x4F46;&#x6CA1;&#x6709;&#x5D4C;&#x5957;&#x7684;&#x56DE;&#x8C03;&#x5904;&#x7406;&#x7A0B;&#x5E8F;&#x901A;&#x5E38;&#x4E0E;&#x5F02;&#x6B65;&#x7CFB;&#x7EDF;&#x76F8;&#x5173;&#x7684;&#x95EE;&#x9898;&#x3002;</p>
+<p>This documentation groups information about the various operators and examples of their usage into the following pages:</p>
+<p><a href="http://reactivex.io/documentation/operators.html#creating" target="_blank" rel="noopener">Creating Observables</a><br><code>Create</code>, <code>Defer</code>, <code>Empty/Never/Throw</code>, <code>From</code>, <code>Interval</code>, <code>Just</code>, <code>Range</code>, <code>Repeat</code>, <code>Start</code>, and <code>Timer</code><br><a href="http://reactivex.io/documentation/operators.html#transforming" target="_blank" rel="noopener">Transforming Observable Items</a><br><code>Buffer</code>, <code>FlatMap</code>, <code>GroupBy</code>, <code>Map</code>, <code>Scan</code>, and <code>Window</code><br><a href="http://reactivex.io/documentation/operators.html#filtering" target="_blank" rel="noopener">Filtering Observables</a><br><code>Debounce</code>, <code>Distinct</code>, <code>ElementAt</code>, <code>Filter</code>, <code>First</code>, <code>IgnoreElements</code>, <code>Last</code>, <code>Sample</code>, <code>Skip</code>, <code>SkipLast</code>, <code>Take</code>, and <code>TakeLast</code><br><a href="http://reactivex.io/documentation/operators.html#combining" target="_blank" rel="noopener">Combining Observables</a><br><code>And/Then/When</code>, <code>CombineLatest</code>, <code>Join</code>, <code>Merge</code>, <code>StartWith</code>, <code>Switch</code>, and <code>Zip</code><br><a href="http://reactivex.io/documentation/operators.html#error" target="_blank" rel="noopener">Error Handling Operators</a><br><code>Catch</code> and <code>Retry</code><br><a href="http://reactivex.io/documentation/operators.html#utility" target="_blank" rel="noopener">Utility Operators</a><br><code>Delay</code>, <code>Do</code>, <code>Materialize/Dematerialize</code>, <code>ObserveOn</code>, <code>Serialize</code>, <code>Subscribe</code>, <code>SubscribeOn</code>, <code>TimeInterval</code>, <code>Timeout</code>, <code>Timestamp</code>, and <code>Using</code><br><a href="http://reactivex.io/documentation/operators.html#conditional" target="_blank" rel="noopener">Conditional and Boolean Operators</a><br><code>All</code>, <code>Amb</code>, <code>Contains</code>, <code>DefaultIfEmpty</code>, <code>SequenceEqual</code>, <code>SkipUntil</code>, <code>SkipWhile</code>, <code>TakeUntil</code>, and <code>TakeWhile</code><br><a href="http://reactivex.io/documentation/operators.html#mathematical" target="_blank" rel="noopener">Mathematical and Aggregate Operators</a><br><code>Average</code>, <code>Concat</code>, <code>Count</code>, <code>Max</code>, <code>Min</code>, <code>Reduce</code>, and <code>Sum</code><br><a href="http://reactivex.io/documentation/operators.html#conversion" target="_blank" rel="noopener">Converting Observables</a><br><code>To</code><br><a href="http://reactivex.io/documentation/operators.html#connectable" target="_blank" rel="noopener">Connectable Observable Operators</a><br><code>Connect</code>, <code>Publish</code>, <code>RefCount</code>, and <code>Replay</code><br><a href="http://reactivex.io/documentation/operators/backpressure.html" target="_blank" rel="noopener">Backpressure Operators</a><br>&#x6267;&#x884C;&#x7279;&#x5B9A;&#x7684;&#x6D41;&#x91CF;&#x63A7;&#x5236;&#x7B56;&#x7565;&#x7684;&#x5404;&#x79CD;&#x8FD0;&#x8425;&#x5546;</p>
+<h5 id="&#x8FDE;&#x9501;&#x8FD0;&#x8425;&#x5546;"><a href="#&#x8FDE;&#x9501;&#x8FD0;&#x8425;&#x5546;" class="headerlink" title="&#x8FDE;&#x9501;&#x8FD0;&#x8425;&#x5546;"></a>&#x8FDE;&#x9501;&#x8FD0;&#x8425;&#x5546;</h5><p>&#x5927;&#x591A;&#x6570;&#x64CD;&#x4F5C;&#x7B26;&#x5728;&#x53EF;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x548C;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x53EF;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x3002;&#x8FD9;&#x5141;&#x8BB8;&#x4F60;&#x5E94;&#x7528;&#x8FD9;&#x4E9B;&#x64CD;&#x4F5C;&#x7B26;&#x4E00;&#x4E2A;&#x63A5;&#x4E00;&#x4E2A;&#xFF0C;&#x5728;&#x4E00;&#x4E2A;&#x94FE;&#x4E2D;&#x3002;&#x94FE;&#x4E2D;&#x7684;&#x6BCF;&#x4E2A;&#x64CD;&#x4F5C;&#x7B26;&#x90FD;&#x4FEE;&#x6539;&#x4E86;&#x53EF;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x7ED3;&#x679C;&#xFF0C;&#x4ECE;&#x4EE5;&#x524D;&#x7684;&#x64CD;&#x4F5C;&#x7684;&#x64CD;&#x4F5C;&#x3002;<br>&#x8FD8;&#x6709;&#x5176;&#x4ED6;&#x6A21;&#x5F0F;&#xFF0C;&#x5982;&#x751F;&#x6210;&#x5668;&#x6A21;&#x5F0F;&#xFF0C;&#x5176;&#x4E2D;&#x4E00;&#x4E2A;&#x7279;&#x5B9A;&#x7C7B;&#x7684;&#x5404;&#x79CD;&#x65B9;&#x6CD5;&#x901A;&#x8FC7;&#x4FEE;&#x6539;&#x8BE5;&#x5BF9;&#x8C61;&#x7684;&#x64CD;&#x4F5C;&#x6765;&#x4FEE;&#x6539;&#x8BE5;&#x7C7B;&#x7684;&#x4E00;&#x4E2A;&#x7C7B;&#x4E0A;&#x7684;&#x4E00;&#x4E2A;&#x9879;&#x76EE;&#x3002;&#x8FD9;&#x4E9B;&#x6A21;&#x5F0F;&#x4E5F;&#x5141;&#x8BB8;&#x4F60;&#x4EE5;&#x7C7B;&#x4F3C;&#x7684;&#x65B9;&#x5F0F;&#x94FE;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x4F46;&#x5728;&#x751F;&#x6210;&#x5668;&#x6A21;&#x5F0F;&#x4E2D;&#xFF0C;&#x5728;&#x94FE;&#x4E2D;&#x51FA;&#x73B0;&#x7684;&#x65B9;&#x6CD5;&#x7684;&#x987A;&#x5E8F;&#x901A;&#x5E38;&#x4E0D;&#x91CD;&#x8981;&#xFF0C;&#x4E0E;&#x53EF;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x8FD0;&#x8425;&#x5546;&#x7684;&#x8BA2;&#x5355;&#x4E8B;&#x5B9C;&#x3002;<br>&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x64CD;&#x4F5C;&#x7B26;&#x7684;&#x94FE;&#x4E0D;&#x72EC;&#x7ACB;&#x4E8E;&#x539F;&#x59CB;&#x89C2;&#x5BDF;&#x5230;&#x7684;&#x8D77;&#x6E90;&#x94FE;&#xFF0C;&#x4F46;&#x4ED6;&#x4EEC;&#x53CD;&#x8FC7;&#x6765;&#x64CD;&#x4F5C;&#xFF0C;&#x6BCF;&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#x4E0A;&#x7684;&#x89C2;&#x5BDF;&#x6240;&#x4EA7;&#x751F;&#x7684;&#x8FD0;&#x8425;&#x5546;&#x7ACB;&#x5373;&#x5728;&#x5916;&#x94FE;&#x3002;</p>
+
+          </div>
+
+          <!-- Sources & Tags -->
+<div class="g-mb-30">
+  <h6 class="g-color-gray-dark-v1 g-mb-15">
+
+    
+
+                <strong class="g-mr-5">专栏:</strong> <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="/categories/开发帮助/">开发帮助</a>
+      
+
+        </h6>
+  <h6 class="g-color-gray-dark-v1">
+          <strong class="g-mr-5">标签:</strong>
+
+          
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/reactiv/">reactiv</a>
+            
+              <a class="u-tags-v1 g-font-size-12 g-brd-around g-brd-gray-light-v4 g-bg-primary--hover g-brd-primary--hover g-color-black-opacity-0_8 g-color-white--hover rounded g-py-6 g-px-15 g-mr-5" href="/tags/rxswift/">rxswift</a>
+            
+        </h6>
+</div>
+<!-- End Sources & Tags -->
+
+
+          <hr class="g-brd-gray-light-v4">
+
+          <!-- Social Shares -->
+<div class="g-mb-30">
+
+    <ul class="list-inline text-uppercase mb-0">
+      <li class="list-inline-item g-mr-10">
+        <strong class="align-middle g-font-size-24 jiathis_counter_style"><a class="jiathis_counter_style"></a></strong>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <span class="g-color-gray-dark-v5">|</span>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_weixin btn u-btn-teal g-font-size-12 rounded g-px-20--sm g-py-10" style="color:white;">
+          <i class="fa fa-wechat g-mr-5--sm"></i>
+          <span class="g-hidden-xs-down">分享到微信</span>
+      </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tqq btn u-btn-twitter g-font-size-12 rounded g-px-20--sm g-py-10" href="#">
+              <i class="fa fa-qq g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 QQ</span>
+            </a>
+      </li>
+      <li class="list-inline-item g-mr-10">
+        <a class="jiathis_button_tsina btn u-btn-lightred g-font-size-12 rounded g-px-20--sm g-py-10 " href="#">
+              <i class="fa fa-weibo g-mr-5--sm"></i> <span class="g-hidden-xs-down">分享到 新浪微博</span>
+            </a>
+      </li>
+    </ul>
+</div>
+          <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+<!-- End Social Shares -->
+
+
+
+          <div class="g-mb-60">
+  <!-- UY BEGIN -->
+  <div id="uyan_frame"></div>
+  <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1821358"></script>
+  <!-- UY END -->
+</div>
+
+
+        </article>
+
+        <div id="stickyblock-end"></div>
+      </div>
+      <!-- End Articles Content -->
+
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+
+        
+        <!-- Social Links -->
+        <div class="g-mb-50">
+          <div class="u-heading-v3-1 g-mb-30">
+            <h2 class="h5 u-heading-v3__title g-color-gray-dark-v1 text-uppercase g-brd-primary">最热专题</h2>
+          </div>
+
+          <ul class="list-unstyled mb-0">
+
+            
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        IOS
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">15</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        服务器
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">4</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        开发帮助
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">3</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        牢骚
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">1</span>
+              </li>
+
+              
+
+              <li class="d-flex align-items-center justify-content-between g-mb-20">
+                <a class="d-flex align-items-center u-link-v5 g-color-gray-dark-v1" href="#">
+                        <span class="u-icon-v3 u-icon-size--xs u-shadow-v25 g-font-size-12 g-bg-facebook g-bg-facebook--hover g-color-white rounded-circle g-mr-10" href="#">
+                          <i class="fa fa-code"></i>
+                        </span>
+                        Web 前端
+                      </a>
+                <span class="js-counter d-block g-color-gray-dark-v4">1</span>
+              </li>
+
+              
+          </ul>
+        </div>
+        <!-- End Social Links -->
+
+
+        <div id="stickyblock-start" class="js-sticky-block g-sticky-block--lg g-pt-20" data-start-point="#stickyblock-start" data-end-point="#stickyblock-end" style="top: 0px; width: 255px; height: 957px;">
+
+  <div class="g-mb-40">
+
+
+
+
+
+      <!-- News Feed -->
+<div class="g-mb-40">
+  <div class="u-heading-v3-1 g-mb-30">
+    <h2 class="h5 u-heading-v3__title g-color-gray-dark-v1 text-uppercase g-brd-primary">最新日志</h2>
+  </div>
+
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/23/生活随处可见一斑20171123/">天通苑地铁 安检方式改变</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/23 9:18:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">使用 NodeJS APNS 给你的应用发消息</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/22 17:2:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">IOS10前 UITextFiled 的 placeholder 的问题</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/11/16 1:16:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+    <hr class="g-brd-gray-light-v4 g-mt-15 g-mb-10">
+    
+
+  
+
+    <!-- Article -->
+    <article>
+      <h3 class="h6">
+              <a class="g-color-gray-dark-v1" href="/2017/10/26/WebView 与 Html Input Bug/">WebView 与 Html Input File 以及 Upload File 出现的问题</a>
+            </h3>
+
+              <span class="g-font-size-12">
+                      2017/10/26 4:10:0
+                    </span>
+    </article>
+    <!-- End Article -->
+
+    
+
+  
+
+</div>
+<!-- End News Feed -->
+
+
+
+</div>
+
+
+      </div>
+      <!-- End Sidebar -->
+    </div>
+  </div>
+</section>
+
+<script src="/assets/js/components/hs.sticky-block.js"></script>
+<script type="text/javascript">
+
+    $(window).on('load', function () {
+      // initialization of sticky blocks
+      $.HSCore.components.HSStickyBlock.init('.js-sticky-block');
+    });
+
+</script>
+
+
+      <!-- JS Implementing Plugins -->
+<script src="/assets/vendor/custombox/custombox.min.js"></script>
+
+<!-- JS Unify -->
+<script src="/assets/js/components/hs.modal-window.js"></script>
+
+
+<!-- Footer -->
+<footer class="g-bg-black-opacity-0_9 g-color-white-opacity-0_8 ">
+  <br><br><br>
+  <div class="container g-mb-60">
+    <div class="row">
+
+      <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">关于我</h2>
+  </div>
+
+  <div class="g-mb-30">
+    <p class="g-color-white-opacity-0_8">努力学习的IOS程序员。目前在学习制作Hexo主题，主要还是为了做自己的一个博客.之后会好好学习linux以及服务器相关的知识.</p>
+  </div>
+
+  <address class="mb-0">
+    <div class="g-mb-30">
+      <h4 class="h6 g-font-weight-600">现居地</h4>
+      <p class="mb-0 g-color-white-opacity-0_8">北京 - 国家的首都 </p>
+    </div>
+
+    <!-- 配置标签相关视图 -->
+    
+
+      <div class="g-mb-30">
+        <h4 class="h6 g-font-weight-600">邮箱:</h4>
+
+        
+
+                <p class="mb-0 g-color-white-opacity-0_8">alphabetion@gmail.com</p>
+        
+
+                <p class="mb-0 g-color-white-opacity-0_8">jingwenzheng@baimaodai.com</p>
+        
+
+      </div>
+
+      
+
+
+
+    <div class="mb-0">
+      <h4 class="h6 g-font-weight-600">一言:</h4>
+      <p class="mb-0">
+        <a class="g-color-white-opacity-0_8" id="hitokoto" href="http://hitokoto.cn/">support@htmlstream.com</a>
+      </p>
+    </div>
+  </address>
+</div>
+<!-- End Footer Content -->
+
+
+        <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+
+
+  <!-- 配置标签相关视图 -->
+  
+    <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+      <h2 class="u-heading-v2__title h6 text-uppercase mb-0">标签</h2>
+    </div>
+    <ul class="u-list-inline g-font-size-12 g-mb-30">
+
+      
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/生活/">
+            生活
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/悲观/">
+            悲观
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/Objective-C/">
+            Objective-C
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/AsyncDisplayKit/">
+            AsyncDisplayKit
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/ios/">
+            ios
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/约束教程/">
+            约束教程
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/swift/">
+            swift
+          </a>
+        </li>
+        
+        <li class="list-inline-item g-mb-10">
+          <a class="u-tags-v1 g-brd-around g-brd-white-opacity-0_1 g-bg-primary--hover g-brd-primary--hover g-color-white-opacity-0_8 g-rounded-50 g-py-4 g-px-15" href="/tags/autolayout/">
+            autolayout
+          </a>
+        </li>
+        
+    </ul>
+    
+
+      <!-- 布局相关链接-->
+
+      <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+        <h2 class="u-heading-v2__title h6 text-uppercase mb-0">友情链接</h2>
+      </div>
+
+      <ul class="list-unstyled">
+        
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://baidu.com">
+              百度
+            </a>
+          </li>
+
+          
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://test.baidu.com">
+              测试链接
+            </a>
+          </li>
+
+          
+
+          <li class="g-mb-5">
+            <i class="fa fa-angle-right g-mr-5"></i>
+
+            <a class="g-color-white-opacity-0_8" href="https://baidu.com">
+              hexo
+            </a>
+          </li>
+
+          
+      </ul>
+
+
+
+</div>
+<!-- End Footer Content -->
+
+
+          <!-- Footer Content -->
+<div class="col-lg-3 col-md-6 g-mb-40 g-mb-0--lg">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">最近文章</h2>
+  </div>
+
+  
+    
+
+  <article class="media">
+
+
+  
+
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/23/生活随处可见一斑20171123/">天通苑地铁 安检方式改变</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/23 9:18:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/23/生活随处可见一斑20171123/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+  <a class="d-flex g-mt-3 mr-3" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">
+    <img class="g-width-60 g-height-60 rounded" src="http://image.msiter.com/stock-photo-236362221.jpg" alt="Image Description">
+  </a>
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">使用 NodeJS APNS 给你的应用发消息</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/22 17:2:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/22/使用 NodeJS APNS 给你的应用发消息/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">IOS10前 UITextFiled 的 placeholder 的问题</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/11/16 1:16:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/11/16/IOS10前 UITextFiled 的 placeholder 的问题/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+  <article class="media">
+
+
+  
+
+
+
+
+  <a class="d-flex g-mt-3 mr-3" href="/2017/10/26/WebView 与 Html Input Bug/">
+    <img class="g-width-60 g-height-60 rounded" src="http://image.msiter.com/stock-photo-233150091.jpg" alt="Image Description">
+  </a>
+
+
+
+
+
+
+
+
+    <div class="media-body">
+      <h3 class="h6">
+            <a class="g-color-white-opacity-0_8 g-color-white--hover" href="/2017/10/26/WebView 与 Html Input Bug/">WebView 与 Html Input File 以及 Upload File 出现的问题</a>
+      </h3>
+      <ul class="u-list-inline g-font-size-12">
+        <li class="list-inline-item">
+          2017/10/26 4:10:0
+        </li>
+        <li class="list-inline-item">/</li>
+        <li class="list-inline-item">
+          <a class="u-link-v5 g-color-white-opacity-0_8 g-color-white--hover" href="/2017/10/26/WebView 与 Html Input Bug/">
+                <i class="fa fa-comments-o"></i>
+                12
+              </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+
+  <hr class="g-brd-white-opacity-0_1 g-mt-20 g-mb-15">
+
+
+  
+
+      
+</div>
+<!-- End Footer Content -->
+
+
+            <!-- Footer Content -->
+<div class="col-lg-3 col-md-6">
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">订阅</h2>
+  </div>
+
+  <div class="g-mb-30">
+    <p class="g-color-white-opacity-0_8">订阅我可以更及时的获取到文章的推送，请在下方输入您的邮箱地址获取文章更新</p>
+    <div class="input-group border-0 g-rounded-30">
+      <input class="form-control border-0 g-rounded-left-30 g-px-12 g-py-8" type="email" placeholder="输入您的邮箱地址">
+      <div class="input-group-addon border-0 p-0">
+        <button class="btn u-btn-primary g-rounded-right-30 g-px-12 g-py-8" type="submit" role="button">订阅</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="u-heading-v2-3--bottom g-brd-white-opacity-0_8 g-mb-20">
+    <h2 class="u-heading-v2__title h6 text-uppercase mb-0">社交</h2>
+  </div>
+
+  <p class="g-color-white-opacity-0_8">作为一个宅男，长期宅在家里，会不定期的更新文章。如果你想更新的了解到我的动态，请选择一下任意一种社交方式关注我。</p>
+  <ul class="list-inline mb-0">
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://www.facebook.com/aimobier">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://www.instagram.com/aimobier/">
+        <i class="fa fa-instagram"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="https://github.com/aimobier">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="http://weibo.com/aouns">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li class="list-inline-item g-mr-10">
+      <a class="u-icon-v3 u-icon-size--xs g-bg-white-opacity-0_1 g-bg-white-opacity-0_2--hover g-color-white-opacity-0_6 rounded" href="#modal1" data-modal-target="#modal1" data-modal-effect="fadein">
+        <i class="fa fa-weixin"></i>
+</a>
+    </li>
+  </ul>
+</div>
+<!-- End Footer Content -->
+
+    </div>
+  </div>
+
+
+  <!-- Copyright Footer -->
+<div class="g-bg-black-opacity-0_1 g-color-white-opacity-0_8 text-center g-py-20">
+  <div class="container">
+    
+      
+        
+        <small class="g-font-size-7 g-mr-10 g-mb-10 g-mb-0--md">2015 - 2017 © All Rights Reserved. Msiter by
+        <a class="g-color-white-opacity-0_8" href="#">Jing WenZheng</a>
+      </small>
+  </div>
+</div>
+<!-- End Copyright Footer -->
+
+
+</footer>
+<!-- End Footer -->
+<a class="js-go-to u-go-to-v1" href="#" data-type="fixed" data-position='{
+ "bottom": 15,
+ "right": 15
+}' data-offset-top="400" data-compensation="#js-header" data-show-effect="zoomIn">
+  <i class="hs-icon hs-icon-arrow-top"></i>
+</a>
+
+<script type="text/javascript">
+  $(function() {
+
+    // initialization of go to
+    $.HSCore.components.HSGoTo.init('.js-go-to');
+    $.HSCore.components.HSModalWindow.init('[data-modal-target]');
+    $.getJSON("https://sslapi.hitokoto.cn/?encode=json", function(json) {
+      $("#hitokoto").html(json["hitokoto"]);
+    });
+  });
+</script>
+
+
+    </main>
+
+    <div class="u-outer-spaces-helper"></div>
+
+
+  </body>
+</html>
